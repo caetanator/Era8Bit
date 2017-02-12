@@ -91,6 +91,65 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         public byte[] MemoryBankChunkType;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1, Size = 5)]
+    public struct DckLrosStruct
+    {
+        /// <summary>
+        /// Not used, must be 0
+        /// </summary>
+        byte NotUsed;
+
+        /// <summary>
+        /// Dock memory bank type, must be TimexCartridgeDockType.LROS
+        /// </summary>
+        byte DockType;
+
+        /// <summary>
+        /// The adress of the machine code intruction to start/jump to, stored in LSB MSB order
+        /// </summary>
+        UInt16 ProgStartingAddress;
+
+        /// <summary>
+        /// The memory chunk specification. When writing to the Horizontal Select Register (Port F4H), the Chunk Specification is High Active
+        /// </summary>
+        byte MemoryChunkSpecification;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1, Size = 8)]
+    public struct DckArosStruct
+    {
+        /// <summary>
+        /// Dock AROS language type, must be TimexCartridgeDockArosLanguage.BASIC or TimexCartridgeDockArosLanguage.MACHINE_CODE
+        /// </summary>
+        byte LanguageType;
+
+        /// <summary>
+        /// Dock memory bank type, must be TimexCartridgeDockType.LROS
+        /// </summary>
+        byte DockType;
+
+        /// <summary>
+        /// The BASIC line or machine code adress of the intruction to start/jump to, stored in LSB MSB order
+        /// </summary>
+        UInt16 ProgStartingAddress;
+
+        /// <summary>
+        /// The memory chunk specification. When writing to the Horizontal Select Register (Port F4H), the Chunk Specification is High Active
+        /// </summary>
+        byte MemoryChunkSpecification;
+
+        /// <summary>
+        /// The program autostart specification: 0=> No; 1 => Yes
+        /// </summary>
+        byte AutostartSpecification;
+
+
+        /// <summary>
+        /// Number of bytes of RAM to be reserved for machine code variables, stored in LSB MSB order
+        /// </summary>
+        UInt16 ReservedRAM;
+    }
+
     public enum TimexCartridgeBankID : int
     {
         /// <summary>
@@ -180,14 +239,14 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 
     public class TimexCartridge8KChunk
     {
-        public TimexCartridge8KChunkType Type;
+        public TimexCartridge8KChunkType Type { get; set; } = TimexCartridge8KChunkType.Unknown;
+        public bool IsRAM { get; set; } = false;
+        public bool IsOnFile { get; set; } = false;
         public byte[] MemoryChunk;
 
         public TimexCartridge8KChunk()
         {
-            this.Type = TimexCartridge8KChunkType.Unknown;
-            this.MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
-            this.MemoryChunk = Encoding.ASCII.GetBytes(new string('\xFF', GlobalMemorySizeConstants.KB8));
+            // Do nothing
         }
     }
 
@@ -241,20 +300,20 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 
         public bool IsDockAROS()
         {
-            return (CartridgeDockType == TimexCartridgeDockType.AROS);
+            return IsDockBank() && (CartridgeDockType == TimexCartridgeDockType.AROS);
         }
         public bool IsDockLROS()
         {
-            return (CartridgeDockType == TimexCartridgeDockType.AROS);
+            return IsDockBank() && (CartridgeDockType == TimexCartridgeDockType.AROS);
         }
 
         public bool IsArosLangBASIC()
         {
-            return (CartridgeDockArosLanguage == TimexCartridgeDockArosLanguage.BASIC);
+            return IsDockAROS() && (CartridgeDockArosLanguage == TimexCartridgeDockArosLanguage.BASIC);
         }
         public bool IsArosLangMachineCode()
         {
-            return (CartridgeDockArosLanguage == TimexCartridgeDockArosLanguage.MACHINE_CODE);
+            return IsDockAROS() && (CartridgeDockArosLanguage == TimexCartridgeDockArosLanguage.MACHINE_CODE);
         }
 
 
@@ -315,6 +374,22 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 
                         default:
                             strAux = "Unknown memory chunk type";
+                            if(this.MemoryBanksChunks[i].IsRAM)
+                            {
+                                strAux += " RAM";
+                            }
+                            else
+                            {
+                                strAux += " ROM";
+                            }
+                            if (this.MemoryBanksChunks[i].IsOnFile)
+                            {
+                                strAux += " (on file)";
+                            }
+                            else
+                            {
+                                strAux += " (not on file)";
+                            }
                             break;
                     }
                     strAux = String.Format("\t{0} - [{1,5:####0} - {2,5:####0}] / [{1:X4}h - {2:X4}h]: {3}", i, memoryBaseStart, memoryBaseEnd, strAux).ToString();
@@ -322,7 +397,27 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
                 }
 
                 // Cartridge subtype
-                
+                // TOdO: 
+                if (this.MemoryBankID == (int)TimexCartridgeBankID.DOCK)
+                {
+                    if (this.CartridgeDockType == TimexCartridgeDockType.LROS)
+                    {
+                        // This is a LROS machin code program
+
+                    }
+                    else if (this.CartridgeDockType == TimexCartridgeDockType.AROS)
+                    {
+                        // This is an AROS BASIC program with an optional machine code program
+                        if (this.CartridgeDockArosLanguage == TimexCartridgeDockArosLanguage.BASIC)
+                        {
+                            // AROS BaSIC
+                        }
+                        else
+                        {
+                            // AROS Machine Code
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -339,9 +434,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             //// Read DCK File Header
             DckHeaderStruct structDCK = (DckHeaderStruct)StreamUtils.ReadStructure<DckHeaderStruct>(streamIn);
 
-            // Cartridge type
-            //int nextByte = (byte)streamIn.ReadByte();
-            //this.MemoryBankID = (TimexCartridgeBankID)nextByte;
+            // Bank ID
             int nextByte = (int)structDCK.MemoryBankID;
             if ((nextByte == (int)TimexCartridgeBankID.DOCK) || (nextByte == (int)TimexCartridgeBankID.EXROM) || (nextByte == (int)TimexCartridgeBankID.HOME))
             {
@@ -356,19 +449,16 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             // The eight 8 KB memory chunks information
             int memoryBaseStart = -1;
             int memoryBaseEnd = -1;
-            int fileSize = 0;
-            bool bIsRAM;
-            bool bIsOnFile;
+            bool ignoreDockTypeDetection = false;
             for (int i = 0; i < 8; i++)
             {
                 memoryBaseStart = i * GlobalMemorySizeConstants.KB8;
                 memoryBaseEnd = ((i + 1) * GlobalMemorySizeConstants.KB8) - 1;
                 this.MemoryBanksChunks[i] = new TimexCartridge8KChunk();
 
-                //nextByte = (byte)streamIn.ReadByte();
                 nextByte = (int)structDCK.MemoryBankChunkType[i];
-                bIsRAM = ((nextByte & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG);
-                bIsOnFile = ((nextByte & CHUNK_MEM_PRESENT_FLAG) == CHUNK_MEM_PRESENT_FLAG);
+                this.MemoryBanksChunks[i].IsRAM = ((nextByte & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG);
+                this.MemoryBanksChunks[i].IsOnFile = ((nextByte & CHUNK_MEM_PRESENT_FLAG) == CHUNK_MEM_PRESENT_FLAG);
                 if ((nextByte & CHUNK_RESERVED_MASK) == 0)
                 {
                     switch ((TimexCartridge8KChunkType)nextByte)
@@ -378,62 +468,130 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
                             switch (this.MemoryBankID)
                             {
                                 case (int)TimexCartridgeBankID.DOCK:
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\uFFFF', GlobalMemorySizeConstants.KB8));
+                                    // In this bank, when reading from non existing ROM/RAM, 255 (FFh) is returned
+                                    this.MemoryBanksChunks[i].MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
+                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\xFF', GlobalMemorySizeConstants.KB8));
                                     break;
 
                                 case (int)TimexCartridgeBankID.EXROM:
-                                    // FIXME: Should copy Extension ROM in 8Kb chunks
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\uFFFF', GlobalMemorySizeConstants.KB8));
+                                    // This memory bank is only partialy decoded (memory bank chunk 2), so the Extension ROM is shadoed in 8 KB chunks
+                                    // from adresses 16384 to 24575 ([4000h-5FFFh])
+                                    this.MemoryBanksChunks[i].MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
+                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\xFF', GlobalMemorySizeConstants.KB8));
                                     break;
+
                                 case (int)TimexCartridgeBankID.HOME:
-                                    // FIXME: Is this OK?
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', GlobalMemorySizeConstants.KB8));
+                                    // For this bank, if the memory chunk is not on the cartridge, the system 16 KB Home ROM and/or RAM are used
+                                    //this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', GlobalMemorySizeConstants.KB8));
+                                    break;
+
+                                default:
+                                    // FIXME: Is this OK? Not supported memory bank
+                                    this.MemoryBanksChunks[i].MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
+                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\xFF', GlobalMemorySizeConstants.KB8));
                                     break;
                             }
                             break;
 
                         case TimexCartridge8KChunkType.RAM_NOT_ON_FILE:
+                            // Fills the memory bank RAM chunk with 8 KB of zeros
                             this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.RAM_NOT_ON_FILE;
+                            this.MemoryBanksChunks[i].MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
                             this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', GlobalMemorySizeConstants.KB8));
                             break;
 
                         case TimexCartridge8KChunkType.ROM_ON_FILE:
+                            // Checks if this is Dock memory bank with a LROS or an AROS program
                             this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.ROM_ON_FILE;
-                            if ((i == 0) && (this.MemoryBankID == (int)TimexCartridgeBankID.DOCK))
+                            this.MemoryBanksChunks[i].MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
+                            if (this.MemoryBankID == (int)TimexCartridgeBankID.DOCK)
                             {
-                                //cartrigeIsLROS = true;
-                                //cartrigePosLROS = fileSize;
+                                if (!ignoreDockTypeDetection)
+                                {
+                                    if (i == 0)
+                                    {
+                                        // This is a LROS machine code program
+                                        this.CartridgeDockType = TimexCartridgeDockType.LROS;
+                                        ignoreDockTypeDetection = true;
+                                    }
+                                    else if (i == 4)
+                                    {
+                                        // This is an AROS BASIC program with an optional machin code program
+                                        this.CartridgeDockType = TimexCartridgeDockType.AROS;
+                                        ignoreDockTypeDetection = true;
+                                    }
+                                }
                             }
-                            else if ((i == 4) && (this.MemoryBankID == (int)TimexCartridgeBankID.DOCK))
-                            {
-                                //cartrigeIsAROS = true;
-                                //cartrigePosAROS = fileSize;
-                            }
+                            // Else is a Home bank 8 KB memory chunk, or some non suported extencion bank
                             ++NumberOf8KChunksInFile;
                             break;
 
                         case TimexCartridge8KChunkType.RAM_ON_FILE:
+                            // This is a presinstent 8KB memory bank chunk
                             this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.RAM_ON_FILE;
+                            this.MemoryBanksChunks[i].MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
                             ++NumberOf8KChunksInFile;
                             break;
 
                         default:
-                            // FIXME: Bug?
+                            // FIXME: Bug? Should't be where
                             break;
                     }
                 }
                 else
                 {
-                    // TODO: Bug?
+                    // TODO: Bug? Unknown memory bank type
                     this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.Unknown;
-                    if (bIsOnFile)
+                    if (this.MemoryBanksChunks[i].IsOnFile)
                     {
-                        ++fileSize;
+                        // ROM or RAM from file
+                        this.MemoryBanksChunks[i].MemoryChunk = new byte[GlobalMemorySizeConstants.KB8];
+                        ++NumberOf8KChunksInFile;
+                    }
+                    if (this.MemoryBanksChunks[i].IsRAM)
+                    {
+                        // RAM not on file
+                        this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', GlobalMemorySizeConstants.KB8));
                     }
                 }
-                if (bIsOnFile)
+                // Read the 8 KB memory chunk from stream
+                if (this.MemoryBanksChunks[i].IsOnFile)
                 {
                     StreamUtils.ReadBytes(streamIn, ref this.MemoryBanksChunks[i].MemoryChunk);
+                    if (this.MemoryBankID == (int)TimexCartridgeBankID.EXROM)
+                    {
+                        // Fix the partial decoding 
+                        // This memory bank is only partialy decoded (memory bank chunk 2), so the Extension ROM is shadoed in 8 KB chunks
+                        // from adresses 16384 to 24575 ([4000h-5FFFh])
+                        if (i == 2)
+                        {
+                            this.MemoryBanksChunks[0].MemoryChunk = this.MemoryBanksChunks[2].MemoryChunk;
+                            this.MemoryBanksChunks[1].MemoryChunk = this.MemoryBanksChunks[2].MemoryChunk;
+                        }
+                        else
+                        {
+                            this.MemoryBanksChunks[i].MemoryChunk = this.MemoryBanksChunks[2].MemoryChunk;
+                        }
+                    }
+                    else if (this.MemoryBankID == (int)TimexCartridgeBankID.DOCK)
+                    {
+                        if (ignoreDockTypeDetection)
+                        {
+                            if (i == 0)
+                            {
+                                // This is a LROS machine code program
+                                Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
+                                DckLrosStruct structLROS = (DckLrosStruct)StreamUtils.ReadStructure<DckLrosStruct>(stream);
+
+                            }
+                            else if (i == 4)
+                            {
+                                // This is an AROS BASIC program with an optional machine code program
+                                Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
+                                DckArosStruct structAROS = (DckArosStruct)StreamUtils.ReadStructure<DckArosStruct>(stream);
+                            }
+                        }
+                    }
                 }
 
                 /*
