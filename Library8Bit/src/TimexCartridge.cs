@@ -97,22 +97,22 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         /// <summary>
         /// Not used, must be 0
         /// </summary>
-        byte NotUsed;
+        public byte NotUsed;
 
         /// <summary>
         /// Dock memory bank type, must be TimexCartridgeDockType.LROS
         /// </summary>
-        byte DockType;
+        public byte DockType;
 
         /// <summary>
         /// The adress of the machine code intruction to start/jump to, stored in LSB MSB order
         /// </summary>
-        UInt16 ProgStartingAddress;
+        public ushort ProgStartingAddress;
 
         /// <summary>
         /// The memory chunk specification. When writing to the Horizontal Select Register (Port F4H), the Chunk Specification is High Active
         /// </summary>
-        byte MemoryChunkSpecification;
+        public byte MemoryChunkSpecification;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1, Size = 8)]
@@ -121,33 +121,33 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         /// <summary>
         /// Dock AROS language type, must be TimexCartridgeDockArosLanguage.BASIC or TimexCartridgeDockArosLanguage.MACHINE_CODE
         /// </summary>
-        byte LanguageType;
+        public byte LanguageType;
 
         /// <summary>
         /// Dock memory bank type, must be TimexCartridgeDockType.LROS
         /// </summary>
-        byte DockType;
+        public byte DockType;
 
         /// <summary>
         /// The BASIC line or machine code adress of the intruction to start/jump to, stored in LSB MSB order
         /// </summary>
-        UInt16 ProgStartingAddress;
+        public ushort ProgStartingAddress;
 
         /// <summary>
         /// The memory chunk specification. When writing to the Horizontal Select Register (Port F4H), the Chunk Specification is High Active
         /// </summary>
-        byte MemoryChunkSpecification;
+        public byte MemoryChunkSpecification;
 
         /// <summary>
         /// The program autostart specification: 0=> No; 1 => Yes
         /// </summary>
-        byte AutostartSpecification;
+        public byte AutostartSpecification;
 
 
         /// <summary>
         /// Number of bytes of RAM to be reserved for machine code variables, stored in LSB MSB order
         /// </summary>
-        UInt16 ReservedRAM;
+        public ushort ReservedRAM;
     }
 
     public enum TimexCartridgeBankID : int
@@ -317,7 +317,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         }
 
 
-        public List<String[]> getInfo()
+        public List<String[]> GetInfo()
         {
             List<String[]> listRet = new List<String[]>();
 
@@ -582,169 +582,22 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
                                 // This is a LROS machine code program
                                 Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
                                 DckLrosStruct structLROS = (DckLrosStruct)StreamUtils.ReadStructure<DckLrosStruct>(stream);
-
+                                // Starting Address endian fix
+                                structLROS.ProgStartingAddress = EndianUtils.ConvertWord16_LE(structLROS.ProgStartingAddress);
                             }
                             else if (i == 4)
                             {
                                 // This is an AROS BASIC program with an optional machine code program
                                 Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
                                 DckArosStruct structAROS = (DckArosStruct)StreamUtils.ReadStructure<DckArosStruct>(stream);
+                                // Starting Address endian fix
+                                structAROS.ProgStartingAddress = EndianUtils.ConvertWord16_LE(structAROS.ProgStartingAddress);
+                                // Reserved Machine Code RAM endian fix
+                                structAROS.ReservedRAM = EndianUtils.ConvertWord16_LE(structAROS.ReservedRAM);
                             }
                         }
                     }
                 }
-
-                /*
-                listRet.Add(new String[2] { "Cartridge Sub-Type", strAux });
-                if (this.IsTypeLROS)
-                {
-                    strAux = "LROS";
-                    // Not Used
-                    cartridgeFile.Position = 9 + (cartrigePosLROS * GlobalConstants.KB8);
-                    nextByte = (byte)cartridgeFile.ReadByte();
-                    listRet += "\tNot Used: 0x" + nextByte.ToString("X2") + Environment.NewLine;
-
-                    // Type
-                    listRet += "\tCartridge Type: ";
-                    nextByte = (byte)cartridgeFile.ReadByte();
-                    switch ((TimexCartridgeDockType)nextByte)
-                    {
-                        case TimexCartridgeDockType.LROS:
-                            listRet += "LROS";
-                            break;
-
-                        default:
-                            listRet += "Type Error (0x" + nextByte.ToString("X2") + ")";
-                            break;
-                    }
-                    listRet += Environment.NewLine;
-
-                    // Starting Address
-                    uint memAdressLSB = (uint)cartridgeFile.ReadByte();
-                    uint memAdressMSB = (uint)cartridgeFile.ReadByte();
-                    if (GlobalConstants.IsLittleEndian)
-                    {
-                        memAdressMSB = memAdressMSB << 8;
-                        memAdressMSB += memAdressLSB;
-                    }
-                    else
-                    {
-                        //memAdressMSB = memAdressMSB;
-                        memAdressMSB += memAdressLSB << 8;
-                    }
-
-                    listRet += "\tStarting Address: " + memAdressMSB + " (0x" + memAdressMSB.ToString("X4") + ")" + Environment.NewLine;
-
-                    // Memory Chunk Specification
-                    uint memChunks = (uint)cartridgeFile.ReadByte();
-                    listRet += "\tMemory Chunk Specification: " + Environment.NewLine;
-                    // When writing to the Horizontal Select Register (Port F4H), the Chunk Specification is High Active.
-                    for (int i = 0; i < 8; i++)
-                    {
-                        listRet += "\t\tChunk " + i + ": " + (memChunks & 1) + Environment.NewLine;
-                        memChunks = memChunks >> 1;
-                    }
-                }
-                else if (cartrigeIsAROS)
-                {
-                    listRet += "Cartridge Sub-Type: AROS" + Environment.NewLine;
-                    // Language
-                    cartridgeFile.Position = 9 + (cartrigePosAROS * GlobalConstants.KB8);
-                    listRet += "\tLanguage Type: ";
-                    nextByte = (byte)cartridgeFile.ReadByte();
-                    switch ((TimexCartridgeDockArosLanguage)nextByte)
-                    {
-                        case TimexCartridgeDockArosLanguage.BASIC:
-                            listRet += "BASIC [and Machine Code]";
-                            break;
-
-                        case TimexCartridgeDockArosLanguage.MACHINE_CODE:
-                            listRet += "Machine Code";
-                            break;
-
-                        default:
-                            listRet += "Language Error (0x" + nextByte.ToString("X2") + ")";
-                            break;
-                    }
-                    listRet += Environment.NewLine;
-
-                    // Type
-                    listRet += "\tCartridge Type: ";
-                    nextByte = (byte)cartridgeFile.ReadByte();
-                    switch ((TimexCartridgeDockType)nextByte)
-                    {
-                        case TimexCartridgeDockType.AROS:
-                            listRet += "AROS";
-                            break;
-
-                        default:
-                            listRet += "Type Error (0x" + nextByte.ToString("X2") + ")";
-                            break;
-                    }
-                    listRet += Environment.NewLine;
-
-                    // Starting Address
-                    uint memAdressLSB = (uint)cartridgeFile.ReadByte();
-                    uint memAdressMSB = (uint)cartridgeFile.ReadByte();
-                    if (GlobalConstants.IsLittleEndian)
-                    {
-                        memAdressMSB = memAdressMSB << 8;
-                        memAdressMSB += memAdressLSB;
-                    }
-                    else
-                    {
-                        //memAdressMSB = memAdressMSB;
-                        memAdressMSB += memAdressLSB << 8;
-                    }
-
-                    listRet += "\tStarting Address: " + memAdressMSB + " (0x" + memAdressMSB.ToString("X4") + ")" + Environment.NewLine;
-
-                    // Memory Chunk Specification
-                    uint memChunks = (uint)cartridgeFile.ReadByte();
-                    listRet += "\tMemory Chunk Specification: " + Environment.NewLine;
-                    // NOTE: Bits 0-3 must he set to 1 for proper execution.
-                    for (int i = 0; i < 8; i++)
-                    {
-                        listRet += "\t\tChunk " + i + ": " + (memChunks & 1) + Environment.NewLine;
-                        memChunks = memChunks >> 1;
-                    }
-
-                    // Autostart Specification
-                    listRet += "\tAutostart Specification: ";
-                    nextByte = (byte)cartridgeFile.ReadByte();
-                    switch (nextByte)
-                    {
-                        case 0:
-                            listRet += "No Autostart";
-                            break;
-
-                        case 1:
-                            listRet += "Autostart";
-                            break;
-
-                        default:
-                            listRet += "Autostart Error (0x" + nextByte.ToString("X2") + ")";
-                            break;
-                    }
-                    listRet += Environment.NewLine;
-
-                    // Number of bytes of RAM to be Reserved for Machine Code Variables
-                    memAdressLSB = (uint)cartridgeFile.ReadByte();
-                    memAdressMSB = (uint)cartridgeFile.ReadByte();
-                    if (GlobalConstants.IsLittleEndian)
-                    {
-                        memAdressMSB = memAdressMSB << 8;
-                        memAdressMSB += memAdressLSB;
-                    }
-                    else
-                    {
-                        //memAdressMSB = memAdressMSB;
-                        memAdressMSB += memAdressLSB << 8;
-                    }
-
-                    listRet += "\tReserved RAM: " + memAdressMSB + " Bytes" + Environment.NewLine;
-                }
-                */
             }
         }
 
@@ -765,12 +618,6 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
     /// </summary>
     public class TimexCartridge : IMediaFormat
     {
-        #region Class Constants
-        private const uint CHUNK_IS_RAM_FLAG = 0x01;
-        private const uint CHUNK_MEM_PRESENT_FLAG = 0x02;
-        private const uint CHUNK_RESERVED_MASK = 0xFC;
-        #endregion // Class Constants
-
         #region Interface IMediaFormat
         public MediaFormatType Type { get; private set; } = MediaFormatType.CARTRIDGE;
         public String[] Extensions { get; private set; } = { "dck" };
@@ -790,28 +637,18 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         #endregion // Interface IMediaFormat
 
         #region Class Properties
-        public TimexCartridgeBankID MemoryBankID { get; private set; } = TimexCartridgeBankID.Unknown;
-
-        public TimexCartridgeDockType CartridgeDockType { get; private set; } = TimexCartridgeDockType.Unknown;
-
-        public TimexCartridgeDockArosLanguage CartridgeDockArosType { get; private set; } = TimexCartridgeDockArosLanguage.Unknown;
-
-        public int NumberOf8KChunks { get; private set; } = 0;
-
-        public TimexCartridge8KChunk[] MemoryBanksChunks { get; private set; } = new TimexCartridge8KChunk[8];
-
-        public bool IsTypeAROS { get; private set; } = false;
-        public bool IsTypeLROS { get; private set; } = false;
+        List<TimexCartridgeBank> TCCBanks;
         #endregion // Class Properties
 
         #region Class Constructors
         public TimexCartridge()
         {
-            // Do nothing
+            TCCBanks = new List<TimexCartridgeBank>();
         }
 
         public TimexCartridge(String fileName)
         {
+            TCCBanks = new List<TimexCartridgeBank>();
             this.Load(fileName);
         }
         #endregion // Class Constructors
@@ -1073,106 +910,39 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         #endregion // Class Methods
 
         #region Interface IMediaFormat
-        public void Read(Stream streamIn)
+        public List<String[]> GetInfo()
         {
-            //// Read DCK File Header
-            DckHeaderStruct structDCK = (DckHeaderStruct)StreamUtils.ReadStructure<DckHeaderStruct>(streamIn);
-
-            // Cartridge type
-            //int nextByte = (byte)streamIn.ReadByte();
-            //this.MemoryBankID = (TimexCartridgeBankID)nextByte;
-            int nextByte = (int)structDCK.MemoryBankID;
-            if ((nextByte == (int)TimexCartridgeBankID.DOCK) || (nextByte == (int)TimexCartridgeBankID.EXROM) || (nextByte == (int)TimexCartridgeBankID.HOME))
+            List<String[]> retList = new List<string[]>();
+            retList.Add(new String[2] { "File Name", this.FileName });
+            retList.Add(new String[2] { "File Size", this.FileSize.ToString() + " Bytes" });
+            foreach (TimexCartridgeBank TCCBank in this.TCCBanks)
             {
-                this.MemoryBankID = (TimexCartridgeBankID)structDCK.MemoryBankID;
-            }
-            else
-            {
-                // TODO: Bug?
-                this.MemoryBankID = TimexCartridgeBankID.Unknown;
+                try
+                {
+                    retList.AddRange(TCCBank.GetInfo());
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
 
-            // The eight 8 KB memory chunks information
-            int memoryBaseStart = -1;
-            int memoryBaseEnd = -1;
-            int fileSize = 0;
-            bool bIsRAM;
-            bool bIsOnFile;
-            for (int i = 0; i < 8; i++)
+            return retList;
+        }
+
+        public void Read(Stream cartridgeFile)
+        {
+            while ((this.FileSize - cartridgeFile.Position) >= 9)
             {
-                memoryBaseStart = i * GlobalMemorySizeConstants.KB8;
-                memoryBaseEnd = ((i + 1) * GlobalMemorySizeConstants.KB8) - 1;
-                this.MemoryBanksChunks[i] = new TimexCartridge8KChunk();
-
-                //nextByte = (byte)streamIn.ReadByte();
-                nextByte = (int)structDCK.MemoryBankChunkType[i];
-                bIsRAM = ((nextByte & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG);
-                bIsOnFile = ((nextByte & CHUNK_MEM_PRESENT_FLAG) == CHUNK_MEM_PRESENT_FLAG);
-                if ((nextByte & CHUNK_RESERVED_MASK) == 0)
+                try
                 {
-                    switch ((TimexCartridge8KChunkType)nextByte)
-                    {
-                        case TimexCartridge8KChunkType.NON_EXISTENT:
-                            this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.NON_EXISTENT;
-                            switch (this.MemoryBankID)
-                            {
-                                case TimexCartridgeBankID.DOCK:
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\uFFFF', GlobalMemorySizeConstants.KB8));
-                                    break;
-
-                                case TimexCartridgeBankID.EXROM:
-                                    // FIXME: Should copy Extension ROM in 8Kb chunks
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\uFFFF', GlobalMemorySizeConstants.KB8));
-                                    break;
-                                case TimexCartridgeBankID.HOME:
-                                    // FIXME: Is this OK?
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', GlobalMemorySizeConstants.KB8));
-                                    break;
-                            }
-                            break;
-
-                        case TimexCartridge8KChunkType.RAM_NOT_ON_FILE:
-                            this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.RAM_NOT_ON_FILE;
-                            this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', GlobalMemorySizeConstants.KB8));
-                            break;
-
-                        case TimexCartridge8KChunkType.ROM_ON_FILE:
-                            this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.ROM_ON_FILE;
-                            if ((i == 0) && (this.MemoryBankID == TimexCartridgeBankID.DOCK))
-                            {
-                                //cartrigeIsLROS = true;
-                                //cartrigePosLROS = fileSize;
-                            }
-                            else if ((i == 4) && (this.MemoryBankID == TimexCartridgeBankID.DOCK))
-                            {
-                                //cartrigeIsAROS = true;
-                                //cartrigePosAROS = fileSize;
-                            }
-                            ++NumberOf8KChunks;
-                            break;
-
-                        case TimexCartridge8KChunkType.RAM_ON_FILE:
-                            this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.RAM_ON_FILE;
-                            ++NumberOf8KChunks;
-                            break;
-
-                        default:
-                            // TODO: Bug?
-                            break;
-                    }
+                    TimexCartridgeBank TCCBank = new TimexCartridgeBank();
+                    TCCBank.Read(cartridgeFile);
+                    this.TCCBanks.Add(TCCBank);
                 }
-                else
+                catch(Exception ex)
                 {
-                    // TODO: Bug?
-                    this.MemoryBanksChunks[i].Type = TimexCartridge8KChunkType.Unknown;
-                    if (bIsOnFile)
-                    {
-                        ++fileSize;
-                    }
-                }
-                if (bIsOnFile)
-                {
-                    StreamUtils.ReadBytes(streamIn, ref this.MemoryBanksChunks[i].MemoryChunk);
+                    throw ex;
                 }
             }
         }
@@ -1192,16 +962,14 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             try
             {
                 FileStream cartridgeFile = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                long fileSize = cartridgeFile.Length;
-                if (fileSize >= 9)
-                {
-                    this.Read(cartridgeFile);
-                    this.FileName = fileName;
-                    this.FileSize = fileSize;
-                }
-                else
+                this.FileName = fileName;
+                this.FileSize = cartridgeFile.Length;
+                this.Read(cartridgeFile);
+                long fileSize = this.FileSize - cartridgeFile.Position;
+                if (fileSize != 0)
                 {
                     throw new Exception("Bad file size");
+
                 }
             }
             catch (Exception ex)

@@ -188,13 +188,13 @@ namespace CaetanoSof.Utils.StreamUtils
             }
         }
 
-        public static void PutBytes(Stream stream, ref byte[] buffer)
+        public static void WriteBytes(Stream stream, ref byte[] buffer)
         {
             stream.Write(buffer, 0, buffer.Length);
             //stream.Flush();
         }
 
-        public static uint GetWord16_BE(Stream stream)
+        public static uint ReadWord16_BE(Stream stream)
         {
             byte[] buffer = new byte[2];
             ushort word = 0;
@@ -209,7 +209,7 @@ namespace CaetanoSof.Utils.StreamUtils
             return (uint)(word & 0xFFFF);
         }
 
-        public static void PutWord16_BE(Stream stream, uint word)
+        public static void WriteWord16_BE(Stream stream, uint word)
         {
             byte[] buffer = new byte[2];
 

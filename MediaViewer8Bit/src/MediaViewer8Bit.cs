@@ -65,7 +65,7 @@ namespace CaetanoSof.Era8Bit.Programs.MediaViwer
             try
             {
                 TimexCartridge timexCartridge = new TimexCartridge(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\TS2048.DCK");
-                List<String[]> info = timexCartridge.getInfo();
+                List<String[]> info = timexCartridge.GetInfo();
                 foreach (var item in info)
                 {
                     WriteProperty(item[0], item[1]);

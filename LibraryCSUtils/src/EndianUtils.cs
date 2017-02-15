@@ -93,5 +93,33 @@ namespace CaetanoSof.Utils.EndianUtils
 
             private set { }
         }
+
+        public static ushort ConvertWord16_BE(ushort word16)
+        {
+            if(EndianUtils.IsBigEndian)
+            {
+                return word16;
+            }
+            
+            byte[] buffer = BitConverter.GetBytes(word16);
+            byte b0 = buffer[0];
+            byte b1 = buffer[1];
+
+            return (ushort)(((buffer[0] << 8) | buffer[1]) & 0xFFFF);
+        }
+
+        public static ushort ConvertWord16_LE(ushort word16)
+        {
+            if (EndianUtils.IsLittleEndian)
+            {
+                return word16;
+            }
+
+            byte[] buffer = BitConverter.GetBytes(word16);
+            byte b0 = buffer[0];
+            byte b1 = buffer[1];
+
+            return (ushort)(((buffer[1] << 8) | buffer[0]) & 0xFFFF);
+        }
     }
 }
