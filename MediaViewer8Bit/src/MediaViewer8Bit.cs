@@ -64,13 +64,24 @@ namespace CaetanoSof.Era8Bit.Programs.MediaViwer
             // 
             try
             {
-                TimexCartridge timexCartridge = new TimexCartridge(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\TS2048.DCK");
-                List<String[]> info = timexCartridge.GetInfo();
-                foreach (var item in info)
+                String[] cartridges = {
+                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\TS2048.DCK",
+                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\SPECEMU.dck",
+                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\TC2048 Emulator\Emulator.dck",
+                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Office\Time Word\Time Word.dck",
+                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Games\CrazyBugs\CrazyBugs.dck",
+                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Games\Chess\Chess.dck" 
+                };
+                foreach (var cartridge in cartridges)
                 {
-                    WriteProperty(item[0], item[1]);
+                    TimexCartridge timexCartridge = new TimexCartridge(cartridge);
+                    List<String[]> info = timexCartridge.GetInfo();
+                    foreach (var item in info)
+                    {
+                        WriteProperty(item[0], item[1]);
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
             }
             catch (Exception ex)
             {
@@ -78,18 +89,7 @@ namespace CaetanoSof.Era8Bit.Programs.MediaViwer
                 WriteError(ex.Message);
             }
             
-            String strOutput = TimexCartridge.getInfo(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\TS2048.DCK");
-            Console.WriteLine(strOutput);
-            strOutput = TimexCartridge.getInfo(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\SPECEMU.dck");
-            Console.WriteLine(strOutput);
-            strOutput = TimexCartridge.getInfo(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\TC2048 Emulator\Emulator.dck");
-            Console.WriteLine(strOutput);
-            strOutput = TimexCartridge.getInfo(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Office\Time Word\Time Word.dck");
-            Console.WriteLine(strOutput);
-            strOutput = TimexCartridge.getInfo(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Games\CrazyBugs\CrazyBugs.dck");
-            Console.WriteLine(strOutput);
-            strOutput = TimexCartridge.getInfo(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Games\Chess\Chess.dck");
-            Console.WriteLine(strOutput);
+            Console.WriteLine();
 
             Console.ResetColor();
             String str = Console.ReadLine();

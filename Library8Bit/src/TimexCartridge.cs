@@ -270,6 +270,9 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         public int NumberOf8KChunksInFile { get; private set; } = 0;
 
         public TimexCartridge8KChunk[] MemoryBanksChunks { get; private set; } = new TimexCartridge8KChunk[8];
+
+        public DckLrosStruct sLrosProgramHeader;
+        public DckArosStruct sArosProgramHeader;
         #endregion // Class Properties
 
         #region Class Constructors
@@ -316,6 +319,15 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             return IsDockAROS() && (CartridgeDockArosLanguage == TimexCartridgeDockArosLanguage.MACHINE_CODE);
         }
 
+        public DckLrosStruct GetLrosProgramHeader()
+        {
+            return this.sLrosProgramHeader;
+        }
+
+        public DckArosStruct GeALrosProgramHeader()
+        {
+            return this.sArosProgramHeader;
+        }
 
         public List<String[]> GetInfo()
         {
@@ -396,26 +408,91 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
                     listRet.Add(new String[2] { null, strAux });
                 }
 
-                // Cartridge subtype
-                // TOdO: 
+                // Cartridge DOCK bank information
                 if (this.MemoryBankID == (int)TimexCartridgeBankID.DOCK)
                 {
                     if (this.CartridgeDockType == TimexCartridgeDockType.LROS)
                     {
-                        // This is a LROS machin code program
+                        // This is a LROS machine code program
+                        listRet.Add(new String[2] { "DOCK Memory Bank Type", "LROS" });
 
+                        listRet.Add(new String[2] { "\tReserved (=0)", this.sLrosProgramHeader.NotUsed.ToString() });
+
+                        if(this.sLrosProgramHeader.DockType == (int)TimexCartridgeDockType.LROS)
+                        {
+                            strAux = "Machine Code";
+                        }
+                        else
+                        {
+                            strAux = String.Format("Unknown Language {0}", this.sLrosProgramHeader.DockType).ToString();
+                        }
+                        listRet.Add(new String[2] { "\tPrograming Language", strAux });
+
+                        strAux = String.Format("{0,5:####0} / {0:X4}h", this.sLrosProgramHeader.ProgStartingAddress).ToString();
+                        listRet.Add(new String[2] { "\tMachine Code Start Adress", strAux });
                     }
                     else if (this.CartridgeDockType == TimexCartridgeDockType.AROS)
                     {
                         // This is an AROS BASIC program with an optional machine code program
+                        listRet.Add(new String[2] { "DOCK Memory Bank Type", "AROS" });
+
+                        if (this.sArosProgramHeader.DockType == (int)TimexCartridgeDockType.AROS)
+                        {
+                            switch (this.sArosProgramHeader.LanguageType)
+                            {
+                                case (int)TimexCartridgeDockArosLanguage.BASIC:
+                                    strAux = "BASIC";
+                                    if (this.sArosProgramHeader.ReservedRAM > 0)
+                                    {
+                                        strAux = " + Machine Code";
+                                    }
+                                    break;
+
+                                case (int)TimexCartridgeDockArosLanguage.MACHINE_CODE:
+                                    strAux = "Machine Code";
+                                    break;
+
+                                default:
+                                    strAux = String.Format("Unknown Language {0}", this.sArosProgramHeader.LanguageType).ToString();
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            strAux = String.Format("Unknown Type {0}", this.sArosProgramHeader.DockType).ToString();
+                        }
+                        listRet.Add(new String[2] { "\tPrograming Language", strAux });
+
                         if (this.CartridgeDockArosLanguage == TimexCartridgeDockArosLanguage.BASIC)
                         {
-                            // AROS BaSIC
+                            // AROS BASIC
+                            strAux = String.Format("{0,5:####0}", this.sArosProgramHeader.ProgStartingAddress).ToString();
+                            listRet.Add(new String[2] { "\tBASIC Code Start Line", strAux });
                         }
                         else
                         {
                             // AROS Machine Code
+                            strAux = String.Format("{0,5:####0} / {0:X4}h", this.sArosProgramHeader.ProgStartingAddress).ToString();
+                            listRet.Add(new String[2] { "\tMachine Code Start Adress", strAux });
                         }
+
+                        listRet.Add(new String[2] { "\tReserved RAM for Machine Code", this.sArosProgramHeader.ReservedRAM.ToString() + " Bytes"});
+
+                        switch (this.sArosProgramHeader.AutostartSpecification)
+                        {
+                            case 0:
+                                strAux = "False";
+                                break;
+
+                            case 1:
+                                strAux = "True";
+                                break;
+
+                            default:
+                                strAux = String.Format("Unknown Autostart Specification {0}", this.sArosProgramHeader.AutostartSpecification).ToString();
+                                break;
+                        }
+                        listRet.Add(new String[2] { "\tProgram Autostarts", strAux });
                     }
                 }
             }
@@ -450,6 +527,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             int memoryBaseStart = -1;
             int memoryBaseEnd = -1;
             bool ignoreDockTypeDetection = false;
+            bool ignoreDockProgramStartDetection = false;
             for (int i = 0; i < 8; i++)
             {
                 memoryBaseStart = i * GlobalMemorySizeConstants.KB8;
@@ -575,25 +653,29 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
                     }
                     else if (this.MemoryBankID == (int)TimexCartridgeBankID.DOCK)
                     {
-                        if (ignoreDockTypeDetection)
+                        if (ignoreDockTypeDetection && !ignoreDockProgramStartDetection)
                         {
                             if (i == 0)
                             {
                                 // This is a LROS machine code program
                                 Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
-                                DckLrosStruct structLROS = (DckLrosStruct)StreamUtils.ReadStructure<DckLrosStruct>(stream);
+                                this.sLrosProgramHeader = (DckLrosStruct)StreamUtils.ReadStructure<DckLrosStruct>(stream);
                                 // Starting Address endian fix
-                                structLROS.ProgStartingAddress = EndianUtils.ConvertWord16_LE(structLROS.ProgStartingAddress);
+                                this.sLrosProgramHeader.ProgStartingAddress = EndianUtils.ConvertWord16_LE(this.sLrosProgramHeader.ProgStartingAddress);
+                                // LROS program header read completed
+                                ignoreDockProgramStartDetection = true;
                             }
                             else if (i == 4)
                             {
                                 // This is an AROS BASIC program with an optional machine code program
                                 Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
-                                DckArosStruct structAROS = (DckArosStruct)StreamUtils.ReadStructure<DckArosStruct>(stream);
+                                this.sArosProgramHeader = (DckArosStruct)StreamUtils.ReadStructure<DckArosStruct>(stream);
                                 // Starting Address endian fix
-                                structAROS.ProgStartingAddress = EndianUtils.ConvertWord16_LE(structAROS.ProgStartingAddress);
+                                this.sArosProgramHeader.ProgStartingAddress = EndianUtils.ConvertWord16_LE(this.sArosProgramHeader.ProgStartingAddress);
                                 // Reserved Machine Code RAM endian fix
-                                structAROS.ReservedRAM = EndianUtils.ConvertWord16_LE(structAROS.ReservedRAM);
+                                this.sArosProgramHeader.ReservedRAM = EndianUtils.ConvertWord16_LE(this.sArosProgramHeader.ReservedRAM);
+                                // AROS program header read completed
+                                ignoreDockProgramStartDetection = true;
                             }
                         }
                     }
