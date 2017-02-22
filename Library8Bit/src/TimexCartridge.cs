@@ -430,6 +430,18 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 
                         strAux = String.Format("{0,5:####0} / {0:X4}h", this.sLrosProgramHeader.ProgStartingAddress).ToString();
                         listRet.Add(new String[2] { "\tMachine Code Start Adress", strAux });
+
+                        // Memory Chunk Specification
+                        uint memChunks = (uint)this.sLrosProgramHeader.MemoryChunkSpecification;
+                        listRet.Add(new String[2] { "\tMemory Chunk Specification", "" });
+
+                        // NOTE: Bits 0-3 must he set to 1 for proper execution.
+                        for (int i = 0; i < 8; i++)
+                        {
+                            strAux = String.Format("\t\tChunk {0}: {1}", i, ((((memChunks & 1) == 0) ? "Present" : "Not Present"))).ToString();
+                            listRet.Add(new String[2] { null, strAux });
+                            memChunks = memChunks >> 1;
+                        }
                     }
                     else if (this.CartridgeDockType == TimexCartridgeDockType.AROS)
                     {
@@ -493,6 +505,18 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
                                 break;
                         }
                         listRet.Add(new String[2] { "\tProgram Autostarts", strAux });
+
+                        // Memory Chunk Specification
+                        uint memChunks = (uint)this.sArosProgramHeader.MemoryChunkSpecification;
+                        listRet.Add(new String[2] { "\tMemory Chunk Specification", "" });
+
+                        // NOTE: Bits 4 must he set to 1 for proper execution.
+                        for (int i = 0; i < 8; i++)
+                        {
+                            strAux = String.Format("\t\tChunk {0}: {1}", i, ((((memChunks & 1) == 0) ? "Present" : "Not Present"))).ToString();
+                            listRet.Add(new String[2] { null, strAux });
+                            memChunks = memChunks >> 1;
+                        }
                     }
                 }
             }

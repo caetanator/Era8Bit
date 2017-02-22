@@ -6,7 +6,7 @@
  *
  * CONTACTS
  *  E-mail regarding any portion of the "Era 8-bit Media Viwer" project:
- *      caetanator@hotmail.com
+ *      José Caetano Silva, jcaetano@users.sourceforge.net
  *
  * COPYRIGHT
  *  This file is distributed under the terms of the GNU General Public
