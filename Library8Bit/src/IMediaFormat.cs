@@ -79,5 +79,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 
         void Load(String fileName);
         void Save(String fileName, uint fileVersion = 0);
+
+        List<String[]> GetInfo();
     }
 }
