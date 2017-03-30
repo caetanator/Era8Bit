@@ -29,7 +29,7 @@ using CaetanoSof.Era8Bit.Library8Bit.MediaFormats;
 
 namespace CaetanoSof.Era8Bit.Programs.MediaViwer
 {
-    public class MediaViwer
+    public class MediaViewer
     {
         private static void WriteError(String strErrorMessage)
         {

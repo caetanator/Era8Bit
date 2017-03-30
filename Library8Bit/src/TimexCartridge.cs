@@ -725,9 +725,9 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
     public class TimexCartridge : IMediaFormat
     {
         #region Interface IMediaFormat
-        public MediaFormatType Type { get; private set; } = MediaFormatType.CARTRIDGE;
-        public String[] Extensions { get; private set; } = { "dck" };
-        public string Description
+        public new static MediaFormatType Type { get; private set; } = MediaFormatType.CARTRIDGE;
+        public new static String[] Extensions { get; private set; } = { "dck" };
+        public new static string Description
         {
             get
             {
@@ -736,10 +736,10 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 
             private set { }
         }
-        public String FileName { get; private set; } = "";
-        public long FileSize { get; private set; } = 0;
+        public new String FileName { get; private set; } = "";
+        public new long FileSize { get; private set; } = 0;
 
-        public bool DataChanged { get; private set; } = false;
+        public new bool DataChanged { get; private set; } = false;
         #endregion // Interface IMediaFormat
 
         #region Class Properties
@@ -760,16 +760,16 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         #endregion // Class Constructors
 
         #region Class Methods
-        
+
         #endregion // Class Methods
 
         #region Interface IMediaFormat
-        public List<String[]> GetInfo()
+        public new List<String[]> GetInfo()
         {
             List<String[]> retList = new List<string[]>();
             retList.Add(new String[2] { "File Name", this.FileName });
             retList.Add(new String[2] { "File Size", this.FileSize.ToString() + " Bytes" });
-            retList.Add(new String[2] { "File Type Description", this.Description });
+            retList.Add(new String[2] { "File Type Description", TimexCartridge.Description });
             foreach (TimexCartridgeBank TCCBank in this.TCCBanks)
             {
                 try
@@ -785,7 +785,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             return retList;
         }
 
-        public void Read(Stream cartridgeFile)
+        public new void Read(Stream cartridgeFile)
         {
             while ((this.FileSize - cartridgeFile.Position) >= 9)
             {
@@ -802,12 +802,12 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             }
         }
 
-        public void Write(Stream streamOut)
+        public new void Write(Stream streamOut)
         {
             throw new NotImplementedException();
         }
 
-        public void Load(String fileName)
+        public new void Load(String fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
@@ -833,7 +833,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             }
         }
 
-        public void Save(String fileName, uint fileVersion = 0)
+        public new void Save(String fileName, uint fileVersion = 0)
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {

@@ -63,23 +63,23 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         SCREEN_DUMP
     };
 
-    interface IMediaFormat
+    public abstract class IMediaFormat
     {
-        MediaFormatType Type { get; }
-        String[] Extensions { get; }
-        String Description { get; }
+        public static MediaFormatType Type { get; private set; }
+        public static String[] Extensions { get; private set; }
+        public static String Description { get; private set; }
 
-        String FileName { get; }
-        long FileSize { get; }
+        public String FileName { get; private set; }
+        public long FileSize { get; private set; }
 
-        bool DataChanged { get; }
+        public bool DataChanged { get; private set; }
 
-        void Read(Stream streamIn);
-        void Write(Stream streamOut);
+        public void Read(Stream streamIn) { }
+        public void Write(Stream streamOut) { }
 
-        void Load(String fileName);
-        void Save(String fileName, uint fileVersion = 0);
+        public void Load(String fileName) { }
+        public void Save(String fileName, uint fileVersion = 0) { }
 
-        List<String[]> GetInfo();
+        public List<String[]> GetInfo() { return null; }
     }
 }

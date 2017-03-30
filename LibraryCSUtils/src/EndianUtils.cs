@@ -46,8 +46,20 @@ namespace CaetanoSof.Utils.EndianUtils
     /// This is also know as the "Motorola convention" and the "Network order".
     /// Used in Motorola 6800, Motorola 68000, SUN SPARK and by IBM PowerPC.
     /// </summary>
-    public static class EndianUtils
+    public sealed class EndianUtils
     {
+        private static readonly bool m_isBigEndian = ((unchecked(((byte)0x12345678)) == 0x12) ? true : false);
+        private static readonly bool m_isLittleEndian = ((unchecked(((byte)0x12345678)) == 0x78) ? true : false);
+
+        private static readonly Lazy<EndianUtils> m_lazy = new Lazy<EndianUtils>(() => new EndianUtils());
+
+        public static EndianUtils Instance { get { return m_lazy.Value; } }
+
+        private EndianUtils()
+        {
+            // Singleton pattern objects dosen't have public constructors
+        }
+
         /// <summary>
         /// Checks if the platform is Big-Endian.
         /// </summary>

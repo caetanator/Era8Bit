@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace CaetanoSof.Era8Bit.Library8Bit
 {
-    public class GlobalMemorySizeConstants
+    public sealed class GlobalMemorySizeConstants
     {
         public const int KB1 = 1 * 1024;
 
@@ -47,5 +47,14 @@ namespace CaetanoSof.Era8Bit.Library8Bit
         public const int KB256 = 256 * 1024;
 
         public const int KB512 = 512 * 1024;
+
+        private static readonly Lazy<GlobalMemorySizeConstants> m_lazy = new Lazy<GlobalMemorySizeConstants>(() => new GlobalMemorySizeConstants());
+
+        public static GlobalMemorySizeConstants Instance { get { return m_lazy.Value; } }
+
+        private GlobalMemorySizeConstants()
+        {
+            // Singleton pattern objects dosen't have public constructors
+        }
     }
 }
