@@ -725,21 +725,21 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
     public class TimexCartridge : IMediaFormat
     {
         #region Interface IMediaFormat
-        public new static MediaFormatType Type { get; private set; } = MediaFormatType.CARTRIDGE;
-        public new static String[] Extensions { get; private set; } = { "dck" };
-        public new static string Description
+        public override MediaFormatType Type { get; protected set; } = MediaFormatType.CARTRIDGE;
+        public override String[] Extensions { get; protected set;  } = { "dck" };
+        public override string Description
         {
             get
             {
                 return "Timex Command Cartridge (TCC)";
             }
 
-            private set { }
+            protected set { }
         }
-        public new String FileName { get; private set; } = "";
-        public new long FileSize { get; private set; } = 0;
+        public override String FileName { get; protected set; } = "";
+        public override long FileSize { get; protected set; } = 0;
 
-        public new bool DataChanged { get; private set; } = false;
+        public override bool DataChanged { get; protected set; } = false;
         #endregion // Interface IMediaFormat
 
         #region Class Properties
@@ -764,28 +764,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         #endregion // Class Methods
 
         #region Interface IMediaFormat
-        public new List<String[]> GetInfo()
-        {
-            List<String[]> retList = new List<string[]>();
-            retList.Add(new String[2] { "File Name", this.FileName });
-            retList.Add(new String[2] { "File Size", this.FileSize.ToString() + " Bytes" });
-            retList.Add(new String[2] { "File Type Description", TimexCartridge.Description });
-            foreach (TimexCartridgeBank TCCBank in this.TCCBanks)
-            {
-                try
-                {
-                    retList.AddRange(TCCBank.GetInfo());
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-
-            return retList;
-        }
-
-        public new void Read(Stream cartridgeFile)
+        public override void Read(Stream cartridgeFile)
         {
             while ((this.FileSize - cartridgeFile.Position) >= 9)
             {
@@ -802,12 +781,12 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             }
         }
 
-        public new void Write(Stream streamOut)
+        public override void Write(Stream streamOut)
         {
             throw new NotImplementedException();
         }
 
-        public new void Load(String fileName)
+        public override void Load(String fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
@@ -833,7 +812,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             }
         }
 
-        public new void Save(String fileName, uint fileVersion = 0)
+        public override void Save(String fileName, uint fileVersion = 0)
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
@@ -860,6 +839,27 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             {
                 throw ex;
             }
+        }
+
+        public override List<String[]> GetInfo()
+        {
+            List<String[]> retList = new List<string[]>();
+            retList.Add(new String[2] { "File Name", this.FileName });
+            retList.Add(new String[2] { "File Size", this.FileSize.ToString() + " Bytes" });
+            retList.Add(new String[2] { "File Type Description", this.Description });
+            foreach (TimexCartridgeBank TCCBank in this.TCCBanks)
+            {
+                try
+                {
+                    retList.AddRange(TCCBank.GetInfo());
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
+            return retList;
         }
         #endregion // Interface IMediaFormat
     }

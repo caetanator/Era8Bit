@@ -26,6 +26,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using CaetanoSof.Era8Bit.Library8Bit.MediaFormats;
+using System.IO;
 
 namespace CaetanoSof.Era8Bit.Programs.MediaViwer
 {
@@ -54,37 +55,116 @@ namespace CaetanoSof.Era8Bit.Programs.MediaViwer
             Console.WriteLine();
         }
 
+        public static void ProcessFile(string mediaFilePath)
+        {
+            IMediaFormat mediaObject = MediaFactory.Instance.GetMediaHandler(mediaFilePath);
+            if (mediaObject != null)
+            {
+                List<String[]> info = mediaObject.GetInfo();
+                if ((info != null) && (info.Capacity > 0))
+                {
+                    foreach (var item in info)
+                    {
+                        WriteProperty(item[0], item[1]);
+                    }
+                }
+                else
+                {
+                    FileStream mediaStream = null;
+                    try
+                    {
+                        mediaStream = new FileStream(mediaFilePath, FileMode.Open, FileAccess.Read);
+                    }
+                    catch (Exception)
+                    {
+                        mediaStream = null;
+                    }
+
+                    WriteProperty("File Name", mediaFilePath);
+                    WriteProperty("File Size", (mediaStream != null) ? (mediaStream.Length.ToString()) : ("File Not Found"));
+                    WriteProperty("File Type Description", mediaObject.Description);
+                }
+            }
+            else
+            {
+                FileStream mediaStream = null;
+                try
+                {
+                    mediaStream = new FileStream(mediaFilePath, FileMode.Open, FileAccess.Read);
+                }
+                catch (Exception)
+                {
+                    mediaStream = null;
+                }
+
+                WriteProperty("File Name", mediaFilePath);
+                WriteProperty("File Size", (mediaStream != null) ? (mediaStream.Length.ToString()) : ("File Not Found"));
+                WriteProperty("File Type Description", "Unknown Media Format");
+            }
+
+            Console.WriteLine();
+        }
+
+        public static void ProcessDirectory(string targetDirectory)
+        {
+            // Process the list of files found in the directory.
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            foreach (string fileName in fileEntries)
+            {
+                ProcessFile(fileName);
+            }
+
+            // Recurse into subdirectories of this directory.
+            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            foreach (string subdirectory in subdirectoryEntries)
+            {
+                ProcessDirectory(subdirectory);
+            }
+        }
+
+        public static void PrintUsage()
+        {
+            Console.WriteLine("Usage: MediaViewer8Bit [file | directory] [file | directory] ...");
+            Console.WriteLine();
+        }
+
         public static void Main(string[] args)
         {
+            if(args.Length <= 0)
+            {
+                PrintUsage();
+                return;
+            }
+
             // Set console colors
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Clear();
 
-            // 
+            // Prosses files
             try
             {
-                String[] cartridges = {
-                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\TS2048.DCK",
-                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\Spectrum Emulator\SPECEMU.dck",
-                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\OS\TC2048 Emulator\Emulator.dck",
-                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Office\Time Word\Time Word.dck",
-                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Games\CrazyBugs\CrazyBugs.dck",
-                    @"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Games\Chess\Chess.dck" 
-                };
-                foreach (var cartridge in cartridges)
+                foreach (string path in args)
                 {
-                    TimexCartridge timexCartridge = new TimexCartridge(cartridge);
-                    List<String[]> info = timexCartridge.GetInfo();
-                    foreach (var item in info)
+                    if (File.Exists(path))
                     {
-                        WriteProperty(item[0], item[1]);
+                        // This path is a file
+                        ProcessFile(path);
                     }
-                    Console.WriteLine();
+                    else if (Directory.Exists(path))
+                    {
+                        // This path is a directory
+                        ProcessDirectory(path);
+                    }
+                    else
+                    {
+                        WriteError(String.Format("{0} is not a valid file or directory.", path));
+                    }
                 }
             }
             catch (Exception ex)
             {
+
                 WriteError("Exception Error: ");
                 WriteError(ex.Message);
             }

@@ -41,13 +41,25 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
             // Singleton pattern objects dosen't have public constructors
         }
 
-        public static IMediaFormat GetMediaHandler(String fileName)
+        public IMediaFormat GetMediaHandler(String fileName)
         {
             IMediaFormat retObject = null;
 
-            if(fileName.EndsWith(TimexCartridge.Extensions[0], StringComparison.OrdinalIgnoreCase))
+            try
             {
-                retObject = new TimexCartridge(fileName);
+                if (fileName.EndsWith(".dck", StringComparison.OrdinalIgnoreCase))
+                {
+                    retObject = new TimexCartridge(fileName);
+                }
+                else if (fileName.EndsWith(".tap", StringComparison.OrdinalIgnoreCase))
+                {
+                    // FIXME: Test only
+                    retObject = new TimexCartridge(@"C:\Users\JCaetano\Desktop\Emulators\Sinclair\Programs\Timex TC2068\Cartridges\Timex Dock\Games\Chess\Chess.dck");
+                }
+            }
+            catch(Exception)
+            {
+                // Do nothing
             }
 
             return retObject;

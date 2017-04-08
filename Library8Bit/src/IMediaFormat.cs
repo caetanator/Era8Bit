@@ -65,21 +65,21 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 
     public abstract class IMediaFormat
     {
-        public static MediaFormatType Type { get; private set; }
-        public static String[] Extensions { get; private set; }
-        public static String Description { get; private set; }
+        public abstract MediaFormatType Type { get; protected set; }
+        public abstract String[] Extensions { get; protected set; }
+        public abstract String Description { get; protected set; }
 
-        public String FileName { get; private set; }
-        public long FileSize { get; private set; }
+        public abstract String FileName { get; protected set; }
+        public abstract long FileSize { get; protected set; }
 
-        public bool DataChanged { get; private set; }
+        public abstract bool DataChanged { get; protected set; }
 
-        public void Read(Stream streamIn) { }
-        public void Write(Stream streamOut) { }
+        public abstract void Read(Stream streamIn);
+        public abstract void Write(Stream streamOut);
 
-        public void Load(String fileName) { }
-        public void Save(String fileName, uint fileVersion = 0) { }
+        public abstract void Load(String fileName);
+        public abstract void Save(String fileName, uint fileVersion = 0);
 
-        public List<String[]> GetInfo() { return null; }
+        public abstract List<String[]> GetInfo();
     }
 }
