@@ -29,6 +29,11 @@ using System.Threading.Tasks;
 
 namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public enum MediaFormatType
     {
         /// <summary>

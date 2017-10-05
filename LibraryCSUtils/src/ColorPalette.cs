@@ -2,16 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ColorEntryByteRGB = CaetanoSof.Utils.Graphics.ColorEntryRGB<byte>;
-using ColorEntryFloatRGB = CaetanoSof.Utils.Graphics.ColorEntryRGB<float>;
-using ColorEntryByteRGBA = CaetanoSof.Utils.Graphics.ColorEntryRGBA<byte>;
-using ColorEntryFloatRGBA = CaetanoSof.Utils.Graphics.ColorEntryRGBA<float>;
+using ColorEntryByteRGB = CaetanoSof.Utils.Drawing.ColorEntryRGB<byte>;
+using ColorEntryFloatRGB = CaetanoSof.Utils.Drawing.ColorEntryRGB<float>;
+using ColorEntryByteRGBA = CaetanoSof.Utils.Drawing.ColorEntryRGBA<byte>;
+using ColorEntryFloatRGBA = CaetanoSof.Utils.Drawing.ColorEntryRGBA<float>;
 
-namespace CaetanoSof.Utils.Graphics
+namespace CaetanoSof.Utils.Drawing
 {
     /// <summary>
     /// A template that defines a color entry for a palette in the form of RGB.
     /// </summary>
+    /// <copyright>(c) 2006-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     /// <typeparam name="T">
     /// A numeric type like byte, float, etc.
     /// </typeparam>

@@ -5,6 +5,7 @@
   },
 
   "dependencies": {
+    "ImageSharp": "1.0.0-alpha9-00034",
     "Library8Bit": "1.0.0-*",
     "Microsoft.NETCore.App": "1.1.0"
   },

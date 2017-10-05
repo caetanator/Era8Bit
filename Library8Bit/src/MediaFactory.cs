@@ -30,6 +30,8 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
     /// <summary>
     /// Singleton pattern class that implements a factory to create the correct object to handle a specific media file format.
     /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public sealed class MediaFactory
     {
         private static readonly Lazy<MediaFactory> m_lazy = new Lazy<MediaFactory>(() => new MediaFactory());

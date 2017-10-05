@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CaetanoSof.Utils.Graphics
+namespace CaetanoSof.Utils.Drawing
 {
     /// <summary>
     /// Represents color by RGBA (Red, Green, Blue and Alpha) values.

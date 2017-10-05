@@ -150,6 +150,11 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         public ushort ReservedRAM;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public enum TimexCartridgeBankID : int
     {
         /// <summary>
@@ -181,6 +186,8 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
     /// <para>Both type of programs have a short header at the beginning which contains the necessary informations (start address etc.) 
     /// for their execution.</para>
     /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public enum TimexCartridgeDockType : int
     {
         /// <summary>
@@ -210,6 +217,11 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         AROS = 2
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public enum TimexCartridgeDockArosLanguage : int
     {
         /// <summary>
@@ -228,6 +240,11 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         MACHINE_CODE = 2
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public enum TimexCartridge8KChunkType : int
     {
         Unknown = -1,
@@ -237,6 +254,11 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         RAM_ON_FILE = 3,
     };
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public class TimexCartridge8KChunk
     {
         public TimexCartridge8KChunkType Type { get; set; } = TimexCartridge8KChunkType.Unknown;
@@ -250,6 +272,11 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
+	/// <license type="GPL-3">See LICENSE for full terms</license>
     public class TimexCartridgeBank
     {
         #region Class Constants
@@ -532,6 +559,9 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         #region Interface IMediaFormat
         public void Read(Stream streamIn)
         {
+            //Assert.IsNull(streamIn);
+            //Assert.IsTrue(streamIn.CanRead, nameof(streamIn), "Stream isn't readable");
+
             //// Read DCK File Header
             DckHeaderStruct structDCK = (DckHeaderStruct)StreamUtils.ReadStructure<DckHeaderStruct>(streamIn);
 

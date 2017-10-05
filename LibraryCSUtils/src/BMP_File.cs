@@ -14,7 +14,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C) 2006   José Caetano Silva
+ *  (C) 2006-2017   José Caetano Silva
  *
  * HISTORY
  *  2006-02-01: Created.
@@ -22,429 +22,241 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace CaetanoSof.Utils.Graphics
+namespace CaetanoSof.Utils.Drawing
 {
     /// <summary>
-    /// This is the OS/2 BMP v2 (and above) compression type used.
+    /// The compression method used on the IBM OS/2 BMP image.
+    /// <para>See: http://www.fileformat.info/format/os2bmp/egff.htm </para>
     /// </summary>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>None</term>
-    /// <description>An uncompressed format.</description>
-    /// </item>
-    /// <item>
-    /// <term>RLE_8</term>
-    /// <description>A run-length encoded (RLE) format for bitmaps with 8 bpp. 
-    /// This format may be compressed in either of two modes:
-    /// 	- Encoded;
-    /// 	- Absolute.
-    /// Both modes can occur anywhere throughout a single bitmap.
-    /// <para>Encoded mode consists of two bytes:  
-    /// the first byte specifies the number of consecutive pixels to be drawn using the color index contained in the second byte.</para></description>
-    /// <para>Absolute mode consists of two bytes, where the first byte of the pair is set to 0 and the second byte as this meaning:
-    /// 	0 - End of Line;
-    /// 	1 - End of Bitmap;
-    /// 	2 - Delta: The next 2 bytes contain unsigned values indicating the horizontal and vertical  offset of the next pixel from the current position;
-    /// 	3 to 255 - The follow WORD aligned bytes represents the number of bytes which follow, each of which contains the color index of a single pixel.</para>
-    ///  <para>Example:
-    /// 	Compressed:
-    /// 		03 04 
-    /// 		05 06 
-    /// 		00 03 45 56 67 00 
-    /// 		02 78 
-    /// 		00 02 05 01 
-    /// 		02 78 
-    /// 		00 00 
-    /// 		09 1E 
-    /// 		00 01
-    /// 	Expanded:
-    /// 		04 04 04 
-    /// 		06 06 06 06 06 
-    /// 		45 56 67 
-    /// 		78 78 
-    ///		Move 5 Coluns right and Line down 
-    /// 		78 78 
-    /// 		End of Line 
-    /// 		1E 1E 1E 1E 1E 1E 1E 1E 1E 
-    /// 		End of RLE Bitmap</para></description>
-    /// </item>
-    /// <item>
-    /// <term>RLE_4</term>
-    /// <description>A run-length encoded (RLE) format for bitmaps with 4 bpp. 
-    /// The compression format is a 2-byte format consisting of a count byte followed by two 4 bits color indexes.
-    /// <para>In encoded mode, the  high-order nibble (that is, its low-order four bits) and one in its low-order nibble. 
-    /// The first of the pixels is drawn using the color specified by the high-order nibble, the second is drawn using the color in the low-order nibble.</para>
-    /// <para>In absolute mode, the first byte contains zero, the second byte contains 
-    /// the number of color indexes that follow, and subsequent bytes contain 
-    /// color indexes in their high- and low-order nibbles, one color index for 
-    /// each pixel. Each run must be aligned on a word boundary. The end-of-line, end-of-bitmap, and delta escapes also apply to.</para>
-    /// <para>Example:
-    /// 	Compressed:
-    /// 		03 04 
-    /// 		05 06 
-    /// 		00 06 45 56 67 00 
-    /// 		04 78
-    /// 		00 02 05 01 
-    /// 		04 78 
-    /// 		00 00 
-    /// 		09 1E 
-    /// 		00 01
-    /// 	Expanded:
-    /// 		0 4 0 
-    /// 		0 6 0 6 0 
-    /// 		4 5 5 6 6 7 
-    /// 		7 8 7 8  
-    ///		Move 5 Coluns right and Line down 
-    /// 		7 8 7 8
-    /// 		End of Line 
-    /// 		1 E 1 E 1 E 1 E 1
-    /// 		End of RLE Bitmap</para></description>
-    /// </item>
-    /// <item>
-    /// <term>Huffman_1D</term>
-    /// <description>Specifies that the bitmap is compressed with Huffman 1D algorithm. See <b>BITMAPINFOHEADER2</b>.</description>
-    /// </item>
-    /// <item>
-    /// <term>RLE_24</term>
-    /// <description>A run-length encoded (RLE) format for bitmaps with 24 bpp. Similar to RLE 4 and RLE 8. See <b>BITMAPINFOHEADER2</b>.</description>
-    /// </item>
-    /// </list>
-    public enum OS2_BitmapCompressionV2
+    public enum OS2_BitmapCompressionType : uint
     {
+        /// <summary>
+        /// The image is uncompressed, the pixels are in plain RGB/RGBA.
+        /// <para>Needs OS/2 1.0 or above.</para>
+        /// <para>From OS/2 BMP version 1 and above.</para>
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// Run-length encoded (RLE) 8-bit/pixel. Only for 8 bpp bitmaps.
+        /// <para>Needs OS/2 2.0 or above.</para>
+        /// <para>From OS/2 BMP version 2 and above.</para>
+        /// </summary>
         RLE_8 = 1,
+        /// <summary>
+        /// Run-length encoded (RLE) 4-bit/pixel. Only for 4 bpp bitmaps.
+        /// <para>Needs OS/2 2.0 or above.</para>
+        /// <para>From OS/2 BMP version 2 and above.</para>
+        /// </summary>
         RLE_4 = 2,
+        /// <summary>
+        /// Huffman 1D algorithm for monochrome bitmaps with 1 bpp.
+        /// <para>Needs OS/2 2.0 or above.</para>
+        /// <para>From OS/2 BMP version 2 and above.</para>
+        /// </summary>
         Huffman_1D = 3,
+        /// <summary>
+        /// Run-length encoded (RLE) 24-bit/pixel. Only for 24 bpp bitmaps.
+        /// <para>Needs OS/2 2.0 or above.</para>
+        /// <para>From OS/2 BMP version 2 and above.</para>
+        /// </summary>
         RLE_24 = 4
     }
 
     /// <summary>
-    /// This is the BMP v2 compression type used.
+    /// The compression method used on the Microsoft Windows BMP image.
+    /// <para>See: https://en.wikipedia.org/wiki/BMP_file_format </para>
     /// </summary>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>None</term>
-    /// <description>An uncompressed format.</description>
-    /// </item>
-    /// <item>
-    /// <term>RLE_8</term>
-    /// <description>A run-length encoded (RLE) format for bitmaps with 8 bpp. 
-    /// The compression format is a 2-byte format consisting of a count byte followed by a byte containing a color index. <see>BitmapCompressionV3</seee></description>
-    /// </item>
-    /// <item>
-    /// <term>RLE_4</term>
-    /// <description>A run-length encoded (RLE) format for bitmaps with 4 bpp. 
-    /// The compression format is a 2-byte format consisting of a count byte followed by two word-length color indexes. <see>BitmapCompressionV3</seee></description>
-    /// </item>
-    /// </list>
-    public enum BitmapCompressionV2 
-	{ 
-        None  	= 0,
+    public enum BitmapCompressionType : uint
+    {
+        /// <summary>
+        /// Uncompressed format. The pixels are in plain RGB/RGBA.
+        /// <para>Needs Windows 2.0 or above.</para>
+        /// <para>From Windows BMP version 2 and above.</para>
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Run-length encoded (RLE) 8-bit/pixel. Only for 8 bpp bitmaps.
+        /// <para>Needs Windows 2.0 or above.</para>
+        /// <para>From Windows BMP version 2 and above.</para>
+        /// </summary>
         RLE_8 = 1,
-        RLE_4 = 2
+        /// <summary>
+        /// Run-length encoded (RLE) 4-bit/pixel. Only for 4 bpp bitmaps.
+        /// <para>Needs Windows 2.0 or above.</para>
+        /// <para>From Windows BMP version 2 and above.</para>
+        /// </summary>
+        RLE_4 = 2,
+        /// <summary>
+        /// Uncompressed format that the color table consists of three DWORD color masks
+        /// that specify the red, green, and blue components, respectively, of each pixel. 
+        /// <para>This is valid when used with 16 and 32 bpp bitmaps.</para>
+        /// <para>Needs Windows 95/Windows NT 4 or above.</para>
+        /// <para>From Windows BMP version 3 and above.</para>
+        /// </summary>
+        BitFields = 3,
+        /// <summary>
+        /// The bitmap contains a JPG image.
+        /// <para>Needs Windows 98/Windows 2000 or above.</para>
+        /// <para>From Windows BMP version 4 and above.</para>
+        /// </summary>
+        JPEG = 4,
+        /// <summary>
+        /// The bitmap contains a PNG image. 
+        /// <para>Needs Windows 98/Windows 2000 or above.</para>
+        /// <para>From Windows BMP version 4 and above.</para>
+        /// </summary>
+        PNG = 5,
+        /// <summary>
+        /// Uncompressed format that the color table consists of four DWORD color masks
+        /// that specify the red, green, blue, and alpha components, respectively, of each pixel. 
+        /// <para>This is valid when used with 16 and 32 bpp bitmaps on Windows CE only.</para>
+        /// <para>Needs Windows CE .NET 4.0 or later.</para>
+        /// <para>From Windows BMP version 3 and above.</para>
+        /// </summary>
+        /// <see cref="https://msdn.microsoft.com/en-us/library/aa452885.aspx"/>
+        Alpha_BitFields = 6,
+        /// <summary>
+        /// Uncompressed format.
+        /// <para>Windows Metafile CMYK only.</para>
+        /// </summary>
+        CMYK_None = 11,
+        /// <summary>
+        /// Run-length encoded (RLE) 8-bit/pixel. Only for 8 bpp bitmaps.
+        /// <para>Windows Metafile CMYK only.</para>
+        /// </summary>
+        CMYK_RLE_8 = 12,
+        /// <summary>
+        /// Run-length encoded (RLE) 4-bit/pixel. Only for 4 bpp bitmaps.
+        /// <para>Windows Metafile CMYK only.</para>
+        /// </summary>
+        CMYK_RLE_4 = 13,
+
+        /// <summary>
+        /// For Windows Mobile version 5.0 and later, you can OR any of the values BI_RGB, BI_BITFIELDS and BI_ALPHABITFIELDS with
+        /// BI_SRCPREROTATE to specify that the source DIB section has the same rotation angle as the destination.
+        /// Otherwise, the image can be rotated 90 degrees anti-clockwise (Landscape/Portrait).
+        /// https://msdn.microsoft.com/en-us/library/aa452495.aspx
+        /// </summary>
+        BI_SRCPREROTATE = 0x8000
     }
-	
-	/// <summary>
-    /// This is the BMP v3 (and above) compression type used.
-    /// </summary>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>None</term>
-    /// <description>An uncompressed format.</description>
-    /// </item>
-    /// <item>
-    /// <term>RLE_8</term>
-    /// <description>A run-length encoded (RLE) format for bitmaps with 8 bpp. 
-    /// This format may be compressed in either of two modes:
-	/// 	- Encoded;
-	/// 	- Absolute.
-	/// Both modes can occur anywhere throughout a single bitmap.
-	/// <para>Encoded mode consists of two bytes:  
-	/// the first byte specifies the number of consecutive pixels to be drawn using the color index contained in the second byte.</para></description>
-	/// <para>Absolute mode consists of two bytes, where the first byte of the pair is set to 0 and the second byte as this meaning:
-	/// 	0 - End of Line;
-	/// 	1 - End of Bitmap;
-	/// 	2 - Delta: The next 2 bytes contain unsigned values indicating the horizontal and vertical  offset of the next pixel from the current position;
-	/// 	3 to 255 - The follow WORD aligned bytes represents the number of bytes which follow, each of which contains the color index of a single pixel.</para>
-	///  <para>Example:
-	/// 	Compressed:
-	/// 		03 04 
-	/// 		05 06 
-	/// 		00 03 45 56 67 00 
-	/// 		02 78 
-	/// 		00 02 05 01 
-	/// 		02 78 
-	/// 		00 00 
-	/// 		09 1E 
-	/// 		00 01
-	/// 	Expanded:
-	/// 		04 04 04 
-	/// 		06 06 06 06 06 
-	/// 		45 56 67 
-	/// 		78 78 
-	///		Move 5 Coluns right and Line down 
-	/// 		78 78 
-	/// 		End of Line 
-	/// 		1E 1E 1E 1E 1E 1E 1E 1E 1E 
-	/// 		End of RLE Bitmap</para></description>
-	/// </item>
-	/// <item>
-	/// <term>RLE_4</term>
-	/// <description>A run-length encoded (RLE) format for bitmaps with 4 bpp. 
-	/// The compression format is a 2-byte format consisting of a count byte followed by two 4 bits color indexes.
-	/// <para>In encoded mode, the  high-order nibble (that is, its low-order four bits) and one in its low-order nibble. 
-	/// The first of the pixels is drawn using the color specified by the high-order nibble, the second is drawn using the color in the low-order nibble.</para>
-	/// <para>In absolute mode, the first byte contains zero, the second byte contains 
-	/// the number of color indexes that follow, and subsequent bytes contain 
-	/// color indexes in their high- and low-order nibbles, one color index for 
-	/// each pixel. Each run must be aligned on a word boundary. The end-of-line, end-of-bitmap, and delta escapes also apply to.</para>
-	/// <para>Example:
-	/// 	Compressed:
-	/// 		03 04 
-	/// 		05 06 
-	/// 		00 06 45 56 67 00 
-	/// 		04 78
-	/// 		00 02 05 01 
-	/// 		04 78 
-	/// 		00 00 
-	/// 		09 1E 
-	/// 		00 01
-	/// 	Expanded:
-	/// 		0 4 0 
-	/// 		0 6 0 6 0 
-	/// 		4 5 5 6 6 7 
-	/// 		7 8 7 8  
-	///		Move 5 Coluns right and Line down 
-	/// 		7 8 7 8
-	/// 		End of Line 
-	/// 		1 E 1 E 1 E 1 E 1
-	/// 		End of RLE Bitmap</para></description>
-    /// </item>
-    /// <item>
-    /// <term>BitFields</term>
-    /// <description>Specifies that the bitmap is not compressed and that the color table consists of 
-    /// three DWORD color masks that specify the red, green, and blue components, respectively, of each pixel. 
-    /// This is valid when used with 16 and 32 bpp bitmaps.</description>
-    /// </item>
-    /// <item>
-    /// <term>JPEG</term>
-    /// <description>Indicates that the bitmap is JPEG compressed. 
-    /// Needs Windows 98/Me or Windows 2000 or above</description>
-    /// </item>
-    /// <item>
-    /// <term>PNG</term>
-    /// <description>Indicates that the bitmap is PNG compressed. 
-    /// Needs Windows 98/Me or Windows 2000 or above.</description>
-    /// </item>
-    /// </list>
-    public enum BitmapCompressionV3 
-	{ 
-        None       	= 0,
-        RLE_8      	= 1,
-        RLE_4      	= 2,
-        BitFields	= 3,
-        JPEG      	= 4,
-        PNG       	= 5
-    }
-	
+
     /// <summary>
-    /// This is the BMP v2 number of bits per pixel used.
+    /// The number of bits-per-pixel (bpp) used in the Microsoft Windows BMP image.
     /// </summary>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>MonoChrome</term>
-    /// <description>
-    /// The bitmap is monochrome, and the palette member of BITMAPINFOHEADER contains 2 entries (2 colors palette).
-    /// Each bit in the bitmap array represents a pixel.
-    /// If the bit is clear, the pixel is displayed with the color of the first entry in the palette table;
-    /// if the bit is set, the pixel has the color of the second entry in the table.
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <term>Palette_16</term>
-    /// <description>
-    /// The bitmap has a maximum of 16 colors, and the palette member of BITMAPINFOHEADER contains up to 16 entries. 
-    /// Each 4 bits in the bitmap array represents a pixel (the index for the palette).
-    /// For example, if the first byte in the bitmap is 0x1F, the byte represents two pixels. 
-	/// The first pixel contains the color in the second table entry, and the second pixel contains the color in the sixteenth table entry.
-    /// </description>
-    /// </item>
-	/// <item>
-    /// <term>Palette_256</term>
-    /// <description>
-    /// The bitmap has a maximum of 256 colors, and the palette member of BITMAPINFOHEADER contains up to 256 entries. 
-    /// Each 8 bits (1 BYTE) in the bitmap array represents a pixel (the index for the palette).
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <term>RGB_24</term>
-    /// <description>
-    /// The bitmap has a maximum of 2^24 colors, and the palette member of BITMAPINFOHEADER is NULL.
-    /// Each pixel is made by 3 bytes that specifies the relative intensities of blue, green, and red color components respectively
-	/// The palette color table is used for optimizing colors used on palette-based devices, and must contain the number of entries specified by the PaletteColors member of the BITMAPINFOHEADER.
-    /// </description>
-    /// </item>
-    /// </list>
-    public enum BitsPerPixelV2
+    public enum BitmapBitsPerPixel : ushort
     {
-        MonoChrome =  1,
-        Palette_16 =  4,
-        Palette_256 =  8,
-        RGB_24 = 24
+        /// <summary>
+        /// The number of bits-per-pixel is specified or is implied by the JPEG or PNG format.
+        /// <para>Needs Windows 98/Windows 2000 or above.</para>
+        /// <para>From Windows BMP version 4 and above.</para>
+        /// </summary>
+        JPEG_PNG = 0,
+        /// <summary>
+        /// The bitmap is monochrome, and the palette contains 2 entries (2 colors palette).
+        /// <para>Each bit in the bitmap array represents a pixel.
+        /// If the bit is clear, the pixel is displayed with the color of the first entry in the palette table;
+        /// if the bit is set, the pixel has the color of the second entry in the table.</para>
+        /// <para>Needs Windows 2.0 or above.</para>
+        /// <para>From Windows BMP version 2 and above.</para>
+        /// </summary>
+        MonoChrome = 1,
+        /// <summary>
+        /// The bitmap has a maximum of 16 colors, and the palette contains up to 16 entries (16 colors palette).
+        /// <para>Each 4 bits in the bitmap array represents a pixel (the index for the palette).
+        /// For example, if the first byte in the bitmap is 0x1F, the byte represents two pixels. 
+        /// The first pixel contains the color in the second table entry, and the second pixel contains the 
+        /// color in the sixteenth table entry.</para>
+        /// <para>Needs Windows 2.0 or above.</para>
+        /// <para>From Windows BMP version 2 and above.</para>
+        /// </summary>
+        Palette_16 = 4,
+        /// <summary>
+        /// The bitmap has a maximum of 256 colors, and the palette contains up to 256 entries (256 colors palette).
+        /// <para>Each 8 bits (1 byte) in the bitmap array represents a pixel (the index for the palette).</para>
+        /// <para>Needs Windows 2.0 or above.</para>
+        /// <para>From Windows BMP version 2 and above.</para>
+        /// </summary>
+        Palette_256 = 8,
+        /// <summary>
+        /// The bitmap has a maximum of 2^16 colors. An optional 256 colors palette can be given, for optimizing the display on palette-based devices.
+        /// <para>Each WORD (2 bytes) in the bitmap array represents a single pixel. The relative intensities of red, green, and blue are represented with 5 bits 
+        /// for each color component.
+        /// The value for blue is in the least significant 5 bits, followed by 5 bits each for green and red. The most significant bit is not used.</para>
+        /// <para>Needs Windows 95/Windows NT 4 or above.</para>
+        /// <para>From Windows BMP version 4 and above.</para>
+        /// </summary>
+        RGB_16 = 16,
+        /// <summary>
+        /// The bitmap has a maximum of 2^24 colors. An optional 256 colors palette can be given, for optimizing the display on palette-based devices.
+        /// <para>Each pixel is made by 3 bytes that specifies the relative intensities of blue, green, and red color components respectively.</para>
+        /// <para>Needs Windows 3.1/Windows NT 3.1 or above.</para>
+        /// <para>From Windows BMP version 3 and above.</para>
+        /// </summary>
+        RGB_24 = 24,
+        /// <summary>
+        /// The bitmap has a maximum of 2^32 colors. An optional 256 colors palette can be given, for optimizing the display on palette-based devices.
+        /// <para>Each DWORD (4 bytes) in the bitmap array represents a single pixel. 
+        /// The relative intensities of red, green, and blue are represented with 8 bits for each color component.
+        /// The value for blue is in the least significant 8 bits, followed by 8 bits each for green and red. The most significant byte is not used.</para>
+        /// <para>Needs Windows 95/Windows NT 4 or above.</para>
+        /// <para>From Windows BMP version 4 and above.</para>
+        /// </summary>
+        RGB_32 = 32
     }
-	
-	/// <summary>
-    /// This is the BMP v3 (and above) number of bits per pixel used.
+
+    /// <summary>
+    /// The color space used on the Microsoft Windows BMP image.
     /// </summary>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>JPEG_PNG</term>
-    /// <description>
-    /// The number of bits-per-pixel is specified or is implied by the JPEG or PNG format.
-    /// Needs Windows 98/Me and Windows 2000 or above.
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <term>MonoChrome</term>
-    /// <description>
-    /// The bitmap is monochrome, and the palette member of BITMAPINFOHEADER contains 2 entries (2 colors palette).
-    /// Each bit in the bitmap array represents a pixel.
-    /// If the bit is clear, the pixel is displayed with the color of the first entry in the palette table;
-    /// if the bit is set, the pixel has the color of the second entry in the table.
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <term>Palette_16</term>
-    /// <description>
-    /// The bitmap has a maximum of 16 colors, and the palette member of BITMAPINFOHEADER contains up to 16 entries. 
-    /// Each 4 bits in the bitmap array represents a pixel (the index for the palette).
-    /// For example, if the first byte in the bitmap is 0x1F, the byte represents two pixels. 
-	/// The first pixel contains the color in the second table entry, and the second pixel contains the color in the sixteenth table entry.
-    /// </description>
-    /// </item>
-	/// <item>
-    /// <term>Palette_256</term>
-    /// <description>
-    /// The bitmap has a maximum of 256 colors, and the palette member of BITMAPINFOHEADER contains up to 256 entries. 
-    /// Each 8 bits (1 BYTE) in the bitmap array represents a pixel (the index for the palette).
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <term>RGB_16</term>
-    /// <description>
-    /// The bitmap has a maximum of 2^16 colors. Each WORD (2 bytes) in the bitmap array represents a single pixel. 
-	/// The relative intensities of red, green, and blue are represented with five bits for each color component.
-	/// The value for blue is in the least significant five bits, followed by five bits each for green and red. The most significant bit is not used.
-	/// The palette color table is used for optimizing colors used on palette-based devices, and must contain the number of entries specified by the PaletteColors member of the BITMAPINFOHEADER.
-	///
-	/// If the biCompression member of the BITMAPINFOHEADER is <b>None</b>, the palette member of BITMAPINFOHEADER is NULL.
-	/// 
-	/// If the biCompression member of the BITMAPINFOHEADER is <b>BitFields</b>, the palette member contains 3 DWORD color masks that specify the red, green, and blue components, respectively, of each pixel. 
-	/// <para>Windows 95/98/Me: When the biCompression member is <b>BitFields</b>, the system supports only the following 16 bpp color masks: 
-	/// 5-5-5 16-bit image, where the blue mask is 0x001F, the green mask is 0x03E0, and the red mask is 0x7C00; 
-	/// 5-6-5 16-bit image, where the blue mask is 0x001F, the green mask is 0x07E0, and the red mask is 0xF800.
-	/// Windows NT 4/2000 or above: When the biCompression member is <b>BitFields</b>, bits set in each DWORD mask must be contiguous and should not overlap the bits of another mask. 
-	/// All the bits in the pixel do not have to be used.</para>
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <term>RGB_24</term>
-    /// <description>
-    /// The bitmap has a maximum of 2^24 colors, and the palette member of BITMAPINFOHEADER is NULL.
-    /// Each pixel is made by 3 bytes that specifies the relative intensities of blue, green, and red color components respectively
-	/// The palette color table is used for optimizing colors used on palette-based devices, and must contain the number of entries specified by the PaletteColors member of the BITMAPINFOHEADER.
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <term>RGB_32</term>
-    /// <description>
-    /// The bitmap has a maximum of 2^32 colors. Each DWORD (4 bytes) in the bitmap array represents a single pixel. 
-	/// The relative intensities of red, green, and blue are represented with five bits for each color component.
-	/// The value for blue is in the least significant five bits, followed by five bits each for green and red. The most significant bit is not used.
-	/// The palette color table is used for optimizing colors used on palette-based devices, and must contain the number of entries specified by the PaletteColors member of the BITMAPINFOHEADER.
-	///
-	/// If the biCompression member of the BITMAPINFOHEADER is <b>None</b>, the palette member of BITMAPINFOHEADER is NULL.
-	/// 
-	/// If the biCompression member of the BITMAPINFOHEADER is <b>BitFields</b>, the palette member contains 3 DWORD color masks that specify the red, green, and blue components, respectively, of each pixel. 
-	/// <para>Windows 95/98/Me: When the biCompression member is <b>BitFields</b>, the system supports only the following 32 bpp color mask: 
-	/// The blue mask is 0x000000FF, the green mask is 0x0000FF00, and the red mask is 0x00FF0000. 
-	/// Windows NT 4/2000 or above: When the biCompression member is <b>BitFields</b>, bits set in each DWORD mask must be contiguous and should not overlap the bits of another mask. 
-	/// All the bits in the pixel do not have to be used.</para>
-    /// </description>
-    /// </item>
-    /// </list>
-    public enum BitmapBitsPerPixelV3
+	public enum BitmapColorSpaceType : uint
     {
-        JPEG_PNG   	=  0,
-        MonoChrome 	=  1,
-        Palette_16 =  4,
-        Palette_256	=  8,
-        RGB_16     	= 16,
-        RGB_24     	= 24,
-        RGB_32     	= 32
-    }
-	
-	/// <summary>
-    /// This is the BMP v4 color space used.
-    /// </summary>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>Calibrated_RBG</term>
-    /// <description>This value indicates that endpoints and gamma values are given in the appropriate fields.</description>
-    /// </item>
-    /// <item>
-    /// <term>sRGB</term>
-    /// <description>This value specifies that the bitmap is in sRGB color space.</description>
-    /// </item>
-	/// <item>
-    /// <term>WindowsColorSpace</term>
-    /// <description>This value indicates that the bitmap is in the system default color space: sRGB.</description>
-    /// </item>
-    /// </list>
-	public enum BitmapColorSpaceV4 
-	{ 
+
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Calibrated_RBG</term>
+        /// <description></description>
+        /// </item>
+        /// <item>
+        /// <term>sRGB</term>
+        /// <description></description>
+        /// </item>
+        /// <item>
+        /// <term>WindowsColorSpace</term>
+        /// <description></description>
+        /// </item>
+        /// <item>
+        /// <term>ProfileLinked</term>
+        /// <description></description>
+        /// </item>
+        /// <item>
+        /// <term>ProfileEmbedded</term>
+        /// <description></description>
+        /// </item>
+        /// </list>
+        /// 
+        /// <summary>
+        /// The endpoints and gamma values are given in the appropriate fields.
+        /// </summary>
         Calibrated_RBG = 0,
-        sRGB   = 1,
-        WindowsColorSpace = 2
-    }
-	
-	/// <summary>
-    /// This is the BMP v5 and above, color space used.
-    /// </summary>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>Calibrated_RBG</term>
-    /// <description>This value indicates that endpoints and gamma values are given in the appropriate fields.</description>
-    /// </item>
-	/// <item>
-    /// <term>sRGB</term>
-    /// <description>This value specifies that the bitmap is in sRGB color space.</description>
-    /// </item>
-	/// <item>
-    /// <term>WindowsColorSpace</term>
-    /// <description>This value indicates that the bitmap is in the system default color space: sRGB.</description>
-    /// </item>
-	/// <item>
-    /// <term>ProlileLinked</term>
-    /// <description>This value indicates that <b>ProfileOffset</b> points to the bmpFile name of the profile to use (gamma and endpoints values are ignored).</description>
-    /// </item>
-	/// <item>
-    /// <term>ProlileEmbedded</term>
-    /// <description>This value indicates that <b>ProfileOffset</b> points to a memory buffer that contains the profile to be used (gamma and endpoints values are ignored).</description>
-    /// </item>
-    /// </list>
-	public enum BitmapColorSpaceV5 
-	{ 
-        Calibrated_RBG = 0,
-		sRGB   = 1,
+        /// <summary>
+        /// The bitmap is in sRGB color space.
+        /// </summary>
+		sRGB = 1,
+        /// <summary>
+        /// The bitmap is in the system default color space: sRGB.
+        /// </summary>
 		WindowsColorSpace = 2,
-		ProlileLinked = 3,
-		ProlileEmbedded = 4
+        /// <summary>
+        /// This value indicates that <b>ProfileOffset</b> points to the ICC color space file name of the profile to use (gamma and endpoints values are ignored).
+        /// </summary>
+		ProfileLinked = 3,
+        /// <summary>
+        /// Indicates that <b>ProfileOffset</b> points to a memory buffer that contains the profile to be used (gamma and endpoints values are ignored).
+        /// </summary>
+        ProfileEmbedded = 4
     }
 	
 	/// <summary>
@@ -472,75 +284,66 @@ namespace CaetanoSof.Utils.Graphics
 	/// Matches the colors to their nearest color in the destination gamut.</description>
     /// </item>
 	/// </list>
-	public enum BitmapIntentV5 
-	{ 
-        Business = 1,	// Saturation
-		Graphics = 2,	// Relative
-		Images   = 4,	// Perceptual
-		ABS_ColoriMetric	= 8		// Absolute
-    }
-	
-    /// <summary>
-    /// This is the BMP v2 palette entry.
-    /// </summary>
-    /// <remarks>
-    /// Make shore that sizeof(RGBTRIPLE) returns 3 (BYTE aligned, the real structure size)
-    /// insted of 4 (DWORD aligned, the default for VC++ 32 bits).
-    /// </remarks>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>Blue</term>
-    /// <description>Specifies the intensity of blue in the color.</description>
-    /// </item>
-    /// <item>
-    /// <term>Green</term>
-    /// <description>Specifies the intensity of green in the color.</description>
-    /// </item>
-    /// <item>
-    /// <term>Red</term>
-    /// <description>Specifies the intensity of red in the color.</description>
-    /// </item>
-    /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 3)]
-    public struct PaletteEntryV2
-    {
-        public byte Blue;
-        public byte Green;
-        public byte Red; 
+	public enum BitmapIntentV5 : int
+    { 
+        Business            = 1,	// Saturation
+		Graphics            = 2,	// Relative
+		Images              = 4,	// Perceptual
+		ABS_ColoriMetric    = 8		// Absolute
     }
 
     /// <summary>
-    /// This is the BMP v3 (and above) palette entry.
+    /// This is the Windows BMP v2 and OS/2 BMP v1 palette entry.
     /// </summary>
     /// <remarks>
-    /// Make shore that sizeof(RGBQUAD) returns 4 (DWORD aligned, the default for VC++ 32 bits).
+    /// Make shore that sizeof(RGBTRIPLE) returns the size of 3 bytes and is byte aligned.
     /// </remarks>
-    /// <list type="bullet">
-    /// <item>
-    /// <term>Blue</term>
-    /// <description>Specifies the intensity of blue in the color.</description>
-    /// </item>
-    /// <item>
-    /// <term>Green</term>
-    /// <description>Specifies the intensity of green in the color.</description>
-    /// </item>
-    /// <item>
-    /// <term>Red</term>
-    /// <description>Specifies the intensity of red in the color.</description>
-    /// </item>
-    /// <term>Alpha</term>
-    /// <description>Not used on BMP v3 (must be 0). Alpha color chanel on BMP v4 or above.</description>
-    /// </item>
-    /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 4)]
+    /// <see cref="https://msdn.microsoft.com/en-us/library/dd162939(v=vs.85).aspx"/>
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 3)]
+    public struct PaletteEntryV2
+    {
+        /// <summary>
+        /// Specifies the intensity of blue in the color in the range 0 to 255.
+        /// </summary>
+        public byte Blue;
+        /// <summary>
+        /// Specifies the intensity of green in the color in the range 0 to 255.
+        /// </summary>
+        public byte Green;
+        /// <summary>
+        /// Specifies the intensity of red in the color in the range 0 to 255.
+        /// </summary>
+        public byte Red;
+    }
+
+    /// <summary>
+    /// This is the Windows BMP v3 and OS/2 BMP v2 palette entry.
+    /// </summary>
+    /// <remarks>
+    /// Make shore that sizeof(RGBQUAD) returns the size of 4 bytes and is byte aligned.
+    /// </remarks>
+    /// <see cref="https://msdn.microsoft.com/en-us/library/windows/desktop/dd162939(v=vs.85).aspx"/>
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 4)]
     public struct PaletteEntryV3
     {
+        /// <summary>
+        /// Specifies the intensity of blue in the color in the range 0 to 255.
+        /// </summary>
         public byte Blue;
+        /// <summary>
+        /// Specifies the intensity of green in the color in the range 0 to 255.
+        /// </summary>
         public byte Green;
+        /// <summary>
+        /// Specifies the intensity of red in the color in the range 0 to 255.
+        /// </summary>
         public byte Red;
+        /// <summary>
+        /// Not used on BMP v3 (reserved and must be 0). Alpha color chanel on BMP v4 and above.
+        /// </summary>
         public byte Alpha;
     }
-    
+
     /// <summary>
     /// This is the BMP v2 (and above) bmpFile header.
     /// </summary>
@@ -570,7 +373,7 @@ namespace CaetanoSof.Utils.Graphics
     /// <description>Specifies the offset, in bytes, from the beginning of the BITMAPFILEHEADER structure to the bitmap bits.</description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 12)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 14)]
     public struct BitmapFileHeaderV2
     { 
 	    public ushort	Magic; 
@@ -601,7 +404,7 @@ namespace CaetanoSof.Utils.Graphics
     /// <description>The z coordinate in fix point (2.30).</description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 12)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
     public struct CIEXYZ_V4
     { 
 	    public int X;
@@ -629,7 +432,7 @@ namespace CaetanoSof.Utils.Graphics
     /// <description>The xyz coordinates of blue endpoint.</description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 36)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 36)]
     public struct CIEXYZ_TripleV4
     { 
 	    public CIEXYZ_V4 Red; 
@@ -664,10 +467,10 @@ namespace CaetanoSof.Utils.Graphics
     /// </item>
     /// <item>
     /// <term>BitsPerPixel</term>
-    /// <description>Specifies the number of bits per pixel. This value must be 1, 4, 8 or 24. <see>BitmapCompressionV2</see></description>
+    /// <description>Specifies the number of bits per pixel. This value must be 1, 4, 8 or 24. <see>BitmapCompressionType</see></description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 12)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
     public struct BitmapHeaderV2
     {
         public uint     HeaderSize;
@@ -719,7 +522,7 @@ namespace CaetanoSof.Utils.Graphics
     /// </item>
 	/// <item>
     /// <term>Compression</term>
-    /// <description>Specifies the type of compression for a compressed bottom-up bitmap (top-down DIBs cannot be compressed).  <see>BitmapCompressionV3</see></description>
+    /// <description>Specifies the type of compression for a compressed bottom-up bitmap (top-down DIBs cannot be compressed).  <see>BitmapCompressionType</see></description>
     /// </item>
 	/// <item>
     /// <term>ImageSize</term>
@@ -753,7 +556,7 @@ namespace CaetanoSof.Utils.Graphics
 	/// If this value is 0, all colors are required.</description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 40)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 40)]
     public struct BitmapHeaderV3
     {
         public uint     HeaderSize;
@@ -898,7 +701,7 @@ namespace CaetanoSof.Utils.Graphics
     /// contain an application-specific value.</description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 64)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 64)]
     public struct OS2_BitmapHeaderV2
     {
         public uint     HeaderSize;
@@ -964,7 +767,7 @@ namespace CaetanoSof.Utils.Graphics
     /// </item>
 	/// <item>
     /// <term>Compression</term>
-    /// <description>Specifies the type of compression for a compressed bottom-up bitmap (top-down DIBs cannot be compressed).  <see>BitmapCompressionV3</see></description>
+    /// <description>Specifies the type of compression for a compressed bottom-up bitmap (top-down DIBs cannot be compressed).  <see>BitmapCompressionType</see></description>
     /// </item>
 	/// <item>
     /// <term>ImageSize</term>
@@ -1015,7 +818,7 @@ namespace CaetanoSof.Utils.Graphics
     /// </item>
 	/// <item>
     /// <term>ColorSpaceType</term>
-    /// <description>Specifies the color space of the DIB. <see>BitmapColorSpaceV4</see></description>
+    /// <description>Specifies the color space of the DIB. <see>BitmapColorSpaceType</see></description>
     /// </item>
 	/// <item>
     /// <term>ColorSpaceEndPoints</term>
@@ -1044,7 +847,7 @@ namespace CaetanoSof.Utils.Graphics
     /// Specified in 16^16 format.</description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 108)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 108)]
     public struct BitmapHeaderV4
     {
         public uint             HeaderSize;
@@ -1111,7 +914,7 @@ namespace CaetanoSof.Utils.Graphics
     /// </item>
 	/// <item>
     /// <term>Compression</term>
-    /// <description>Specifies the type of compression for a compressed bottom-up bitmap (top-down DIBs cannot be compressed).  <see>BitmapCompressionV3</see></description>
+    /// <description>Specifies the type of compression for a compressed bottom-up bitmap (top-down DIBs cannot be compressed).  <see>BitmapCompressionType</see></description>
     /// </item>
 	/// <item>
     /// <term>ImageSize</term>
@@ -1162,7 +965,7 @@ namespace CaetanoSof.Utils.Graphics
     /// </item>
 	/// <item>
     /// <term>ColorSpaceType</term>
-    /// <description>Specifies the color space of the DIB. <see>BitmapColorSpaceV5</see></description>
+    /// <description>Specifies the color space of the DIB. <see>BitmapColorSpaceType</see></description>
     /// </item>
 	/// <item>
     /// <term>ColorSpaceEndPoints</term>
@@ -1198,7 +1001,7 @@ namespace CaetanoSof.Utils.Graphics
 	/// <item>
     /// <term>ProfileOffset</term>
     /// <description>The offset, in bytes, from the beginning of the <b>BitmapHeaderV5</b> structure to the start of the profile data.
-	/// This member is ignored unless <b>ColorSpaceType</b> is set to <b>ProlileLinked</b> or <b>ProlileEmbedded</b>.
+	/// This member is ignored unless <b>ColorSpaceType</b> is set to <b>ProfileLinked</b> or <b>ProfileEmbedded</b>.
 	/// <para>If the profile is embedded, profile data is the actual ICM 2.0 profile.</para>
 	/// <para>If the profile is linked,  profile data is the null-terminated bmpFile name of the ICM 2.0 profile or 
 	/// the fully qualified path (including a network path) of the profile that can be opened using the CreateFile function.
@@ -1207,7 +1010,7 @@ namespace CaetanoSof.Utils.Graphics
 	/// <item>
     /// <term>ProfileSize</term>
     /// <description>Size, in bytes, of embedded profile data.
-	/// This member is ignored unless <b>ColorSpaceType</b> is set to <b>ProlileLinked</b> or <b>ProlileEmbedded</b>.
+	/// This member is ignored unless <b>ColorSpaceType</b> is set to <b>ProfileLinked</b> or <b>ProfileEmbedded</b>.
 	/// <para>The profile data (if present) should follow the color table.<para></description>
 	/// <para>For packed DIBs, the profile data should follow the bitmap bits similar to the bmpFile format.<para></description>
     /// </item>
@@ -1216,7 +1019,7 @@ namespace CaetanoSof.Utils.Graphics
     /// <description>This member has been reserved for future use. Its value should be set to zero.</description>
     /// </item>
     /// </list>
-    [StructLayout(LayoutKind.Sequential, Size = 124)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 124)]
     public struct BitmapHeaderV5
     {
         public uint    		    HeaderSize; 
@@ -1251,7 +1054,7 @@ namespace CaetanoSof.Utils.Graphics
         private static string[] FileExt = {"bmp"};
         
         // BMP Magic ID ("BM" = 0x4D42, 'B'=0x42; 'M'=0x4D)
-        private static ushort BMP_MAGIC_ID = 0x4D42;
+        private const ushort BMP_MAGIC_ID = 0x4D42;
 
         // Microsoft Windows 2.x and IBM OS/2 Presentation Manager versions 1.x bitmaps
         protected const int BMP_FILE_HEADER_SIZE_V2 = 14;     
@@ -1281,7 +1084,7 @@ namespace CaetanoSof.Utils.Graphics
         private OS2_BitmapHeaderV2 BitmapHeaderOS2;
         private ColorPalette Palette = new ColorPalette();
 
-        private ColorEntryRGBA<T>[,] Pixels = null;
+        private ColorEntryRGBA<byte>[] Pixels = null;
 
         private byte[] ProfileICM = null;
 
@@ -1306,8 +1109,8 @@ namespace CaetanoSof.Utils.Graphics
 	        this.BitmapHeader.Width            = 0; 
 	        this.BitmapHeader.Height           = 0;
             this.BitmapHeader.Planes           = 1;
-            this.BitmapHeader.BitsPerPixel     = (ushort)BitmapBitsPerPixelV3.RGB_24;
-            this.BitmapHeader.Compression      = (uint)BitmapCompressionV3.None;
+            this.BitmapHeader.BitsPerPixel     = (ushort)BitmapBitsPerPixel.RGB_24;
+            this.BitmapHeader.Compression      = (uint)BitmapCompressionType.None;
             this.BitmapHeader.ImageSize        = 0;
             this.BitmapHeader.PixelsPerMeterX  = 0;
             this.BitmapHeader.PixelsPerMeterY  = 0;
@@ -1317,7 +1120,7 @@ namespace CaetanoSof.Utils.Graphics
             this.BitmapHeader.MaskGreen        = 0;
             this.BitmapHeader.MaskBlue         = 0;
             this.BitmapHeader.MaskAlpha        = 0;
-            this.BitmapHeader.ColorSpaceType   = (uint)BitmapColorSpaceV4.sRGB;
+            this.BitmapHeader.ColorSpaceType   = (uint)BitmapColorSpaceType.sRGB;
             this.BitmapHeader.ColorSpaceEndPoints.Red.X = 0;
             this.BitmapHeader.ColorSpaceEndPoints.Red.Y = 0;
             this.BitmapHeader.ColorSpaceEndPoints.Red.Z = 0;
@@ -1359,21 +1162,32 @@ namespace CaetanoSof.Utils.Graphics
             { 
                 //case BMP_HEADER_OS2_SIZE_V1:
                 case BMP_HEADER_WIN_SIZE_V2:
+                    // Microsoft Windows v2 & IBM OS/2 v1 (Windows 2.0 and OS/2 1.0)
                     major = 2;
                     break;
-                case BMP_HEADER_OS2_SIZE_V2:
                 case BMP_HEADER_WIN_SIZE_V3:
+                    // Microsoft Windows v3 (Windows 3.xx)
                     major = 3;
                     break;
                 case BMP_HEADER_WIN_SIZE_V4:
+                    // Microsoft Windows v4 (Windows 95, NT 3.1)
                     major = 4;
                     break;
                 case BMP_HEADER_WIN_SIZE_V5:
+                    // Microsoft Windows v5 (Windows 98, 2000)
                     major = 5;
                     break;
                 default:
-                    // This should never happen.
-                    major = 0;
+                    if((this.BitmapHeader.HeaderSize > BMP_HEADER_OS2_SIZE_V1) && (this.BitmapHeader.HeaderSize <= BMP_HEADER_OS2_SIZE_V2))
+                    {
+                        // IBM OS/2 v2
+                        major = 3;
+                    }
+                    else
+                    {
+                        // Unknown
+                        major = 0;
+                    }
                     break;
             }
             minor = 0;
@@ -1418,7 +1232,7 @@ namespace CaetanoSof.Utils.Graphics
             this.BitmapHeader.Width = (int)x;
             this.BitmapHeader.Height = (int)y;
 
-            Pixels = new ColorEntryRGBA<T>[y, x];
+            Pixels = new ColorEntryRGBA<byte>[y, x];
         }
 
         public void getDPI(out int x, out int y)
@@ -1470,7 +1284,7 @@ namespace CaetanoSof.Utils.Graphics
             this.BitmapHeader.ColorSpaceGammaGreen = g;
             this.BitmapHeader.ColorSpaceGammaBlue = b;
 
-            this.BitmapHeader.ColorSpaceType = (uint)BitmapColorSpaceV4.Calibrated_RBG;
+            this.BitmapHeader.ColorSpaceType = (uint)BitmapColorSpaceType.Calibrated_RBG;
 
             if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V4)
                 this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V4;
@@ -1491,16 +1305,16 @@ namespace CaetanoSof.Utils.Graphics
                 //case BMP_HEADER_OS2_SIZE_V1:
                 case BMP_HEADER_OS2_SIZE_V2:
                 case BMP_HEADER_WIN_SIZE_V2:
-                    this.BitmapHeader.BitsPerPixel = (ushort)((BitsPerPixelV2)bitsPerPixel);
+                    this.BitmapHeader.BitsPerPixel = (ushort)((BitsPerPixel)bitsPerPixel);
                     break;
                 case BMP_HEADER_WIN_SIZE_V3:
                 case BMP_HEADER_WIN_SIZE_V4:
                 case BMP_HEADER_WIN_SIZE_V5:
-                    this.BitmapHeader.BitsPerPixel = (ushort)((BitmapBitsPerPixelV3)bitsPerPixel);
+                    this.BitmapHeader.BitsPerPixel = (ushort)((BitmapBitsPerPixel)bitsPerPixel);
                     break;
                 default:
                     // This should never happen.
-                    this.BitmapHeader.BitsPerPixel = (ushort)((BitmapBitsPerPixelV3)bitsPerPixel);
+                    this.BitmapHeader.BitsPerPixel = (ushort)((BitmapBitsPerPixel)bitsPerPixel);
                     break;
             }
 
@@ -1517,20 +1331,20 @@ namespace CaetanoSof.Utils.Graphics
         {
             RTPixelFormat pixelFormat;
 
-            switch ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel)
+            switch ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel)
             {
-                case BitmapBitsPerPixelV3.JPEG_PNG:
+                case BitmapBitsPerPixel.JPEG_PNG:
                     // No info for this format
                     throw new Exception("JPEG and PNG compressed BMP is not supported!");
                     //break;
-                case BitmapBitsPerPixelV3.MonoChrome:
-                case BitmapBitsPerPixelV3.Palette_16:
-                case BitmapBitsPerPixelV3.Palette_256:
+                case BitmapBitsPerPixel.MonoChrome:
+                case BitmapBitsPerPixel.Palette_16:
+                case BitmapBitsPerPixel.Palette_256:
                     pixelFormat = RTPixelFormat.RGB080808;
                     break;
-                case BitmapBitsPerPixelV3.RGB_16:
+                case BitmapBitsPerPixel.RGB_16:
                     pixelFormat = RTPixelFormat.Unknow;
-                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.BitFields)
+                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.BitFields)
                     {
                         if (this.BitmapHeader.MaskAlpha == 0)
                         {
@@ -1545,15 +1359,15 @@ namespace CaetanoSof.Utils.Graphics
                         }
                     }
                     break;
-                case BitmapBitsPerPixelV3.RGB_24:
-                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None)
+                case BitmapBitsPerPixel.RGB_24:
+                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
                         pixelFormat = RTPixelFormat.RGB080808;
                     else
                         pixelFormat = RTPixelFormat.Unknow;
                     break;
-                case BitmapBitsPerPixelV3.RGB_32:
+                case BitmapBitsPerPixel.RGB_32:
                     pixelFormat = RTPixelFormat.Unknow;
-                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.BitFields)
+                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.BitFields)
                     {
                         if (this.BitmapHeader.MaskAlpha == 0)
                         {
@@ -1593,7 +1407,7 @@ namespace CaetanoSof.Utils.Graphics
                                 pixelFormat = RTPixelFormat.RGBA08080808;
                         }
                     }
-                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None)
+                    if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
                         pixelFormat = RTPixelFormat.RGB080808;
                     break;
                 default:
@@ -1620,10 +1434,10 @@ namespace CaetanoSof.Utils.Graphics
                     
                     if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V3)
                         this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V3;
-                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.BitFields)
-                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.BitFields;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_16)
-                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_16;
+                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionType.BitFields)
+                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.BitFields;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_16)
+                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_16;
                     break;
                 case RTPixelFormat.RGB050605:
                     this.BitmapHeader.MaskRed = (uint)0x0000F800;     /* 0000 0000 0000 0000 1111 1000 0000 0000 */
@@ -1633,10 +1447,10 @@ namespace CaetanoSof.Utils.Graphics
 
                     if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V3)
                         this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V3;
-                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.BitFields)
-                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.BitFields;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_16)
-                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_16;
+                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionType.BitFields)
+                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.BitFields;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_16)
+                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_16;
                     break;
                 case RTPixelFormat.RGB080808:
                     this.BitmapHeader.MaskRed = (uint)0x00FF0000;     /* 0000 0000 1111 1111 0000 0000 0000 0000 */
@@ -1646,15 +1460,15 @@ namespace CaetanoSof.Utils.Graphics
 
                     if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V3)
                         this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V3;
-                    if ((this.BitmapHeader.Compression != (uint)BitmapCompressionV3.BitFields) &&
-                        (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.None))
-                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.None;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_24)
+                    if ((this.BitmapHeader.Compression != (uint)BitmapCompressionType.BitFields) &&
+                        (this.BitmapHeader.Compression != (uint)BitmapCompressionType.None))
+                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.None;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_24)
                     {
-                        if (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.None)
-                            this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_24;
+                        if (this.BitmapHeader.Compression != (uint)BitmapCompressionType.None)
+                            this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_24;
                         else
-                            this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_32;
+                            this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     }
                     break;
                 case RTPixelFormat.RGB101010:
@@ -1665,10 +1479,10 @@ namespace CaetanoSof.Utils.Graphics
 
                     if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V4)
                         this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V4;
-                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.BitFields)
-                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.BitFields;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_32)
-                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_32;
+                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionType.BitFields)
+                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.BitFields;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
+                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     break;
                 case RTPixelFormat.RGBA05050501:
                     this.BitmapHeader.MaskRed = (uint)0x00007C00;     /* 0000 0000 0000 0000 0111 1100 0000 0000 */
@@ -1678,12 +1492,12 @@ namespace CaetanoSof.Utils.Graphics
 
                     if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V4)
                         this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V4;
-                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.BitFields)
-                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.BitFields;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_32)
-                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_32;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_32)
-                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_32;
+                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionType.BitFields)
+                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.BitFields;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
+                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
+                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     break;
                 case RTPixelFormat.RGBA05050505:
                     this.BitmapHeader.MaskRed = (uint)0x0000F800;     /* 0000 0000 0000 0000 1111 1000 0000 0000 */
@@ -1693,10 +1507,10 @@ namespace CaetanoSof.Utils.Graphics
 
                     if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V4)
                         this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V4;
-                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.BitFields)
-                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.BitFields;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_32)
-                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_32;
+                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionType.BitFields)
+                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.BitFields;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
+                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     break;
                 case RTPixelFormat.RGBA08080808:
                 default:
@@ -1707,10 +1521,10 @@ namespace CaetanoSof.Utils.Graphics
 
                     if (this.BitmapHeader.HeaderSize < BMP_HEADER_WIN_SIZE_V4)
                         this.BitmapHeader.HeaderSize = BMP_HEADER_WIN_SIZE_V4;
-                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionV3.BitFields)
-                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.BitFields;
-                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixelV3.RGB_32)
-                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixelV3.RGB_32;
+                    if (this.BitmapHeader.Compression != (uint)BitmapCompressionType.BitFields)
+                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.BitFields;
+                    if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
+                        this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     break;
             }
         }
@@ -1751,7 +1565,7 @@ namespace CaetanoSof.Utils.Graphics
             {
                 ProfileICM = icm;
                 this.BitmapHeader.ProfileSize = (uint)ProfileICM.Length;
-                this.BitmapHeader.ColorSpaceType = (uint)BitmapColorSpaceV5.ProlileEmbedded;
+                this.BitmapHeader.ColorSpaceType = (uint)BitmapColorSpaceType.ProfileEmbedded;
             }
         }
 
@@ -1774,7 +1588,7 @@ namespace CaetanoSof.Utils.Graphics
                 ProfileICM = new byte[charLen];
                 Array.Copy(buffer, ProfileICM, charLen);
                 this.BitmapHeader.ProfileSize = (uint)ProfileICM.Length;
-                this.BitmapHeader.ColorSpaceType = (uint)BitmapColorSpaceV5.ProlileLinked;
+                this.BitmapHeader.ColorSpaceType = (uint)BitmapColorSpaceType.ProfileLinked;
             }
         }
 
@@ -1996,8 +1810,8 @@ namespace CaetanoSof.Utils.Graphics
                 // Checks unsupported OS/2 BMP v2.x compression
                 if (this.BitmapHeader.HeaderSize == BMP_HEADER_OS2_SIZE_V2)
                 {
-                    if ((this.BitmapHeader.Compression == (uint)OS2_BitmapCompressionV2.Huffman_1D) ||
-                        (this.BitmapHeader.Compression == (uint)OS2_BitmapCompressionV2.RLE_24))
+                    if ((this.BitmapHeader.Compression == (uint)OS2_BitmapCompressionType.Huffman_1D) ||
+                        (this.BitmapHeader.Compression == (uint)OS2_BitmapCompressionType.RLE_24))
                     {
                         stream.Close();
 						throw new Exception("OS/2 BMP v2.x compression can't be 'Huffman 1D' or 'RLE 24'!");
@@ -2053,9 +1867,9 @@ namespace CaetanoSof.Utils.Graphics
 
                 // Loads the colors masks for Header v3
                 if ((this.BitmapHeader.HeaderSize == BMP_HEADER_WIN_SIZE_V3) &&
-                    ((BitmapCompressionV3)this.BitmapHeader.Compression == BitmapCompressionV3.BitFields) &&
-                    (((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_16) ||
-                    ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_32)))
+                    ((BitmapCompressionType)this.BitmapHeader.Compression == BitmapCompressionType.BitFields) &&
+                    (((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_16) ||
+                    ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_32)))
                 {
                     this.BitmapHeader.MaskRed = (uint)RTStreamEndianUtils.GetWord32_LE(stream);
                     this.BitmapHeader.MaskGreen = (uint)RTStreamEndianUtils.GetWord32_LE(stream);
@@ -2093,27 +1907,27 @@ namespace CaetanoSof.Utils.Graphics
                 
                 if (this.BitmapHeader.ImageSize == 0)
                 {
-                    switch ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel)
+                    switch ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel)
                     {
-                        case BitmapBitsPerPixelV3.JPEG_PNG:
+                        case BitmapBitsPerPixel.JPEG_PNG:
                             throw new Exception("JPEG and PNG compressed BMP is not supported!");
                             //break;
-                        case BitmapBitsPerPixelV3.MonoChrome:
-                        case BitmapBitsPerPixelV3.Palette_16:
-                        case BitmapBitsPerPixelV3.Palette_256:
-                        case BitmapBitsPerPixelV3.RGB_24:
+                        case BitmapBitsPerPixel.MonoChrome:
+                        case BitmapBitsPerPixel.Palette_16:
+                        case BitmapBitsPerPixel.Palette_256:
+                        case BitmapBitsPerPixel.RGB_24:
                             this.BitmapHeader.ImageSize = (uint)(4 * (((this.BitmapHeader.Width *
                                                           this.BitmapHeader.BitsPerPixel) + 31) / 32) *
                                                           Math.Abs(this.BitmapHeader.Height));
                             break;
-                        case BitmapBitsPerPixelV3.RGB_16:
+                        case BitmapBitsPerPixel.RGB_16:
                             if (this.BitmapHeader.HeaderSize == BMP_HEADER_WIN_SIZE_V3)
                                 this.BitmapHeader.ImageSize = (uint)(2 * ((this.BitmapHeader.Width % 2) + this.BitmapHeader.Width) *
                                                            Math.Abs(this.BitmapHeader.Height));
                             else
                                 this.BitmapHeader.ImageSize = (uint)(4 * this.BitmapHeader.Width * Math.Abs(this.BitmapHeader.Height));
                             break;
-                        case BitmapBitsPerPixelV3.RGB_32:
+                        case BitmapBitsPerPixel.RGB_32:
                             this.BitmapHeader.ImageSize = (uint)(4 * this.BitmapHeader.Width * Math.Abs(this.BitmapHeader.Height));
                             break;
                         default:
@@ -2130,14 +1944,14 @@ namespace CaetanoSof.Utils.Graphics
                 Pixels = new ColorEntryRGBA<T>[Math.Abs(this.BitmapHeader.Height), this.BitmapHeader.Width];
 
                 // Pixels
-                switch ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel)
+                switch ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel)
                 {
-                    case BitmapBitsPerPixelV3.JPEG_PNG:
+                    case BitmapBitsPerPixel.JPEG_PNG:
                         // No info for this format
                         throw new Exception("JPEG and PNG compressed BMP is not supported!");
                         //break;
-                    case BitmapBitsPerPixelV3.MonoChrome:
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None)
+                    case BitmapBitsPerPixel.MonoChrome:
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
                         {
                             int bytesPerLine = (int)this.BitmapHeader.ImageSize / (int)Math.Abs(this.BitmapHeader.Height);
                             int x;
@@ -2176,8 +1990,8 @@ namespace CaetanoSof.Utils.Graphics
                             throw new Exception("This compression of 8 bits BMP is not supported!");
                         }
                         //break;
-                    case BitmapBitsPerPixelV3.Palette_16:
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None)
+                    case BitmapBitsPerPixel.Palette_16:
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
                         {
                             int bytesPerLine = (int)this.BitmapHeader.ImageSize / (int)Math.Abs(this.BitmapHeader.Height);
                             int x;
@@ -2206,7 +2020,7 @@ namespace CaetanoSof.Utils.Graphics
                             }
                             break;
                         }
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.RLE_4)
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.RLE_4)
                         {
                             DecodeRLE4(stream, ref this.Pixels, ref this.Palette);
                             break;
@@ -2216,8 +2030,8 @@ namespace CaetanoSof.Utils.Graphics
                             throw new Exception("This compression of 8 bits BMP is not supported!");
                         }
                         //break;
-                    case BitmapBitsPerPixelV3.Palette_256:
-                         if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None)
+                    case BitmapBitsPerPixel.Palette_256:
+                         if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
                          {
                             for (int y = 0; y < Math.Abs(this.BitmapHeader.Height); y++)
                             {
@@ -2231,7 +2045,7 @@ namespace CaetanoSof.Utils.Graphics
                              }
                              break;
                         }
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.RLE_8)
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.RLE_8)
                         {
                             DecodeRLE8(stream, ref this.Pixels, ref this.Palette);
                             break;
@@ -2241,9 +2055,9 @@ namespace CaetanoSof.Utils.Graphics
                             throw new Exception("This compression of 8 bits BMP is not supported!");
                         }
                         //break;
-                    case BitmapBitsPerPixelV3.RGB_16:
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.BitFields ||
-                            (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None))
+                    case BitmapBitsPerPixel.RGB_16:
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.BitFields ||
+                            (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None))
                         {
                             if ((this.BitmapHeader.MaskRed == (uint)0) && (this.BitmapHeader.MaskGreen == (uint)0) &&
 								(this.BitmapHeader.MaskBlue == (uint)0) && (this.BitmapHeader.MaskAlpha == (uint)0))
@@ -2342,8 +2156,8 @@ namespace CaetanoSof.Utils.Graphics
                             throw new Exception("This compression of 16 bits BMP is not supported!");
                         }
                         //break;
-                    case BitmapBitsPerPixelV3.RGB_24:
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None)
+                    case BitmapBitsPerPixel.RGB_24:
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
                         {
                             for (int y = 0; y < Math.Abs(this.BitmapHeader.Height); y++)
                             {
@@ -2364,8 +2178,8 @@ namespace CaetanoSof.Utils.Graphics
                             throw new Exception("This compression of 24 bits BMP is not supported!");
                         }
                         //break;
-                    case BitmapBitsPerPixelV3.RGB_32:
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None)
+                    case BitmapBitsPerPixel.RGB_32:
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
                         {
                             for (int y = 0; y < Math.Abs(this.BitmapHeader.Height); y++)
                             {
@@ -2376,9 +2190,9 @@ namespace CaetanoSof.Utils.Graphics
                                     this.Pixels[y, x].Red = (byte)RTStreamEndianUtils.GetByte(stream);
                                     this.Pixels[y, x].Alpha = (byte)RTStreamEndianUtils.GetByte(stream);
                                     // Some transparent bitmaps are badly identifyed
-                                    if ((this.BitmapHeader.Compression == (uint)BitmapCompressionV3.None) && (this.Pixels[y, x].Alpha != 0))
+                                    if ((this.BitmapHeader.Compression == (uint)BitmapCompressionType.None) && (this.Pixels[y, x].Alpha != 0))
                                     {
-                                        this.BitmapHeader.Compression = (uint)BitmapCompressionV3.BitFields;
+                                        this.BitmapHeader.Compression = (uint)BitmapCompressionType.BitFields;
                                         this.BitmapHeader.MaskRed =     (uint)0x00FF0000; /* 0000 0000 1111 1111 0000 0000 0000 0000 */
                                         this.BitmapHeader.MaskGreen =   (uint)0x0000FF00; /* 0000 0000 0000 0000 1111 1111 0000 0000 */
                                         this.BitmapHeader.MaskBlue =    (uint)0x000000FF; /* 0000 0000 0000 0000 0000 0000 1111 1111 */
@@ -2390,7 +2204,7 @@ namespace CaetanoSof.Utils.Graphics
                              }
                              break;
                         }
-                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionV3.BitFields)
+                        if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.BitFields)
                         {
                             if ((this.BitmapHeader.MaskRed == (uint)0) && (this.BitmapHeader.MaskGreen == (uint)0) &&
 								(this.BitmapHeader.MaskBlue == (uint)0) && (this.BitmapHeader.MaskAlpha == (uint)0))
@@ -2522,28 +2336,28 @@ namespace CaetanoSof.Utils.Graphics
                 if (this.BitmapHeader.Height < 0)
                     this.BitmapHeader.Height = -this.BitmapHeader.Height;
 
-                switch ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel)
+                switch ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel)
                 {
-                    case BitmapBitsPerPixelV3.JPEG_PNG:
+                    case BitmapBitsPerPixel.JPEG_PNG:
                         // No info for this format
                         throw new Exception("JPEG and PNG compressed BMP is not supported!");
                         //break;
-                    case BitmapBitsPerPixelV3.MonoChrome:
-                    case BitmapBitsPerPixelV3.Palette_16:
-                    case BitmapBitsPerPixelV3.Palette_256:
-                    case BitmapBitsPerPixelV3.RGB_24:
+                    case BitmapBitsPerPixel.MonoChrome:
+                    case BitmapBitsPerPixel.Palette_16:
+                    case BitmapBitsPerPixel.Palette_256:
+                    case BitmapBitsPerPixel.RGB_24:
                         this.BitmapHeader.ImageSize = (uint)(4 * (((this.BitmapHeader.Width * 
                                                       this.BitmapHeader.BitsPerPixel) + 31) / 32) *
                                                       this.BitmapHeader.Height);
                         break;
-                    case BitmapBitsPerPixelV3.RGB_16:
+                    case BitmapBitsPerPixel.RGB_16:
                         if (this.BitmapHeader.HeaderSize == BMP_HEADER_WIN_SIZE_V3)
                             this.BitmapHeader.ImageSize = (uint)(2 * ((this.BitmapHeader.Width % 2) + this.BitmapHeader.Width) *
                                                        this.BitmapHeader.Height);
                         else
                             this.BitmapHeader.ImageSize = (uint)(4 * this.BitmapHeader.Width * this.BitmapHeader.Height);
                         break;
-                    case BitmapBitsPerPixelV3.RGB_32:
+                    case BitmapBitsPerPixel.RGB_32:
                         this.BitmapHeader.ImageSize = (uint)(4 * this.BitmapHeader.Width * this.BitmapHeader.Height);
                         break;
                     default:
@@ -2574,9 +2388,9 @@ namespace CaetanoSof.Utils.Graphics
                                                         ((uint)this.BitmapHeader.PaletteColors * (uint)BMP_PALETTE_SIZE_V3);
                     // Size of 3 RGB Masks
                     if ((this.BitmapHeader.HeaderSize == BMP_HEADER_WIN_SIZE_V3) &&
-                        ((BitmapCompressionV3)this.BitmapHeader.Compression == BitmapCompressionV3.BitFields) &&
-                        (((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_16) ||
-                        ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_32)))
+                        ((BitmapCompressionType)this.BitmapHeader.Compression == BitmapCompressionType.BitFields) &&
+                        (((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_16) ||
+                        ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_32)))
                     {
                         this.BitmapFileHeader.PixelsOffset += sizeof(uint) * 3;
                     }
@@ -2694,9 +2508,9 @@ namespace CaetanoSof.Utils.Graphics
 
                 // Saves the colors masks for Header v3
                 if ((this.BitmapHeader.HeaderSize == BMP_HEADER_WIN_SIZE_V3) &&
-                    ((BitmapCompressionV3)this.BitmapHeader.Compression == BitmapCompressionV3.BitFields) &&
-                    (((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_16) || 
-                    ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_32)))
+                    ((BitmapCompressionType)this.BitmapHeader.Compression == BitmapCompressionType.BitFields) &&
+                    (((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_16) || 
+                    ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_32)))
                 {
                     RTStreamEndianUtils.PutWord32_LE(stream, (uint)this.BitmapHeader.MaskRed);
                     RTStreamEndianUtils.PutWord32_LE(stream, (uint)this.BitmapHeader.MaskGreen);
@@ -2714,28 +2528,28 @@ namespace CaetanoSof.Utils.Graphics
                 {
                     for (int x = 0; x < this.BitmapHeader.Width; x++)
                     {
-                        switch ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel)
+                        switch ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel)
                         {
-                            case BitmapBitsPerPixelV3.JPEG_PNG:
+                            case BitmapBitsPerPixel.JPEG_PNG:
                                 // No info for this format
                                 throw new Exception("JPEG and PNG compressed BMP is not supported!");
                                 //break;
-                            case BitmapBitsPerPixelV3.MonoChrome:
+                            case BitmapBitsPerPixel.MonoChrome:
                                 break;
-                            case BitmapBitsPerPixelV3.Palette_16:
+                            case BitmapBitsPerPixel.Palette_16:
                                 break;
-                            case BitmapBitsPerPixelV3.Palette_256:
+                            case BitmapBitsPerPixel.Palette_256:
                                 int i = this.Palette.getColorIndex(this.Pixels[y, x]);
                                 RTStreamEndianUtils.PutByte(stream, (uint)i);
                                 break;
-                            case BitmapBitsPerPixelV3.RGB_16:
+                            case BitmapBitsPerPixel.RGB_16:
                                 break;
-                            case BitmapBitsPerPixelV3.RGB_24:
+                            case BitmapBitsPerPixel.RGB_24:
                                 RTStreamEndianUtils.PutByte(stream, (uint)this.Pixels[y, x].Blue);
                                 RTStreamEndianUtils.PutByte(stream, (uint)this.Pixels[y, x].Green);
                                 RTStreamEndianUtils.PutByte(stream, (uint)this.Pixels[y, x].Red);
                                 break;
-                            case BitmapBitsPerPixelV3.RGB_32:
+                            case BitmapBitsPerPixel.RGB_32:
                                 RTStreamEndianUtils.PutByte(stream, (uint)this.Pixels[y, x].Blue);
                                 RTStreamEndianUtils.PutByte(stream, (uint)this.Pixels[y, x].Green);
                                 RTStreamEndianUtils.PutByte(stream, (uint)this.Pixels[y, x].Red);
@@ -2832,24 +2646,24 @@ namespace CaetanoSof.Utils.Graphics
                 sb.Append("\t*** Header v3 Members (Windows 3.x)");
                 sb.AppendLine();
                 string str = "";
-                switch ((BitmapCompressionV3)this.BitmapHeader.Compression)
+                switch ((BitmapCompressionType)this.BitmapHeader.Compression)
                 {
-                    case BitmapCompressionV3.None:
+                    case BitmapCompressionType.None:
                         str = "None (Plain RGB)";
                         break;
-                    case BitmapCompressionV3.RLE_8:
+                    case BitmapCompressionType.RLE_8:
                         str = "RLE 8";
                         break;
-                    case BitmapCompressionV3.RLE_4:
+                    case BitmapCompressionType.RLE_4:
                         str = "RLE 4";
                         break;
-                    case BitmapCompressionV3.BitFields:
+                    case BitmapCompressionType.BitFields:
                         str = "None (RGBA Bit Fields)";
                         break;
-                    case BitmapCompressionV3.JPEG:
+                    case BitmapCompressionType.JPEG:
                         str = "JPEG";
                         break;
-                    case BitmapCompressionV3.PNG:
+                    case BitmapCompressionType.PNG:
                         str = "PNG";
                         break;
                     default:
@@ -2873,9 +2687,9 @@ namespace CaetanoSof.Utils.Graphics
                 sb.AppendLine();
             }
             if ((this.BitmapHeader.HeaderSize == BMP_HEADER_WIN_SIZE_V3) &&
-                    ((BitmapCompressionV3)this.BitmapHeader.Compression == BitmapCompressionV3.BitFields) &&
-                    (((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_16) ||
-                    ((BitmapBitsPerPixelV3)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixelV3.RGB_32)))
+                    ((BitmapCompressionType)this.BitmapHeader.Compression == BitmapCompressionType.BitFields) &&
+                    (((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_16) ||
+                    ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel == BitmapBitsPerPixel.RGB_32)))
             {
                 sb.AppendFormat("\tMask Red:\t0x{0:X8}", this.BitmapHeader.MaskRed);
                 sb.AppendLine();
@@ -2919,21 +2733,21 @@ namespace CaetanoSof.Utils.Graphics
                 sb.AppendFormat("\tMask Alpha:\t\t0x{0:X8}", this.BitmapHeader.MaskAlpha);
                 sb.AppendLine();
                 string str = "";
-                switch ((BitmapColorSpaceV5)this.BitmapHeader.ColorSpaceType)
+                switch ((BitmapColorSpaceType)this.BitmapHeader.ColorSpaceType)
                 {
-                    case BitmapColorSpaceV5.Calibrated_RBG:
+                    case BitmapColorSpaceType.Calibrated_RBG:
                         str = "Calibrated RBG";
                         break;
-                    case BitmapColorSpaceV5.sRGB:
+                    case BitmapColorSpaceType.sRGB:
                         str = "sRGB";
                         break;
-                    case BitmapColorSpaceV5.WindowsColorSpace:
+                    case BitmapColorSpaceType.WindowsColorSpace:
                         str = "System Default";
                         break;
-                    case BitmapColorSpaceV5.ProlileEmbedded:
+                    case BitmapColorSpaceType.ProfileEmbedded:
                         str = "Prolile Embedded";
                         break;
-                    case BitmapColorSpaceV5.ProlileLinked:
+                    case BitmapColorSpaceType.ProfileLinked:
                         str = "Prolile Linked";
                         break;
                     default:
@@ -3005,13 +2819,13 @@ namespace CaetanoSof.Utils.Graphics
                     sb.AppendFormat("\t\tProfile:\t");
                     foreach (Byte b in ProfileICM)
                     {
-                        if (this.BitmapHeader.ColorSpaceType == (uint)BitmapColorSpaceV5.ProlileEmbedded)
+                        if (this.BitmapHeader.ColorSpaceType == (uint)BitmapColorSpaceType.ProfileEmbedded)
                         {
                             sb.AppendFormat("{0} ", b.ToString());
                         }
                         else
                         {
-                            // BitmapColorSpaceV5.ProlileLinked
+                            // BitmapColorSpaceType.ProfileLinked
                             sb.AppendFormat("{0}", (char)b);
                         }
                     }
