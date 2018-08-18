@@ -1,18 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{470070AD-824D-463E-9910-B9D3A69DE11F}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Library8Bit", "Library8Bit\Library8Bit.xproj", "{E0DD267E-936F-48B9-BF2B-20067EDCBD32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library8Bit", "Library8Bit\Library8Bit.csproj", "{E0DD267E-936F-48B9-BF2B-20067EDCBD32}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MediaViewer8Bit", "MediaViewer8Bit\MediaViewer8Bit.xproj", "{70E80343-ECEB-402C-B4BC-DF3BF2AA5170}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaViewer8Bit", "MediaViewer8Bit\MediaViewer8Bit.csproj", "{70E80343-ECEB-402C-B4BC-DF3BF2AA5170}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LibraryCSUtils", "LibraryCSUtils\LibraryCSUtils.xproj", "{277A5071-4806-4C3B-A38B-9CB0F0DED93D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryCSUtils", "LibraryCSUtils\LibraryCSUtils.csproj", "{277A5071-4806-4C3B-A38B-9CB0F0DED93D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,5 +37,8 @@ Global
 		{E0DD267E-936F-48B9-BF2B-20067EDCBD32} = {470070AD-824D-463E-9910-B9D3A69DE11F}
 		{70E80343-ECEB-402C-B4BC-DF3BF2AA5170} = {470070AD-824D-463E-9910-B9D3A69DE11F}
 		{277A5071-4806-4C3B-A38B-9CB0F0DED93D} = {470070AD-824D-463E-9910-B9D3A69DE11F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD14DD28-3B2F-4D83-B6B2-7C47E58A8652}
 	EndGlobalSection
 EndGlobal

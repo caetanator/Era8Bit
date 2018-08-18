@@ -26,7 +26,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace CaetanoSof.Utils.Drawing
+namespace CaetanoSof.Graphics.FileFormats.BMP
 {
     /// <summary>
     /// The compression method used on the IBM OS/2 BMP image.
