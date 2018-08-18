@@ -2,11 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ColorEntryByteRGB = CaetanoSof.Utils.Drawing.ColorEntryRGB<byte>;
-using ColorEntryFloatRGB = CaetanoSof.Utils.Drawing.ColorEntryRGB<float>;
-using ColorEntryByteRGBA = CaetanoSof.Utils.Drawing.ColorEntryRGBA<byte>;
-using ColorEntryFloatRGBA = CaetanoSof.Utils.Drawing.ColorEntryRGBA<float>;
-
 namespace CaetanoSoft.Graphics.FileFormats
 {
     /// <summary>

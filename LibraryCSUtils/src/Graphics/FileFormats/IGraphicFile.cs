@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using System.IO;
 
 namespace CaetanoSoft.Graphics.FileFormats
 {
@@ -14,8 +15,8 @@ namespace CaetanoSoft.Graphics.FileFormats
         void GetFileVersion(out int major, out int minor);
         void SetFileVersion(int major, int minor);
         
-        void GetPixelDimensions(out uint x, out uint y);
-        void SetPixelDimensions(uint x, uint y);
+        void GetPixelDimensions(out uint Width, out uint Height);
+        void SetPixelDimensions(uint Width, uint Heighty);
 	    
         void GetDPI(out int x, out int y);
         void SetDPI(int x, int y);
@@ -32,8 +33,8 @@ namespace CaetanoSoft.Graphics.FileFormats
         uint GetNumberOfImages();
         void GetNumberOfImages(uint nImages);
 
-        uint GetCurrentImagePosition();
-        void SetCurrentImagePosition(uint nImage);
+        uint GetCurrentImageIndex();
+        void SetCurrentImageIndex(uint nImage);
 
         byte[] GetProfileICM();
         void   SetProfileICM(ref byte[] icm);
@@ -42,12 +43,12 @@ namespace CaetanoSoft.Graphics.FileFormats
         Dictionary<string, string> getExifData();
         void setExifData(ref Dictionary<string, string> hashTable);
 
-        ARGB rrr;
-
-        ColorEntryRGBA<T> getPixel(uint x, uint y);
-        void setPixel(int x, int y, ref ColorEntryRGBA<T> color);
+        TColorEntryRGBA<byte> GetPixel(uint x, uint y);
+        void SetPixel(int x, int y, ref TColorEntryRGBA<byte> color);
 
         void Load(string file);
+        void Load(Stream stream);
         void Save(string file);
+        void Save(Stream stream);
     }
 }

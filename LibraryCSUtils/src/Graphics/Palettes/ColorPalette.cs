@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ColorEntryByteRGB = CaetanoSof.Utils.Drawing.ColorEntryRGB<byte>;
-using ColorEntryFloatRGB = CaetanoSof.Utils.Drawing.ColorEntryRGB<float>;
-using ColorEntryByteRGBA = CaetanoSof.Utils.Drawing.ColorEntryRGBA<byte>;
-using ColorEntryFloatRGBA = CaetanoSof.Utils.Drawing.ColorEntryRGBA<float>;
+using ColorEntryByteRGB = CaetanoSoft.Graphics.FileFormats.TColorEntryRGB<byte>;
+using ColorEntryFloatRGB = CaetanoSoft.Graphics.FileFormats.TColorEntryRGB<float>;
+using ColorEntryByteRGBA = CaetanoSoft.Graphics.FileFormats.TColorEntryRGBA<byte>;
+using ColorEntryFloatRGBA = CaetanoSoft.Graphics.FileFormats.TColorEntryRGBA<float>;
 
 namespace CaetanoSoft.Graphics.FileFormats
 {
@@ -43,7 +43,7 @@ namespace CaetanoSoft.Graphics.FileFormats
         private ColorEntryByteRGBA[] palette = null;
 
         // Dictionary to speed search of colors in the palette
-        private Dictionary<int, ColorEntryByteRGBA> hashTable = new Dictionary<int, ColorEntryByteRGBA>();
+        private Dictionary<uint, int> hashTable = new Dictionary<uint, int>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ColorPalette"/> class.
@@ -72,7 +72,7 @@ namespace CaetanoSoft.Graphics.FileFormats
                 return this.paletteColors;
             }
 
-            private set 
+            set 
             {
                 if ((value >= PALETTE_MIN_SIZE) && (value <= PALETTE_MAX_SIZE))
                 {
@@ -612,8 +612,7 @@ namespace CaetanoSoft.Graphics.FileFormats
             this.palette[15].Blue = 255;
         }
 
-        /*
-        public int getColorIndex(ColorEntry<T> color)
+        public int GetColorIndex(ColorEntryByteRGBA color)
         {
             uint key = 0;
             int index;
@@ -632,7 +631,7 @@ namespace CaetanoSoft.Graphics.FileFormats
                     // already in the dictionary.
                     try
                     {
-                        this.hashTable.Add((int)key, (T)(Object)i);
+                        this.hashTable.Add((uint)key, i);
                     }
                     catch (ArgumentException)
                     {
@@ -645,7 +644,7 @@ namespace CaetanoSoft.Graphics.FileFormats
             key = ((uint)(Object)color.Alpha << 24) | 
                    ((uint)(Object)color.Red << 16) | ((uint)color.Green << 8)|
                    (uint)(Object)color.Blue;
-            if (this.hashTable.TryGetValue((int)key, out (T)(Object)index))
+            if (this.hashTable.TryGetValue((uint)key, out index))
                 return (int)index;
             else
             {
@@ -668,6 +667,5 @@ namespace CaetanoSoft.Graphics.FileFormats
             
             return index;
         }
-        */
     }
 }

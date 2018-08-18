@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Text;
+
 public class MyBinaryWriter : BinaryWriter
 {
     private bool isLittleEndian = true;

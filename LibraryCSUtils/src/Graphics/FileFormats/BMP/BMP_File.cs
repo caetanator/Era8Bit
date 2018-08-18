@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using CaetanoSoft.Graphics.FileFormats;
 
 namespace CaetanoSof.Graphics.FileFormats.BMP
 {
@@ -1084,7 +1085,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
         private OS2_BitmapHeaderV2 BitmapHeaderOS2;
         private ColorPalette Palette = new ColorPalette();
 
-        private ColorEntryRGBA<byte>[] Pixels = null;
+        private TColorEntryRGBA<byte>[,] Pixels = null;
 
         private byte[] ProfileICM = null;
 
@@ -1232,7 +1233,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
             this.BitmapHeader.Width = (int)x;
             this.BitmapHeader.Height = (int)y;
 
-            Pixels = new ColorEntryRGBA<byte>[y, x];
+            Pixels = new TColorEntryRGBA<byte>[y, x];
         }
 
         public void getDPI(out int x, out int y)
@@ -1323,13 +1324,13 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                 uint nColors = 1;
                 for (int i = 0; i < bitsPerPixel; i++)
                     nColors = nColors << 1;
-                Palette.NumberOfEntries = nColors;
+                Palette.NumberOfEntries = (int)nColors;
             }
         }
 
-        public RTPixelFormat getPixelFormat()
+        public PixelFormat getPixelFormat()
         {
-            RTPixelFormat pixelFormat;
+            PixelFormat pixelFormat;
 
             switch ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel)
             {
@@ -1340,10 +1341,10 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                 case BitmapBitsPerPixel.MonoChrome:
                 case BitmapBitsPerPixel.Palette_16:
                 case BitmapBitsPerPixel.Palette_256:
-                    pixelFormat = RTPixelFormat.RGB080808;
+                    pixelFormat = PixelFormat.RGB080808;
                     break;
                 case BitmapBitsPerPixel.RGB_16:
-                    pixelFormat = RTPixelFormat.Unknow;
+                    pixelFormat = PixelFormat.Unknow;
                     if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.BitFields)
                     {
                         if (this.BitmapHeader.MaskAlpha == 0)
@@ -1351,22 +1352,22 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                             if ((this.BitmapHeader.MaskRed == (uint)0x00007C00) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x000003E0) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x0000001F))
-                                pixelFormat = RTPixelFormat.RGB050505;
+                                pixelFormat = PixelFormat.RGB050505;
                             if ((this.BitmapHeader.MaskRed == (uint)0x0000F800) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x000007E0) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x0000001F))
-                                pixelFormat = RTPixelFormat.RGB050605;
+                                pixelFormat = PixelFormat.RGB050605;
                         }
                     }
                     break;
                 case BitmapBitsPerPixel.RGB_24:
                     if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
-                        pixelFormat = RTPixelFormat.RGB080808;
+                        pixelFormat = PixelFormat.RGB080808;
                     else
-                        pixelFormat = RTPixelFormat.Unknow;
+                        pixelFormat = PixelFormat.Unknow;
                     break;
                 case BitmapBitsPerPixel.RGB_32:
-                    pixelFormat = RTPixelFormat.Unknow;
+                    pixelFormat = PixelFormat.Unknow;
                     if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.BitFields)
                     {
                         if (this.BitmapHeader.MaskAlpha == 0)
@@ -1374,41 +1375,41 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                             if ((this.BitmapHeader.MaskRed == (uint)0x00007C00) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x000003E0) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x0000001F))
-                                pixelFormat = RTPixelFormat.RGB050505;
+                                pixelFormat = PixelFormat.RGB050505;
                             if ((this.BitmapHeader.MaskRed == (uint)0x0000F800) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x000007E0) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x0000001F))
-                                pixelFormat = RTPixelFormat.RGB050605;
+                                pixelFormat = PixelFormat.RGB050605;
                             if ((this.BitmapHeader.MaskRed == (uint)0x00FF0000) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x0000FF00) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x000000FF))
-                                pixelFormat = RTPixelFormat.RGB080808;
+                                pixelFormat = PixelFormat.RGB080808;
                             if ((this.BitmapHeader.MaskRed == (uint)0x3FF00000) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x000FFC00) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x000003FF))
-                                pixelFormat = RTPixelFormat.RGB101010;
+                                pixelFormat = PixelFormat.RGB101010;
                         }
                         if (this.BitmapHeader.MaskAlpha == (uint)0x001F0000)
                         {
                             if ((this.BitmapHeader.MaskRed == (uint)0x00007C00) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x000003E0) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x0000001F))
-                                pixelFormat = RTPixelFormat.RGBA05050501;
+                                pixelFormat = PixelFormat.RGBA05050501;
                             if ((this.BitmapHeader.MaskRed == (uint)0x0000F800) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x000007E0) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x0000001F))
-                                pixelFormat = RTPixelFormat.RGBA05050505;
+                                pixelFormat = PixelFormat.RGBA05050505;
                         }
                         if (this.BitmapHeader.MaskAlpha == (uint)0xFF000000)
                         {
                             if ((this.BitmapHeader.MaskRed == (uint)0x00FF0000) &&
                                  (this.BitmapHeader.MaskGreen == (uint)0x0000FF00) &&
                                  (this.BitmapHeader.MaskBlue == (uint)0x000000FF))
-                                pixelFormat = RTPixelFormat.RGBA08080808;
+                                pixelFormat = PixelFormat.RGBA08080808;
                         }
                     }
                     if (this.BitmapHeader.Compression == (uint)BitmapCompressionType.None)
-                        pixelFormat = RTPixelFormat.RGB080808;
+                        pixelFormat = PixelFormat.RGB080808;
                     break;
                 default:
                     // This should never happen.
@@ -1419,14 +1420,14 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
             return pixelFormat;
         }
 
-        public void setPixelFormat(RTPixelFormat pixelFormat)
+        public void setPixelFormat(PixelFormat pixelFormat)
         {
             if (this.OpenForReadding)
                 return;
 
             switch (pixelFormat)
             {
-                case RTPixelFormat.RGB050505:
+                case PixelFormat.RGB050505:
                     this.BitmapHeader.MaskRed = (uint)0x00007C00;     /* 0000 0000 0000 0000 0111 1100 0000 0000 */
                     this.BitmapHeader.MaskGreen = (uint)0x000003E0;     /* 0000 0000 0000 0000 0000 0011 1110 0000 */
                     this.BitmapHeader.MaskBlue = (uint)0x0000001F;     /* 0000 0000 0000 0000 0000 0000 0001 1111 */
@@ -1439,7 +1440,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                     if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_16)
                         this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_16;
                     break;
-                case RTPixelFormat.RGB050605:
+                case PixelFormat.RGB050605:
                     this.BitmapHeader.MaskRed = (uint)0x0000F800;     /* 0000 0000 0000 0000 1111 1000 0000 0000 */
                     this.BitmapHeader.MaskGreen = (uint)0x000007E0;     /* 0000 0000 0000 0000 0000 0111 1110 0000 */
                     this.BitmapHeader.MaskBlue = (uint)0x0000001F;     /* 0000 0000 0000 0000 0000 0000 0001 1111 */
@@ -1452,7 +1453,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                     if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_16)
                         this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_16;
                     break;
-                case RTPixelFormat.RGB080808:
+                case PixelFormat.RGB080808:
                     this.BitmapHeader.MaskRed = (uint)0x00FF0000;     /* 0000 0000 1111 1111 0000 0000 0000 0000 */
                     this.BitmapHeader.MaskGreen = (uint)0x0000FF00;     /* 0000 0000 0000 0000 1111 1111 0000 0000 */
                     this.BitmapHeader.MaskBlue = (uint)0x000000FF;     /* 0000 0000 0000 0000 0000 0000 1111 1111 */
@@ -1471,7 +1472,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                             this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     }
                     break;
-                case RTPixelFormat.RGB101010:
+                case PixelFormat.RGB101010:
                     this.BitmapHeader.MaskRed = (uint)0x3FF00000;     /* 0011 1111 1111 0000 0000 0000 0000 0000 */
                     this.BitmapHeader.MaskGreen = (uint)0x000FFC00;     /* 0000 0000 0000 1111 1111 1100 0000 0000 */
                     this.BitmapHeader.MaskBlue = (uint)0x000003FF;     /* 0000 0000 0000 0000 0000 0011 1111 1111 */
@@ -1484,7 +1485,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                     if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
                         this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     break;
-                case RTPixelFormat.RGBA05050501:
+                case PixelFormat.RGBA05050501:
                     this.BitmapHeader.MaskRed = (uint)0x00007C00;     /* 0000 0000 0000 0000 0111 1100 0000 0000 */
                     this.BitmapHeader.MaskGreen = (uint)0x000003E0;     /* 0000 0000 0000 0000 0000 0011 1110 0000 */
                     this.BitmapHeader.MaskBlue = (uint)0x0000001F;     /* 0000 0000 0000 0000 0000 0000 0001 1111 */
@@ -1499,7 +1500,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                     if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
                         this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     break;
-                case RTPixelFormat.RGBA05050505:
+                case PixelFormat.RGBA05050505:
                     this.BitmapHeader.MaskRed = (uint)0x0000F800;     /* 0000 0000 0000 0000 1111 1000 0000 0000 */
                     this.BitmapHeader.MaskGreen = (uint)0x000007E0;     /* 0000 0000 0000 0000 0000 0111 1110 0000 */
                     this.BitmapHeader.MaskBlue = (uint)0x0000001F;     /* 0000 0000 0000 0000 0000 0000 0001 1111 */
@@ -1512,7 +1513,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                     if (this.BitmapHeader.BitsPerPixel < (ushort)BitmapBitsPerPixel.RGB_32)
                         this.BitmapHeader.BitsPerPixel = (ushort)BitmapBitsPerPixel.RGB_32;
                     break;
-                case RTPixelFormat.RGBA08080808:
+                case PixelFormat.RGBA08080808:
                 default:
                     this.BitmapHeader.MaskRed = (uint)0x00FF0000;     /* 0000 0000 1111 1111 0000 0000 0000 0000 */
                     this.BitmapHeader.MaskGreen = (uint)0x0000FF00;     /* 0000 0000 0000 0000 1111 1111 0000 0000 */
@@ -1603,43 +1604,23 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                 return;
         }
 
-        public ColorEntryRGBA<T> getPixel(int x, int y)
+        public TColorEntryRGBA<byte> getPixel(int x, int y)
         {
-            ColorEntryRGBA<T> color;
-            int swap;
-            if (this.BitmapHeader.Height > 0)
-            {
-                swap = this.BitmapHeader.Height - y - 1;
-                color = Pixels[swap, x];
-            }
-            else
-                color = Pixels[y, x];
+            TColorEntryRGBA<byte> color;
+            color = Pixels[y, x];
             return color;
         }
 
-        public void setPixel(int x, int y, ref ColorEntryRGBA<T> color)
+        public void setPixel(int x, int y, ref TColorEntryRGBA<byte> color)
         {
             if (this.OpenForReadding)
                 return;
 
-            int swap;
-            if (this.BitmapHeader.Height > 0)
-            {
-                swap = this.BitmapHeader.Height - y - 1;
-                Pixels[swap, x].Alpha = color.Alpha;
-                Pixels[swap, x].Red = color.Red;
-                Pixels[swap, x].Green = color.Green;
-                Pixels[swap, x].Blue = color.Blue;
-            }
-            else
-            {
-                Pixels[y, x].Alpha = color.Alpha;
-                Pixels[y, x].Red = color.Red;
-                Pixels[y, x].Green = color.Green;
-                Pixels[y, x].Blue = color.Blue;
-            }
-            
-        }
+            Pixels[y, x].Alpha = color.Alpha;
+            Pixels[y, x].Red = color.Red;
+            Pixels[y, x].Green = color.Green;
+            Pixels[y, x].Blue = color.Blue;
+    }
 
         public void Load(string file)
         {
@@ -1843,7 +1824,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                         }
                     }
                     Palette.NumberOfEntries = (uint)Math.Min(this.BitmapHeader.PaletteColors, maxColors);
-                    ColorEntryRGBA<T> color;
+                    TColorEntryRGBA<T> color;
                     for (int i = 0; i < Palette.NumberOfEntries; i++)
                     {
                         if ((this.BitmapHeader.HeaderSize == BMP_HEADER_OS2_SIZE_V1) || 
@@ -1941,7 +1922,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                     pad = 0;
                 byte b;
 
-                Pixels = new ColorEntryRGBA<T>[Math.Abs(this.BitmapHeader.Height), this.BitmapHeader.Width];
+                Pixels = new TColorEntryRGBA<byte>[this.BitmapHeader.Height, this.BitmapHeader.Width];
 
                 // Pixels
                 switch ((BitmapBitsPerPixel)this.BitmapHeader.BitsPerPixel)
@@ -1969,7 +1950,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                                     for (int i = 0; i < 8; i++)
                                     {
                                         int p = (int)((b & (0x80 >> i)) != 0 ? 0x01 : 0x00);
-                                        this.Pixels[y, x + i] = Palette.getEntry(p);
+                                        this.Pixels[y, x + i] = Palette.GetEntry(p);
                                     }
                                 }
                                 if ((this.BitmapHeader.Width % 8) != 0)
@@ -1979,7 +1960,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                                     for (int i = 0; i < (this.BitmapHeader.Width % 8); i++)
                                     {
                                         int p = (int)((b & (0x80 >> i)) != 0 ? 0x01 : 0x00);
-                                        this.Pixels[y, x + i] = Palette.getEntry(p);
+                                        this.Pixels[y, x + i] = Palette.GetEntry(p);
                                     }
                                 }
                             }
@@ -2008,12 +1989,12 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                                 {
                                     b = byteN[pos];
                                     p = ((int)b & 0x000000F0) >> 4;
-                                    this.Pixels[y, x] = Palette.getEntry(p);
+                                    this.Pixels[y, x] = Palette.GetEntry(p);
                                     x1 = x + 1;
                                     if (x1 < this.BitmapHeader.Width)
                                     {
                                         p = (int)b & 0x0000000F;
-                                        this.Pixels[y, x1] = Palette.getEntry(p);
+                                        this.Pixels[y, x1] = Palette.GetEntry(p);
                                         ++pos;
                                     }
                                 }
@@ -2038,7 +2019,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                                 for (int x = 0; x < this.BitmapHeader.Width; x++)
                                 {
                                     b = (byte)RTStreamEndianUtils.GetByte(stream);
-                                    this.Pixels[y, x] = Palette.getEntry(b);
+                                    this.Pixels[y, x] = Palette.GetEntry(b);
                                 }
                                 for (int i = 0; i < pad; i++)
                                     b = (byte)RTStreamEndianUtils.GetByte(stream);
@@ -2366,8 +2347,8 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                         //break;
                 }  
 
-                this.BitmapHeader.PaletteColors = this.Palette.NumberOfEntries;
-                this.BitmapHeader.PaletteImportant = this.Palette.NumberOfEntries;
+                this.BitmapHeader.PaletteColors = (uint)this.Palette.NumberOfEntries;
+                this.BitmapHeader.PaletteImportant = (uint)this.Palette.NumberOfEntries;
 
                 int pad = ((int)this.BitmapHeader.ImageSize / this.BitmapHeader.Height) - (sizeOfPixel * this.BitmapHeader.Width);
                 if (pad < 0)
@@ -2485,10 +2466,10 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                 // Saves the palette
                 if (Palette.NumberOfEntries > 0)
                 {
-                    ColorEntryRGBA<T> color;
+                    TColorEntryRGBA<byte> color;
                     for (int i = 0; i < Palette.NumberOfEntries; i++)
                     {
-                        color = Palette.getEntry(i);
+                        color = Palette.GetEntry(i);
                         if ((this.BitmapHeader.HeaderSize == BMP_HEADER_OS2_SIZE_V1) ||
                             (this.BitmapHeader.HeaderSize == BMP_HEADER_OS2_SIZE_V2))
                         {
@@ -2539,7 +2520,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                             case BitmapBitsPerPixel.Palette_16:
                                 break;
                             case BitmapBitsPerPixel.Palette_256:
-                                int i = this.Palette.getColorIndex(this.Pixels[y, x]);
+                                int i = this.Palette.GetColorIndex(this.Pixels[y, x]);
                                 RTStreamEndianUtils.PutByte(stream, (uint)i);
                                 break;
                             case BitmapBitsPerPixel.RGB_16:
@@ -2838,10 +2819,10 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
             {
                 sb.Append("Palette:");
                 sb.AppendLine();
-                ColorEntryRGBA<T> color;
+                TColorEntryRGBA<T> color;
                 for (int i = 0; i < Palette.NumberOfEntries; i++)
                 {
-                    color = Palette.getEntry(i);
+                    color = Palette.GetEntry(i);
                     if ((this.BitmapHeader.HeaderSize == BMP_HEADER_OS2_SIZE_V1) ||
                         (this.BitmapHeader.HeaderSize == BMP_HEADER_OS2_SIZE_V2))
                     {
@@ -2909,7 +2890,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
         /// <exception cref="System.Exception">
         /// Throws <b>Exception</b> when the palette as more than 256 entries.
         /// </exception>
-        public void DecodeRLE8(Stream stream, ref ColorEntryRGBA<T>[,] pixels, ref ColorPalette palette)
+        public void DecodeRLE8(Stream stream, ref TColorEntryRGBA<byte>[,] pixels, ref ColorPalette palette)
         {
             if (pixels == null)
                 throw new Exception("Invalid pixels!");
@@ -2928,7 +2909,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
             int byte2;
             int byte3;
             int byte4;
-            ColorEntryRGBA<T> color;
+            TColorEntryRGBA<T> color;
             
             do
             {
@@ -3014,7 +2995,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                                     count += byte3;
                                     for (int i = 0; i < (int)byte2; i++)
                                     {
-                                        color = palette.getEntry((int)byteN[i]);
+                                        color = palette.GetEntry((int)byteN[i]);
                                         //pixels[maxY - y - 1, x] = color;
                                         pixels[y, x] = color;
                                         ++x;
@@ -3035,7 +3016,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                         // Absolute mode
                         for (int i = 0; i < (int)byte1; i++)
                         {
-                            color = palette.getEntry((int)byte2);
+                            color = palette.GetEntry((int)byte2);
                             //pixels[maxY - y - 1, x] = color;
                             pixels[y, x] = color;
                             ++x;
@@ -3060,7 +3041,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
         /// <exception cref="System.Exception">
         /// Throws <b>Exception</b> when the palette as more than 256 entries.
         /// </exception>
-        public void EncodeRLE8(Stream stream, ref ColorEntryRGBA<T>[,] pixels, ref ColorPalette palette)
+        public void EncodeRLE8(Stream stream, ref TColorEntryRGBA<byte>[,] pixels, ref ColorPalette palette)
         {
             if (pixels == null)
                 throw new Exception("Invalid pixels!");
@@ -3108,7 +3089,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
         /// <exception cref="System.Exception">
         /// Throws <b>Exception</b> when the palette as more than 16 entries.
         /// </exception>
-        public void DecodeRLE4(Stream stream, ref ColorEntryRGBA<T>[,] pixels, ref ColorPalette palette)
+        public void DecodeRLE4(Stream stream, ref TColorEntryRGBA<byte>[,] pixels, ref ColorPalette palette)
         {
             if (pixels == null)
                 throw new Exception("Invalid pixels!");
@@ -3127,7 +3108,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
             int byte2 = 0;
             int byte3 = 0;
             int byte4 = 0;
-            ColorEntryRGBA<T> color;
+            TColorEntryRGBA<T> color;
 
             do
             {
@@ -3215,10 +3196,10 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                                     for (int i = 0; i < (int)byte2; ++i)
                                     {
                                         if ((i % 2) == 0)
-                                            color = palette.getEntry(((int)byteN[pos] & 0x000000F0) >> 4);
+                                            color = palette.GetEntry(((int)byteN[pos] & 0x000000F0) >> 4);
                                         else
                                         {
-                                            color = palette.getEntry((int)byteN[pos] & 0x0000000F);
+                                            color = palette.GetEntry((int)byteN[pos] & 0x0000000F);
                                             ++pos;
                                         }
                                         //pixels[maxY - y - 1, x] = color;
@@ -3244,9 +3225,9 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
                         for (int i = 0; i < (int)byte1; ++i)
                         {
                             if ((i % 2) == 0)
-                                color = palette.getEntry((int)byte3);
+                                color = palette.GetEntry((int)byte3);
                             else
-                                color = palette.getEntry((int)byte4);
+                                color = palette.GetEntry((int)byte4);
                             //pixels[maxY - y - 1, x] = color;
                             pixels[y, x] = color;
                             ++x;
@@ -3271,7 +3252,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
         /// <exception cref="System.Exception">
         /// Throws <b>Exception</b> when the palette as more than 16 entries.
         /// </exception>
-        public void EncodeRLE4(Stream stream, ref ColorEntryRGBA<T>[,] pixels, ref ColorPalette palette)
+        public void EncodeRLE4(Stream stream, ref TColorEntryRGBA<byte>[,] pixels, ref ColorPalette palette)
         {
             if (pixels == null)
                 throw new Exception("Invalid pixels!");
@@ -3280,6 +3261,121 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
 			if (palette.NumberOfEntries > 16)
                 throw new Exception("The palette has more than 16 colors!");
             throw new Exception("RLE 4 encoding not implented!");
+        }
+
+        public IEnumerable<string> GetFileExtentions()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> GetFileMimeTypes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetFileVersion(out int major, out int minor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetFileVersion(int major, int minor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetPixelDimensions(out uint Width, out uint Height)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPixelDimensions(uint Width, uint Heighty)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetDPI(out int x, out int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetDPI(int x, int y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public float GetGama()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetGama(float gama)
+        {
+            throw new NotImplementedException();
+        }
+
+        public uint GetColorDeep()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetColorDeep(uint bitsPerPixel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PixelFormat GetPixelFormat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPixelFormat(PixelFormat pixelFormat)
+        {
+            throw new NotImplementedException();
+        }
+
+        public uint GetNumberOfImages()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetNumberOfImages(uint nImages)
+        {
+            throw new NotImplementedException();
+        }
+
+        public uint GetCurrentImageIndex()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetCurrentImageIndex(uint nImage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] GetProfileICM()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetProfileICM(ref byte[] icm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetProfileICM(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Load(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(Stream stream)
+        {
+            throw new NotImplementedException();
         }
     }
 }
