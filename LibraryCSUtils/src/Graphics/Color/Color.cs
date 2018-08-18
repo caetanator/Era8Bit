@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CaetanoSof.Utils.Drawing
+namespace CaetanoSoft.Graphics.FileFormats
 {
     /// <summary>
     /// Represents color by RGBA (Red, Green, Blue and Alpha) values.
@@ -59,29 +59,11 @@ namespace CaetanoSof.Utils.Drawing
         /// <param name="r">Red channel value.</param>
         /// <param name="g">Green channel value.</param>
         /// <param name="b">Blue channel value.</param>
-        /// <remarks>
-        /// RGB color channels values must be a real between [0.0; 1.0].
-        /// The Alpha channel value is set to 1.0.
-        /// </remarks>
-        public Color(double r, double g, double b)
-        {
-            Red = r;
-            Green = g;
-            Blue = b;
-            m_alpha = 1.0;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> class.
-        /// </summary>
-        /// <param name="r">Red channel value.</param>
-        /// <param name="g">Green channel value.</param>
-        /// <param name="b">Blue channel value.</param>
         /// <param name="a">Alpha channel value.</param>
         /// <remarks>
         /// The Alpha channel and RGB color channels values must be a real between [0.0; 1.0].
         /// </remarks>
-        public Color(double r, double g, double b, double a)
+        public Color(double r, double g, double b, double a = 1.0)
         {
             Red = r;
             Green = g;
@@ -95,34 +77,16 @@ namespace CaetanoSof.Utils.Drawing
         /// <param name="r">Red channel value.</param>
         /// <param name="g">Green channel value.</param>
         /// <param name="b">Blue channel value.</param>
-        /// <remarks>
-        /// RGB color channels values must be an integer between [0; 255].
-        /// The Alpha channel value is set to 255.
-        /// </remarks>
-        public Color(int r, int g, int b)
-        {
-            intRed = (int)((double)r / 255.0);
-            intGreen = (int)((double)g / 255.0);
-            intBlue = (int)((double)b / 255.0);
-            m_alpha = 1.0;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Color"/> class.
-        /// </summary>
-        /// <param name="r">Red channel value.</param>
-        /// <param name="g">Green channel value.</param>
-        /// <param name="b">Blue channel value.</param>
         /// <param name="a">Alpha channel value.</param>
         /// <remarks>
         /// The Alpha channel and RGB color channels values must be an integer between [0; 255].
         /// </remarks>
-        public Color(int r, int g, int b, int a)
+        public Color(int r, int g, int b, int a = 255)
         {
-            intRed = (int)((double)r / 255.0);
-            intGreen = (int)((double)g / 255.0);
-            intBlue = (int)((double)b / 255.0);
-            intAlpha = (int)((double)a / 255.0);
+            IntRed = r;
+            IntGreen = g;
+            IntBlue = b;
+            IntAlpha = a;
         }
 
         /// <summary>
@@ -157,6 +121,7 @@ namespace CaetanoSof.Utils.Drawing
             set { 
                     if (value < 0.0 || value > 1.0)
                         throw new ArgumentException("Red value must be between 0.0 and 1.0!");
+                    //else
                     m_red = value;
                 }
         }
@@ -179,6 +144,7 @@ namespace CaetanoSof.Utils.Drawing
             set {
                     if (value < 0.0 || value > 1.0)
                         throw new ArgumentException("Green value must be between 0.0 and 1.0!");
+                    //else
                     m_green = value;
                 }
         }
@@ -201,6 +167,7 @@ namespace CaetanoSof.Utils.Drawing
             set {
                     if (value < 0.0 || value > 1.0)
                         throw new ArgumentException("Blue value must be between 0.0 and 1.0!");
+                    //else
                     m_blue = value;
                 }
         }
@@ -224,95 +191,100 @@ namespace CaetanoSof.Utils.Drawing
             {
                 if (value < 0.0 || value > 1.0)
                     throw new ArgumentException("Alpha value must be between 0.0 and 1.0!");
+                //else
                 m_alpha = value;
             }
         }
 
         /// <summary>
-        /// The <b>intRed</b> property represents the <i>red</i> component of the RGBA color, as an integer.
+        /// The <b>IntRed</b> property represents the <i>red</i> component of the RGBA color, as an integer.
         /// </summary>
         /// <remarks>
-        /// <b>intRed</b> must be between [0; 255].
+        /// <b>IntRed</b> must be between [0; 255].
         /// </remarks>
         /// <value>
-        /// The <b>intRed</b> property gets/sets the <i>red</i> component of the RGBA color.
+        /// The <b>IntRed</b> property gets/sets the <i>red</i> component of the RGBA color.
         /// </value>
         /// <exception cref="System.ArgumentException">
         /// Throws <b>ArgumentException</b> when the value is not valid.
         /// </exception>
-        public int intRed
+        public int IntRed
         {
             get { return (int)(255.0 * m_red); }
             set {
                     if (value < 0 || value > 255)
                         throw new ArgumentException("Red value must be between 0 and 255!");
+                    //else
                     m_red = (double)value / 255.0;
                 }
         }
 
         /// <summary>
-        /// The <b>intGreen</b> property represents the <i>green</i> component of the RGBA color, as an integer.
+        /// The <b>IntGreen</b> property represents the <i>green</i> component of the RGBA color, as an integer.
         /// </summary>
         /// <remarks>
-        /// <b>intGreen</b> must be between [0; 255].
+        /// <b>IntGreen</b> must be between [0; 255].
         /// </remarks>
         /// <value>
-        /// The <b>intGreen</b> property gets/sets the <i>green</i> component of the RGBA color.
+        /// The <b>IntGreen</b> property gets/sets the <i>green</i> component of the RGBA color.
         /// </value>
         /// <exception cref="System.ArgumentException">
         /// Throws <b>ArgumentException</b> when the value is not valid.
         /// </exception>
-        public int intGreen
+        public int IntGreen
         {
             get { return (int)(255.0 * m_green); }
             set {
                     if (value < 0 || value > 255)
                         throw new ArgumentException("Green value must be between 0 and 255!");
+                    //else
                     m_green = (double)value / 255.0;
                 }
         }
 
         /// <summary>
-        /// The <b>intBlue</b> property represents the <i>blue</i> component of the RGBA color, as an integer.
+        /// The <b>IntBlue</b> property represents the <i>blue</i> component of the RGBA color, as an integer.
         /// </summary>
         /// <remarks>
-        /// <b>intBlue</b> must be between [0; 255].
+        /// <b>IntBlue</b> must be between [0; 255].
         /// </remarks>
         /// <value>
-        /// The <b>intBlue</b> property gets/sets the <i>blue</i> component of the RGBA color.
+        /// The <b>IntBlue</b> property gets/sets the <i>blue</i> component of the RGBA color.
         /// </value>
         /// <exception cref="System.ArgumentException">
         /// Throws <b>ArgumentException</b> when the value is not valid.
         /// </exception>
-        public int intBlue
+        public int IntBlue
         {
             get { return (int)(255.0 * m_blue); }
             set {
                     if (value < 0 || value > 255)
                         throw new ArgumentException("Blue value must be between 0 and 255!");
+                    //else
                     m_blue = (double)value / 255.0;
                 }
         }
 
         /// <summary>
-        /// The <b>intAlpha</b> property represents the <i>blue</i> component of the RGBA color, as an integer.
+        /// The <b>IntAlpha</b> property represents the <i>blue</i> component of the RGBA color, as an integer.
         /// </summary>
         /// <remarks>
-        /// <b>intAlpha</b> must be between [0; 255] (0 => 100% transparent; 255 => 100% opaque).
+        /// <b>IntAlpha</b> must be between [0; 255] (0 => 100% transparent; 255 => 100% opaque).
         /// </remarks>
         /// <value>
-        /// The <b>intAlpha</b> property gets/sets the <i>blue</i> component of the RGBA color.
+        /// The <b>IntAlpha</b> property gets/sets the <i>blue</i> component of the RGBA color.
         /// </value>
         /// <exception cref="System.ArgumentException">
         /// Throws <b>ArgumentException</b> when the value is not valid.
         /// </exception>
-        public int intAlpha
+        public int IntAlpha
         {
             get { return (int)(255.0 * m_alpha); }
             set
             {
                 if (value < 0 || value > 255)
                     throw new ArgumentException("Alpha value must be between 0 and 255!");
+                //else
                 m_alpha = (double)value / 255.0;
             }
         }
@@ -335,6 +307,8 @@ namespace CaetanoSof.Utils.Drawing
                 m_green = 0.0;
             if (m_blue < 0.0)
                 m_blue = 0.0;
+            if (m_alpha < 0.0)
+                m_alpha = 0.0;
 
             if (m_red > 1.0)
                 m_red = 1.0;
@@ -342,6 +316,8 @@ namespace CaetanoSof.Utils.Drawing
                 m_green = 1.0;
             if (m_blue > 1.0)
                 m_blue = 1.0;
+            if (m_alpha > 1.0)
+                m_alpha = 1.0;
         }
 
         /// <summary>
@@ -490,8 +466,9 @@ namespace CaetanoSof.Utils.Drawing
                         break;
                     default:
                         throw new ArgumentException("HSV color values not valid!");
-                        //break;
                 }
+
+                Alpha = 1.0;
             }
 
             Clamp();
