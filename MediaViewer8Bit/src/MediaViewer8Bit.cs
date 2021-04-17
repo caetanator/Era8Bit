@@ -1,11 +1,11 @@
 ﻿/**
- * MediaViwer.cs
+ * MediaViewer.cs
  *
  * PURPOSE
  *  Show the contents of 8-bit related files (.TZX, .TAP, .DCK, .IMG, etc.).
  *
  * CONTACTS
- *  E-mail regarding any portion of the "Era 8-bit Media Viwer" project:
+ *  E-mail regarding any portion of the "Era 8-bit Media Viewer" project:
  *      José Caetano Silva, jcaetano@users.sourceforge.net
  *
  * COPYRIGHT
