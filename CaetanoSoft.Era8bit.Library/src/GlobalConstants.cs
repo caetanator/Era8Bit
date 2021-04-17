@@ -54,7 +54,7 @@ namespace CaetanoSof.Era8Bit.Library8Bit
 
         private GlobalMemorySizeConstants()
         {
-            // Singleton pattern objects dosen't have public constructors
+            // Singleton pattern objects doesn't have public constructors
         }
     }
 }

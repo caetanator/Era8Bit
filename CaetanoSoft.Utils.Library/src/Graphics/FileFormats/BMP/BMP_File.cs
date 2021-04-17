@@ -3089,7 +3089,7 @@ namespace CaetanoSof.Graphics.FileFormats.BMP
         /// <exception cref="System.Exception">
         /// Throws <b>Exception</b> when the palette as more than 16 entries.
         /// </exception>
-        public void DecodeRLE4(Stream stream, ref TColorEntryRGBA<byte>[,] pixels, ref ColorPalette palette)
+        public void DecodeRLE4(Stream stream, ref TColorEntryRGBA<byte>[,] pixels, ref ColorPalette palettespell)
         {
             if (pixels == null)
                 throw new Exception("Invalid pixels!");

@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
 {
     /// <summary>
-    /// 
+    /// Enumeration that identifies the type of media.
     /// </summary>
     /// <copyright>(c) 2016-2017 by José Caetano Silva</copyright>
 	/// <license type="GPL-3">See LICENSE for full terms</license>
@@ -52,13 +52,13 @@ namespace CaetanoSof.Era8Bit.Library8Bit.MediaFormats
         DISK,
 
         /// <summary>
-        /// Microdrive Cartridge media format type.
+        /// Microdrive tape cartridge media format type.
         /// <para>Used by Sinclair ZX Interface I and Sinclair QL.</para>
         /// </summary>
         MICRODRIVE_CARTRIDGE,
 
         /// <summary>
-        /// Cartridge media format type.
+        /// ROM and/or RAM memory cartridge media format type.
         /// </summary>
         CARTRIDGE,
 

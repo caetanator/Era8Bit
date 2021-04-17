@@ -10,7 +10,7 @@ using ColorEntryFloatRGBA = CaetanoSoft.Graphics.FileFormats.TColorEntryRGBA<flo
 namespace CaetanoSoft.Graphics.FileFormats
 {
     /// <summary>
-    /// Implementes a color palette.
+    /// Implements a color palette.
     /// </summary>
     /// <list type = "bullet" >
     /// <item>
