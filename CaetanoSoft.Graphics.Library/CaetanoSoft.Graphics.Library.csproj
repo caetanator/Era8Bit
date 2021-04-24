@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>CaetanoSoft.Graphics</RootNamespace>
+    <Company>CaetanoSoft</Company>
+    <Authors>José Caetano Silva</Authors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CaetanoSoft.Utils.Library\CaetanoSoft.Utils.Library.csproj" />
+  </ItemGroup>
 
 </Project>
