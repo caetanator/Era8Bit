@@ -1,0 +1,54 @@
+SCR Format
+==========
+
+These files are Spectrum screen dumps (compatible with ZX Spectrum SCREEN$ file), and are simply the 6912 bytes of pixel and 
+attribute data found at address 16384, stored on disk in exactly the same way as they are stored in memory.
+
+The Spectrum screen is split into four areas; top third, mid third, bottom third and attributes (colours).
+
+The first 6144 bytes store the screen bitmap 256x192 pixels (32 characters wide x 24 lines), 1 bit per pixel (on or off). The 
+layout is not linear.
+
+Following the bitmap region, the remaining 768 bytes store the attributes. There is 1 byte of attribute for each 
+character cell (each 8x8 square). Stored left to right, top to bottom. Bits 2-0 store the foreground colour, or "ink" colour 
+(colour assigned to "on" pixels). Bits 5-3 store the background colour or "paper" colour (colour assigned to "off" pixels). 
+Bit 6 is bright. If setted, both paper and ink colours are lighter. Bit 7 is flash. If setted, the paper and ink colour swap 
+every 640 ms to give a kind of flashing character.
+
+The screen bitmap is divided horizontally into three thirds: each one is 2048 bytes and store 8 text rows of 32 column 
+each one (each character cell has 8 scans of 8 pixels each one).
+For each third, the first scan of each character cell is stored, left to right, top to bottom. Then, the second scan, 
+then the third, until the last one, the eighth. After this, a new third is stored in the same fashion.
+Each byte stored has 8 pixels: the MSb belongs to the leftmost pixel as shown on the screen.
+
+In addition to the above, ".scr" specification is extended for Timex TC2048/TC2068/TS2068 in the following ways:
+
+   * A 12288 byte .SCR file contains a Timex HiColour screen.
+    The first 6144 bytes are a dump from address 16384, and the second 6144 bytes are a dump from 22528.
+    HiColour mode is entered by setting bit 1 of port $FF. It differs a little from the standard mode, explained 
+    above. HiColour mode uses an attribute region which is not 768 bytes, but 6144 bytes in size, the same as the bitmap region. The attribute region does not start following the bitmap region, but there is a gap of 1280 bytes between the end of the bitmap and the start of the attribute region. The total screen size is 12288 bytes, not including this gap.
+
+The layout of this attribute region is the same as the bitmap region (3 thirds, the first scan is stored, then the second, etc). There is now 1 byte of atribute for each scan of 8 pixels. The format of the attribute byte is the same as in the standard mode.
+
+On tape, some programs use two different blocks to load the bitmap region, then the attribute region (as they are not contiguous). Some others use a single block containing both regions along with 1280 byte gap between them.
+
+   * A 12289 byte .SCR file contains a Timex HiRes screen.
+    The first 6144 bytes are a dump from address 16384, and the second 6144 bytes are a dump from 22528, the last byte 
+    contains the HiRes colour information that was dumped from port 255.
+    On tape, HiRes SCREEN$ are stored the same way as HiColour SCREEN$. So a separate BASIC program must provide the colors for this mode, 
+    along with the mode change command.
+    HiRes is entered by setting bit 3 of port $FF. This mode shows a screen of 512x192 pixels, using two different 
+    bitmap regions. One region is the same as in the standard and HiColour mode, and the second one is located in the 
+    same place as the attribute region of the HiColour mode.
+
+    For each scan of 16 pixels, the left most 8 pixels are stored in the first bitmap region, and the rightmost 8 pixels 
+    are stored in the second bitmap region.
+
+    Each bitmap region is arranged the same way as the other screen modes.
+
+    The foreground, background and border colour is setted separately on bits 5-3 of port $FF. These three bits store 
+    the ink colour which will be applied to all "on" pixels. The 1-complement of this value will be used for both paper 
+    and border colours. In HiRes mode, the bright bit is always setted and there is no flash.
+
+https://www.worldofspectrum.org/faq/reference/formats.htm
+https://retrocomputing.stackexchange.com/questions/212/what-format-is-the-timex-sinclair-zx-spectrum-screen-scr-file

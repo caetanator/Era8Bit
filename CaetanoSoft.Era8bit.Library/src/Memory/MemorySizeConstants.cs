@@ -36,34 +36,37 @@ namespace CaetanoSoft.Era8bit.Memory
         public const int KB1 = 1024;
 
         /// <summary>The size in bytes for 4 KB.</summary>
-        public const int KB4 = 8 * 1024;
+        public const int KB4 = 4 * KB1;
 
         /// <summary>The size in bytes for 8 KB.</summary>
-        public const int KB8 = 8 * 1024;
+        public const int KB8 = 8 * KB1;
 
         /// <summary>The size in bytes for 16 KB.</summary>
-        public const int KB16 = 16 * 1024;
+        public const int KB16 = 16 * KB1;
 
         /// <summary>The size in bytes for 24 KB.</summary>
-        public const int KB24 = 24 * 1024;
+        public const int KB24 = 24 * KB1;
 
         /// <summary>The size in bytes for 32 KB.</summary>
-        public const int KB32 = 32 * 1024;
+        public const int KB32 = 32 * KB1;
 
         /// <summary>The size in bytes for 64 KB.</summary>
-        public const int KB64 = 64 * 1024;
+        public const int KB64 = 64 * KB1;
 
         /// <summary>The size in bytes for 128 KB.</summary>
-        public const int KB128 = 128 * 1024;
+        public const int KB128 = 128 * KB1;
 
         /// <summary>The size in bytes for 256 KB.</summary>
-        public const int KB256 = 256 * 1024;
+        public const int KB256 = 256 * KB1;
 
         /// <summary>The size in bytes for 512 KB.</summary>
-        public const int KB512 = 512 * 1024;
+        public const int KB512 = 512 * KB1;
 
         /// <summary>The size in bytes for 1 MB (1024 KB).</summary>
         public const int MB1 = MemorySizeConstants.KB1 * 1024;
+
+        /// <summary>The size in bytes for 1 MB (1024 KB).</summary>
+        public const int MB4 = MemorySizeConstants.MB1 * 4;
 
         /// <summary>The size in bytes for 1 TB (1024 MB).</summary>
         public const int TB1 = MemorySizeConstants.MB1 * 1024;

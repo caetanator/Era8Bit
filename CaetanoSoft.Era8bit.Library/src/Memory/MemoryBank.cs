@@ -8,44 +8,36 @@ namespace CaetanoSoft.Era8bit.Memory
     /// <summary>
     ///   <br />
     /// </summary>
-    public class MemoryBankChunk
+    public class MemoryBank
     {
         #region Class Properties
-        /// <summary>Gets or sets the type.</summary>
-        /// <value>The type.</value>
-        public MemoryBankChunkTypeEnum Type { get; private set; } = MemoryBankChunkTypeEnum.Unknown;
+        /// <summary>Gets the bank identifier.</summary>
+        /// <value>The bank identifier.</value>
+        public int BankID { get; private set; } = -1;
 
         /// <summary>Gets the size.</summary>
         /// <value>The size.</value>
         public int Size { get; private set; } = -1;
 
-        /// <summary>Gets a value indicating whether this instance is ROM.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is rom; otherwise, <c>false</c>.</value>
-        public bool IsROM { get { return (this.Type == MemoryBankChunkTypeEnum.ROM); } }
+        /// <summary>Gets the size of the chunk.</summary>
+        /// <value>The size of the chunk.</value>
+        public int ChunkSize { get; private set; } = -1;
 
-        /// <summary>Gets a value indicating whether this instance is volatil ram.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is volatil ram; otherwise, <c>false</c>.</value>
-        public bool IsVolatilRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile); } }
+        /// <summary>Gets the number of chunks.</summary>
+        /// <value>The number of chunks.</value>
+        public int NumberOfChunks { get; private set; } = 0;
 
-        /// <summary>Gets a value indicating whether this instance is static ram.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is static ram; otherwise, <c>false</c>.</value>
-        public bool IsStaticRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Static); } }
-
-        /// <summary>Gets or sets a value indicating whether this instance is RAM.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is ram; otherwise, <c>false</c>.</value>
-        public bool IsRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile) || (this.Type == MemoryBankChunkTypeEnum.RAM_Static); } }
+        /// <summary>Gets the maximum number of chunks.</summary>
+        /// <value>The maximum number of chunks.</value>
+        public int MaxNumberOfChunks { get; private set; } = -1;
 
         /// <summary>Gets a value indicating whether [data changed].</summary>
         /// <value>
         ///   <c>true</c> if [data changed]; otherwise, <c>false</c>.</value>
         public bool DataChanged { get; private set; } = false;
 
-        /// <summary>The memory chunk</summary>
-        private byte[] MemoryChunk = null;
+        /// <summary>The bank chunks</summary>
+        private Dictionary<int, MemoryBankChunk> BankChunks;
         #endregion // Class Properties
 
         #region Class Constructors
@@ -61,29 +53,27 @@ namespace CaetanoSoft.Era8bit.Memory
         /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
         /// <param name="size">The size in bytes of the chunk (must be between 1 byte and 512 MB).</param>
         /// <param name="initValue">The initialize byte value for the memory bank chunk (must be between 0 and 255).</param>
-        public MemoryBankChunk(MemoryBankChunkTypeEnum type, int size, int initValue = -1)
+        public MemoryBank(int id, int size, int maxChunks)
         {
 #if DEBUG
-            Assert.IsFalse((type != MemoryBankChunkTypeEnum.Unknown) && 
-                            ((type == MemoryBankChunkTypeEnum.ROM) || (type == MemoryBankChunkTypeEnum.RAM_Static) || 
-                             (type == MemoryBankChunkTypeEnum.RAM_Volatile)), "'type' must be RAM or ROM!");
+            Assert.IsFalse((id >= 0) && (id <= 255), "'id' must be between 0 and 255!");
             Assert.IsFalse((size >= 0), "'size' must be 1 or more!");
 #endif
             // Validate the memory bank chunk type
-            if (type != MemoryBankChunkTypeEnum.Unknown)
+            if ((id >= 0) && (id <= 255))
             {
-                // OK, it's ROM or RAM
-                this.Type = type;
+                // OK, bank ID is valid
+                this.BankID = id;
 
                 // Validate the memory bank chunk size
-                if ((size > 0) && (size <= MemorySizeConstants.KB64))
+                if ((size > 0) && (size <= MemorySizeConstants.MB1))
                 {
-                    // OK, size is more than 1 byte and less or equal to 64 KB
+                    // OK, size is more than 1 byte and less or equal to 1 MB
                     this.Size = size;
-                    this.MemoryChunk = new byte[this.Size];
+                    this.MaxNumberOfChunks = this.Size / ;
 
                     // Validate the memory bank chunk size
-                    if ((initValue >= 0) && (initValue <= 255))
+                    if ((maxChunks >= 0) && (maxChunks <= 255))
                     {
                         // OK, is between 0 and 255
                         for (int i = 0; i < this.MemoryChunk.Length; i++)
@@ -110,7 +100,7 @@ namespace CaetanoSoft.Era8bit.Memory
         /// </summary>
         /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
         /// <param name="chunk">The vector bytes to be copied to the chunk.</param>
-        public MemoryBankChunk(MemoryBankChunkTypeEnum type, byte [] chunk) : this(type, chunk.Length, -1)
+        public MemoryBank(MemoryBankChunkTypeEnum type, byte [] chunk) : this(type, chunk.Length, -1)
         {
 #if DEBUG
             Assert.IsNotNull(chunk, "'chunk' can't be null!");
@@ -174,7 +164,6 @@ namespace CaetanoSoft.Era8bit.Memory
                     {
                         int ret = (int)this.MemoryChunk[location];
                         this.MemoryChunk[location] = (byte)theByte;
-                        this.DataChanged = true;
                         return ret;
                     }
                     //else
@@ -229,7 +218,6 @@ namespace CaetanoSoft.Era8bit.Memory
                     {
                         // OK, copy byte values
                         chunk.CopyTo(this.MemoryChunk, 0);
-                        this.DataChanged = true;
                         return true;
                     }
                     //else

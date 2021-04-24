@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Era8Bit
+/CaetanoSoft.Era8bit.Library/obj
+/CaetanoSoft.Graphics.Library/obj/Debug/netcoreapp3.1
+/CaetanoSoft.Graphics.Library/obj
+/CaetanoSoft.Utils.Library/bin/Debug/netcoreapp3.1
+/CaetanoSoft.Utils.Library/obj/Debug/netcoreapp3.1
+/CaetanoSoft.Utils.Library/obj
