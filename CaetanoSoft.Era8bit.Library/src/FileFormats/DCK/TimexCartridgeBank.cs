@@ -27,7 +27,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
 
         public int NumberOf8KChunksInFile { get; private set; } = 0;
 
-        public TimexCC8KChunk[] MemoryBanksChunks { get; private set; } = new TimexCC8KChunk[8];
+        public MemoryBankChunk[] MemoryBanksChunks { get; private set; } = new MemoryBankChunk[8];
 
         public DockHeaderLrosStruct sLrosProgramHeader;
         public DockHeaderArosStruct sArosProgramHeader;
@@ -317,7 +317,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             {
                 memoryBaseStart = i * GlobalMemorySizeConstants.KB8;
                 memoryBaseEnd = ((i + 1) * GlobalMemorySizeConstants.KB8) - 1;
-                this.MemoryBanksChunks[i] = new TimexCC8KChunk();
+                this.MemoryBanksChunks[i] = new MemoryBankChunk();
 
                 nextByte = (int)structDCK.MemoryBankChunkType[i];
                 this.MemoryBanksChunks[i].IsRAM = ((nextByte & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG);
