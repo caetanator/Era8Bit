@@ -7,7 +7,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
     /// <summary>
     ///   <br />
     /// </summary>
-    public enum DckHeaderMemoryBankChunkTypeEnum : byte
+    public enum MemoryBankChunkTypeEnum : byte
     {
         /// <summary>
         /// The ROM memory chunk isn't present on the file.
