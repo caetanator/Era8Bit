@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>CaetanoSoft.Era8bit</RootNamespace>
+    <Authors>José Caetano Silva</Authors>
+    <Company>CaetanoSoft</Company>
+    <Copyright>(c) 2016-2021 by José Caetano Silva</Copyright>
+    <PackageLicenseFile>GPL.txt</PackageLicenseFile>
+    <Description>This class library contains objects to help applications that emulate 8-bit era computers, like the Sinclair ZX Spectrum, Timex Computer 2068 and Commodore 64.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="src\GPL.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
