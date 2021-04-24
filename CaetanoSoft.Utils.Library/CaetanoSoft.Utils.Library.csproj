@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>CaetanoSoft.Utils</RootNamespace>
+    <Company>CaetanoSoft</Company>
+    <Authors>José Caetano Silva</Authors>
+    <Copyright>(c) 2006-2021 by José Caetano Silva</Copyright>
+    <PackageLicenseFile>GPL.txt</PackageLicenseFile>
+    <Description>This class library contains objects to help applications to handle CPU endianness files and memory allocation.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="src\GPL.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
