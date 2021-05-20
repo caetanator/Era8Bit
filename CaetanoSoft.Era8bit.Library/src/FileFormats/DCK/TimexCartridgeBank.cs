@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CaetanoSoft.Era8bit.Memory;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

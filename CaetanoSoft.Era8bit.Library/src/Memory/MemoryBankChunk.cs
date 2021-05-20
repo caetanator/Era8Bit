@@ -6,46 +6,43 @@ using System.Text;
 namespace CaetanoSoft.Era8bit.Memory
 {
     /// <summary>
-    ///   <br />
+    /// This class implements a type of memory chunk, that can be ROM, volatile RAM or static RAM.
     /// </summary>
     public class MemoryBankChunk
     {
         #region Class Properties
-        /// <summary>Gets or sets the type.</summary>
-        /// <value>The type.</value>
+        /// <summary>
+        /// Gets or sets the type of the memory chunk. See <see cref="MemoryBankChunkTypeEnum" /> enumeration for more information.<br />
+        /// If this value is <c>MemoryBankChunkTypeEnum.Unknown</c>, them it's content is invalid. </summary>
+        /// <value>The memory chunk type.</value>
         public MemoryBankChunkTypeEnum Type { get; private set; } = MemoryBankChunkTypeEnum.Unknown;
 
         /// <summary>Gets the size.</summary>
         /// <value>The size.</value>
-        public int Size { get; private set; } = -1;
-
-        /// <summary>Gets a value indicating whether this instance is ROM.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is rom; otherwise, <c>false</c>.</value>
-        public bool IsROM { get { return (this.Type == MemoryBankChunkTypeEnum.ROM); } }
-
-        /// <summary>Gets a value indicating whether this instance is volatil ram.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is volatil ram; otherwise, <c>false</c>.</value>
-        public bool IsVolatilRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile); } }
-
-        /// <summary>Gets a value indicating whether this instance is static ram.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is static ram; otherwise, <c>false</c>.</value>
-        public bool IsStaticRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Static); } }
-
-        /// <summary>Gets or sets a value indicating whether this instance is RAM.</summary>
-        /// <value>
-        ///   <c>true</c> if this instance is ram; otherwise, <c>false</c>.</value>
-        public bool IsRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile) || (this.Type == MemoryBankChunkTypeEnum.RAM_Static); } }
-
-        /// <summary>Gets a value indicating whether [data changed].</summary>
-        /// <value>
-        ///   <c>true</c> if [data changed]; otherwise, <c>false</c>.</value>
-        public bool DataChanged { get; private set; } = false;
+        public int Size { get; private set; } = 0;
 
         /// <summary>The memory chunk</summary>
         private byte[] MemoryChunk = null;
+
+        /// <summary>Gets a value indicating whether the data in this memory chunk as changed.</summary>
+        /// <value><c>true</c> if the data changed; otherwise, <c>false</c>.</value>
+        public bool DataChanged { get; private set; } = false;
+
+        /// <summary>Gets a value indicating whether this instance is ROM.</summary>
+        /// <value><c>true</c> if this instance is ROM; otherwise, <c>false</c>.</value>
+        public bool IsROM { get { return (this.Type == MemoryBankChunkTypeEnum.ROM); } }
+
+        /// <summary>Gets a value indicating whether this instance is volatile RAM.</summary>
+        /// <value><c>true</c> if this instance is volatile RAM; otherwise, <c>false</c>.</value>
+        public bool IsVolatilRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile); } }
+
+        /// <summary>Gets a value indicating whether this instance is static RAM.</summary>
+        /// <value><c>true</c> if this instance is static RAM; otherwise, <c>false</c>.</value>
+        public bool IsStaticRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Static); } }
+
+        /// <summary>Gets or sets a value indicating whether this instance is RAM.</summary>
+        /// <value><c>true</c> if this instance is RAM; otherwise, <c>false</c>.</value>
+        public bool IsRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile) || (this.Type == MemoryBankChunkTypeEnum.RAM_Static); } }
         #endregion // Class Properties
 
         #region Class Constructors
@@ -67,7 +64,8 @@ namespace CaetanoSoft.Era8bit.Memory
             Assert.IsFalse((type != MemoryBankChunkTypeEnum.Unknown) && 
                             ((type == MemoryBankChunkTypeEnum.ROM) || (type == MemoryBankChunkTypeEnum.RAM_Static) || 
                              (type == MemoryBankChunkTypeEnum.RAM_Volatile)), "'type' must be RAM or ROM!");
-            Assert.IsFalse((size >= 0), "'size' must be 1 or more!");
+            Assert.IsFalse((size >= MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64) && ((size % MemorySizeConstants.KB1) == 0), "'size' must be 1 KB to 64 KB!");
+            Assert.IsFalse((initValue >= 0) && (initValue <= 255), "'initValue' must be between 0 and 255!");
 #endif
             // Validate the memory bank chunk type
             if (type != MemoryBankChunkTypeEnum.Unknown)
@@ -76,9 +74,9 @@ namespace CaetanoSoft.Era8bit.Memory
                 this.Type = type;
 
                 // Validate the memory bank chunk size
-                if ((size > 0) && (size <= MemorySizeConstants.KB64))
+                if ((size > MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64) && ((size % MemorySizeConstants.KB1) == 0))
                 {
-                    // OK, size is more than 1 byte and less or equal to 64 KB
+                    // OK, size is more or equal to 1 KB and less or equal to 64 KB, in multiples of 1 KB
                     this.Size = size;
                     this.MemoryChunk = new byte[this.Size];
 
@@ -91,11 +89,20 @@ namespace CaetanoSoft.Era8bit.Memory
                             this.MemoryChunk[i] = (byte)initValue;
                         }
                     }
+                    else
+                    {
+                        // This memory bank chunk is invalid
+                        this.Type = MemoryBankChunkTypeEnum.Unknown;
+                        this.Size = 0;
+                        this.MemoryChunk = null;
+                    }
                 }
                 else
                 {
                     // This memory bank chunk is invalid
                     this.Type = MemoryBankChunkTypeEnum.Unknown;
+                    this.Size = 0;
+                    this.MemoryChunk = null;
                 }
             }
         }
@@ -117,16 +124,25 @@ namespace CaetanoSoft.Era8bit.Memory
             Assert.IsFalse((type != MemoryBankChunkTypeEnum.Unknown) &&
                             ((type == MemoryBankChunkTypeEnum.ROM) || (type == MemoryBankChunkTypeEnum.RAM_Static) ||
                              (type == MemoryBankChunkTypeEnum.RAM_Volatile)), "'type' must be RAM or ROM!");
-            Assert.IsFalse((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
+            Assert.IsFalse((chunk.Length >= MemorySizeConstants.KB1) && (chunk.Length <= MemorySizeConstants.KB64) && ((chunk.Length % MemorySizeConstants.KB1) == 0), "'chunk.Length' must be 1 KB to 64 KB!");
 #endif
             // Validate the memory bank chunk type
             if (this.Type != MemoryBankChunkTypeEnum.Unknown)
             {
                 // Validate the memory bank chunk size
-                if ((this.Size >= 0) && (this.MemoryChunk.Length == chunk.Length))
+                if ((chunk.Length >= MemorySizeConstants.KB1) && (chunk.Length <= MemorySizeConstants.KB64) && ((chunk.Length % MemorySizeConstants.KB1) == 0))
                 {
                     // OK, copy byte values
+                    this.Size = chunk.Length;
+                    this.MemoryChunk = new byte[this.Size];
                     chunk.CopyTo(this.MemoryChunk, 0);
+                }
+                else
+                {
+                    // This memory bank chunk is invalid
+                    this.Type = MemoryBankChunkTypeEnum.Unknown;
+                    this.Size = 0;
+                    this.MemoryChunk = null;
                 }
             }
         }
@@ -135,7 +151,7 @@ namespace CaetanoSoft.Era8bit.Memory
         #region Class Methods
         /// <summary>
         /// Reads the byte at memory bank chunk <c>location</c>.
-        /// <para>Valid values are [0-<c>Size</c>].</para>
+        /// <para>Valid values are [0-<c>BankSize</c>].</para>
         /// </summary>
         /// <param name="location">The location to read the byte.</param>
         /// <returns>
@@ -148,13 +164,16 @@ namespace CaetanoSoft.Era8bit.Memory
             {
                 return (int)this.MemoryChunk[location];
             }
-            // else
+            //else
+            //{
+            // Invalid byte location
             return -1;
+            //}
         }
 
         /// <summary>
         /// Writes the byte <c>theByte</c> at memory bank chunk <c>location</c>.
-        /// <para>Valid values for <c>location</c> are [0-<c>Size</c>].</para>
+        /// <para>Valid values for <c>location</c> are [0-<c>BankSize</c>].</para>
         /// <para>Valid values for <c>theByte</c> are [0-255].</para>
         /// </summary>
         /// <param name="location">The location to write the byte.</param>
@@ -179,13 +198,13 @@ namespace CaetanoSoft.Era8bit.Memory
                     }
                     //else
                     //{
-                        // Invalid byte
-                        return -1;
+                    // Invalid byte
+                    return -1;
                     //}
                 }
                 //else
                 //{
-                    // Invalid location
+                    // Invalid byte location
                     return -1;
                 //}
             }
@@ -219,7 +238,7 @@ namespace CaetanoSoft.Era8bit.Memory
 #if DEBUG
             Assert.IsNotNull(chunk, "'chunk' can't be null!");
             Assert.IsFalse((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
-            Assert.IsFalse(this.Size != chunk.Length, "'chunk.Length' must be equal to 'this.Size'!");
+            Assert.IsFalse(this.Size != chunk.Length, "'chunk.Length' must be equal to 'this.BankSize'!");
 #endif
             if (this.IsRAM)
             {

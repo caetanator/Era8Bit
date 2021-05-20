@@ -11,33 +11,29 @@ namespace CaetanoSoft.Era8bit.Memory
     public class MemoryBank
     {
         #region Class Properties
-        /// <summary>Gets the bank identifier.</summary>
-        /// <value>The bank identifier.</value>
+        /// <summary>Gets the memory bank identifier. Must be between 0 and 255.</summary>
+        /// <value>The memory bank identifier.</value>
         public int BankID { get; private set; } = -1;
 
-        /// <summary>Gets the size.</summary>
-        /// <value>The size.</value>
-        public int Size { get; private set; } = -1;
-
-        /// <summary>Gets the size of the chunk.</summary>
-        /// <value>The size of the chunk.</value>
-        public int ChunkSize { get; private set; } = -1;
+        /// <summary>Gets the memory bank size. Must be between 1 KB and 64 KB.</summary>
+        /// <value>The memory bank size.</value>
+        public int BankSize { get; private set; } = 0;
 
         /// <summary>Gets the number of chunks.</summary>
         /// <value>The number of chunks.</value>
         public int NumberOfChunks { get; private set; } = 0;
 
-        /// <summary>Gets the maximum number of chunks.</summary>
-        /// <value>The maximum number of chunks.</value>
-        public int MaxNumberOfChunks { get; private set; } = -1;
+        /// <summary>Gets the size of the memory chunk. Must be between 1 KB and 64 KB</summary>
+        /// <value>The size of the memory chunk.</value>
+        public int ChunkSize { get; private set; } = 0;
 
-        /// <summary>Gets a value indicating whether [data changed].</summary>
+        /// <summary>The memory bank chunks</summary>
+        private MemoryBankChunk[] BankChunks = null;
+
+        /// <summary>Gets a value indicating whether the data changed.</summary>
         /// <value>
-        ///   <c>true</c> if [data changed]; otherwise, <c>false</c>.</value>
+        ///   <c>true</c> if data changed; otherwise, <c>false</c>.</value>
         public bool DataChanged { get; private set; } = false;
-
-        /// <summary>The bank chunks</summary>
-        private Dictionary<int, MemoryBankChunk> BankChunks;
         #endregion // Class Properties
 
         #region Class Constructors
@@ -50,14 +46,15 @@ namespace CaetanoSoft.Era8bit.Memory
         /// If <c>initValue</c> is not between 0 and 255, the memory bank chunk is not initialized with the value.
         /// </para>
         /// </summary>
-        /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
+        /// <param name="id">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
         /// <param name="size">The size in bytes of the chunk (must be between 1 byte and 512 MB).</param>
-        /// <param name="initValue">The initialize byte value for the memory bank chunk (must be between 0 and 255).</param>
-        public MemoryBank(int id, int size, int maxChunks)
+        /// <param name="maxChunks">The initialize byte value for the memory bank chunk (must be between 0 and 255).</param>
+        public MemoryBank(int id, int size, int numChunks)
         {
 #if DEBUG
             Assert.IsFalse((id >= 0) && (id <= 255), "'id' must be between 0 and 255!");
-            Assert.IsFalse((size >= 0), "'size' must be 1 or more!");
+            Assert.IsFalse((size >= MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64), "'size' must be between 1 KB and 64 KB!");
+            Assert.IsFalse((numChunks >= 1) && (numChunks <= 64), "'numChunks' must be between 0 and 64!");
 #endif
             // Validate the memory bank chunk type
             if ((id >= 0) && (id <= 255))
@@ -66,57 +63,32 @@ namespace CaetanoSoft.Era8bit.Memory
                 this.BankID = id;
 
                 // Validate the memory bank chunk size
-                if ((size > 0) && (size <= MemorySizeConstants.MB1))
+                if ((size >= MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64))
                 {
-                    // OK, size is more than 1 byte and less or equal to 1 MB
-                    this.Size = size;
-                    this.MaxNumberOfChunks = this.Size / ;
+                    // OK, size is between than 1 KB and less or equal to 64 KB
+                    this.BankSize = size;
 
                     // Validate the memory bank chunk size
-                    if ((maxChunks >= 0) && (maxChunks <= 255))
+                    if ((numChunks >= 1) && (numChunks <= 64))
                     {
-                        // OK, is between 0 and 255
-                        for (int i = 0; i < this.MemoryChunk.Length; i++)
+                        // OK, is between 1 and 64 memory chunks
+                        this.NumberOfChunks = numChunks;
+                        this.ChunkSize = this.BankSize / this.NumberOfChunks;
+
+                        // Allocate the memory vector
+                        this.BankChunks = new MemoryBankChunk[this.NumberOfChunks];
+                        for (int i = 0; i < this.NumberOfChunks; i++)
                         {
-                            this.MemoryChunk[i] = (byte)initValue;
+                            this.BankChunks[i] = null;
                         }
                     }
                 }
                 else
                 {
-                    // This memory bank chunk is invalid
-                    this.Type = MemoryBankChunkTypeEnum.Unknown;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MemoryBankChunk" /> class.<br />
-        /// This creates a new memory bank chunk from a vector of bytes.<br />
-        /// <para>
-        /// If <c>type</c> is equal to <c>MemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
-        /// If <c>chunk.Length</c> is not between 1 byte and 512 MB, the memory bank chunk is not created.<br />
-        /// </para>
-        /// </summary>
-        /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
-        /// <param name="chunk">The vector bytes to be copied to the chunk.</param>
-        public MemoryBank(MemoryBankChunkTypeEnum type, byte [] chunk) : this(type, chunk.Length, -1)
-        {
-#if DEBUG
-            Assert.IsNotNull(chunk, "'chunk' can't be null!");
-            Assert.IsFalse((type != MemoryBankChunkTypeEnum.Unknown) &&
-                            ((type == MemoryBankChunkTypeEnum.ROM) || (type == MemoryBankChunkTypeEnum.RAM_Static) ||
-                             (type == MemoryBankChunkTypeEnum.RAM_Volatile)), "'type' must be RAM or ROM!");
-            Assert.IsFalse((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
-#endif
-            // Validate the memory bank chunk type
-            if (this.Type != MemoryBankChunkTypeEnum.Unknown)
-            {
-                // Validate the memory bank chunk size
-                if ((this.Size >= 0) && (this.MemoryChunk.Length == chunk.Length))
-                {
-                    // OK, copy byte values
-                    chunk.CopyTo(this.MemoryChunk, 0);
+                    // This memory bank is invalid
+                    this.BankID = -1;
+                    this.NumberOfChunks = 0;
+                    this.ChunkSize = 0;
                 }
             }
         }
@@ -125,40 +97,73 @@ namespace CaetanoSoft.Era8bit.Memory
         #region Class Methods
         /// <summary>
         /// Reads the byte at memory bank chunk <c>location</c>.
-        /// <para>Valid values are [0-<c>Size</c>].</para>
+        /// <para>Valid values are [0-<c>BankSize</c>].</para>
         /// </summary>
         /// <param name="location">The location to read the byte.</param>
         /// <returns>
-        /// The byte at memory <c>location</c> [0-255], if the <c>location</c> is on the valid range;
-        /// <para>-1, if <c>location</c> isn't valid</para>
+        /// The byte at memory <c>location</c>, if it's on the valid range.
+        /// <para>-1, if <c>location</c> isn't valid; [0-255] otherwise.</para>
         /// </returns>
         public int ReadByte(int location)
         {
-            if ((location >= 0) && (location < this.Size))
+            int theByte = -1;
+
+            if ((location >= 0) && (location < this.BankSize))
             {
-                return (int)this.MemoryChunk[location];
+                int chunkID = location % this.ChunkSize;
+                int chunkPosition = location - (chunkID * this.ChunkSize);
+                if (this.BankChunks != null)
+                {
+                    MemoryBankChunk chunk = this.BankChunks[location];
+                    if (chunk != null)
+                    {
+                        theByte = chunk.ReadByte(chunkPosition);
+                    }
+                    // else
+                    theByte = -1;
+                }
+                // else
+                theByte = -1;
             }
             // else
-            return -1;
+            return theByte;
         }
 
         /// <summary>
         /// Writes the byte <c>theByte</c> at memory bank chunk <c>location</c>.
-        /// <para>Valid values for <c>location</c> are [0-<c>Size</c>].</para>
+        /// <para>Valid values for <c>location</c> are [0-<c>BankSize</c>].</para>
         /// <para>Valid values for <c>theByte</c> are [0-255].</para>
         /// </summary>
         /// <param name="location">The location to write the byte.</param>
         /// <param name="theByte">The byte to be written.</param>
         /// <returns>
-        /// The previous byte at memory <c>location</c> [0-255], if the <c>location</c> and the <c>theByte</c> 
-        /// are on the valid range;
-        /// <para>-1, if <c>location</c> or <c>theByte</c> aren't valid.</para>
+        /// The <c>theByte</c> at memory <c>location</c>, if it's on the valid range.
+        /// <para>-1, if <c>location</c> isn't valid; [0-255] otherwise</para>
         /// </returns>
         public int WriteByte(int location, int theByte)
         {
+            if ((location >= 0) && (location < this.BankSize))
+            {
+                int chunkID = location % this.ChunkSize;
+                int chunkPosition = location - (chunkID * this.ChunkSize);
+                if (this.BankChunks != null)
+                {
+                    MemoryBankChunk chunk = this.BankChunks[location];
+                    if (chunk != null)
+                    {
+                        theByte = chunk.ReadByte(chunkPosition);
+                    }
+                    // else
+                    theByte = -1;
+                }
+                // else
+                theByte = -1;
+            }
+            // else
+            return theByte;
             if (this.IsRAM)
             {
-                if ((location >= 0) && (location < this.Size))
+                if ((location >= 0) && (location < this.BankSize))
                 {
                     if ((theByte >= 0) && (theByte <= 255))
                     {
@@ -208,13 +213,13 @@ namespace CaetanoSoft.Era8bit.Memory
 #if DEBUG
             Assert.IsNotNull(chunk, "'chunk' can't be null!");
             Assert.IsFalse((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
-            Assert.IsFalse(this.Size != chunk.Length, "'chunk.Length' must be equal to 'this.Size'!");
+            Assert.IsFalse(this.BankSize != chunk.Length, "'chunk.Length' must be equal to 'this.BankSize'!");
 #endif
             if (this.IsRAM)
             {
                 if (this.Type != MemoryBankChunkTypeEnum.Unknown)
                 {
-                    if ((this.Size >= 0) && (this.MemoryChunk.Length == chunk.Length))
+                    if ((this.BankSize >= 0) && (this.MemoryChunk.Length == chunk.Length))
                     {
                         // OK, copy byte values
                         chunk.CopyTo(this.MemoryChunk, 0);
