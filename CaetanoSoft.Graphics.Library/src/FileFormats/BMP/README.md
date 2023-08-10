@@ -27,7 +27,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 ### IBM OS/2 v1
 
-> **See Microsoft Windows v2**
+> **See [Microsoft Windows v2](#microsoft-windows-v2)**
 
 
 ### IBM OS/2 v2
@@ -39,7 +39,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
   - [ ] No Halftoning
   - [ ] Error Diffusion Halftoning
   - [ ] PANDA Halftoning
-  - [ ] Super Circle Halftoning
+  - [ ] Super-Circle Halftoning
 
 **16 Colors Palette** (4 bits-per-pixel)
 
@@ -249,8 +249,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 > [!NOTE]
 > 90º degrees rotated DIBs for Windows CE files, are probably for internal use of the Windows Win32 APIs. Not to be used on a file saved on a disk.
-> [!NOTE]
 > JPEG and PNG cpmpression, are for internal use on the Windows Win32 Printing APIs. Not to be used on a file saved on a disk.
 
 > [!IMPORTANT]
-> Information for IBM OS/2 1-bpp compression needed. Please help.
+> Information for IBM OS/2 1-bpp "Huffman 1D" compression needed. Please help.
