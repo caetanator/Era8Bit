@@ -51,7 +51,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 - [X] Uncompressed
 - [X] RLE-8 Compressed
 
-**24-bit RGB** (8-bit per pixel color)
+**24-bit RGB** (8 bits-per-pixel color)
 
 - [X] Uncompressed - BGR888
 - [ ] RLE-24 Compressed
@@ -77,17 +77,17 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 - [X] Uncompressed
 
-**16 Colors Palette** (4-bit per pixel)
+**16 Colors Palette** (4 bits-per-pixel)
 
 - [X] Uncompressed
 - [X] RLE-4 Compressed
 
-**256 Colors Palette** (8-bit per pixel)
+**256 Colors Palette** (8 bits-per-pixel)
 
 - [X] Uncompressed
 - [X] RLE-8 Compressed
 
-**24-bit RGB** (8-bit per pixel color)
+**24-bit RGB** (8 bits-per-pixel color)
 
 - [X] Uncompressed - BGR888
 
@@ -96,7 +96,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 **Extra Features**
 
 - [X] Top-down DIBs for uncompressed files
-- [?] 90º degrees rotated DIBs for Windows CE files
+- [ ]  90º degrees rotated DIBs for Windows CE files
 - [X] Bitfield masks on v3 DIBs for Windows NT and Windows CE files
 - [X] Gamma correction for v4 and v5 DIBs
 - [X] ICC color spaces profiles for v5 DIBs
@@ -109,34 +109,34 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 - [ ] JPEG Compressed
 
-**Monochrome** (1-bit per pixel)
+**Monochrome** (1 bits-per-pixel)
 
 - [X] Uncompressed
 
-**4 Colors Palette** (2-bit per pixel)
+**4 Colors Palette** (2 bits-per-pixel)
 
 - [X] Uncompressed
 
-**16 Colors Palette** (4-bit per pixel)
+**16 Colors Palette** (4 bits-per-pixel)
 
 - [X] Uncompressed
 - [X] RLE-4 Compressed
 
-**256 Colors Palette** (8-bit per pixel)
+**256 Colors Palette** (8 bits-per-pixel)
 
 - [X] Uncompressed
 - [X] RLE-8 Compressed
 
-**16-bit RGB** (5-bit per pixel color)
+**16-bit RGB** (5 bits-per-pixel color)
 
 - [X] Uncompressed - BGR555
 - [X] Bitfields
 
-**24-bit RGB** (8-bit per pixel color)
+**24-bit RGB** (8 bits-per-pixel color)
 
 - [X] Uncompressed - BGR888
 
-**32-bit RGBA** (8-bit per pixel color + 8-bit Alpha)
+**32-bit RGBA** (8 bits-per-pixel color + 8-bit Alpha)
 
 - [X] Uncompressed - BGRA8880
 - [X] Bitfields
@@ -149,7 +149,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 ### IBM OS/2 v2
 
-**Monochrome** (1-bit per pixel)
+**Monochrome** (1 bit-per-pixel)
 
 - [ ] Uncompressed
 - [ ] Huffman 1D Compressed
@@ -158,17 +158,17 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
   - [ ] PANDA Halftoning
   - [ ] Super Circle Halftoning
 
-**16 Colors Palette** (4-bit per pixel)
+**16 Colors Palette** (4 bits-per-pixel)
 
 - [ ] Uncompressed
 - [ ] RLE-4 Compressed
 
-**256 Colors Palette** (8-bit per pixel)
+**256 Colors Palette** (8 bits-per-pixel)
 
 - [ ] Uncompressed
 - [ ] RLE-8 Compressed
 
-**24-bit RGB** (8-bit per pixel color)
+**24-bit RGB** (8 bits-per-pixel color)
 
 - [ ] Uncompressed - BGR888
 - [ ] RLE-24 Compressed
@@ -179,21 +179,21 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 ### Microsoft Windows v2
 
-**Monochrome** (1-bit per pixel)
+**Monochrome** (1 bit-per-pixel)
 
 - [ ] Uncompressed
 
-**16 Colors Palette** (4-bit per pixel)
+**16 Colors Palette** (4 bits-per-pixel)
 
 - [ ] Uncompressed
 - [ ] RLE-4 Compressed
 
-**256 Colors Palette** (8-bit per pixel)
+**256 Colors Palette** (8 bits-per-pixel)
 
 - [ ] Uncompressed
 - [ ] RLE-8 Compressed
 
-**24-bit RGB** (8-bit per pixel color)
+**24-bit RGB** (8 bits-per-pixel color)
 
 - [ ] Uncompressed - BGR888
 
@@ -202,7 +202,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 **Extra Features**
 
 - [X] Top-down DIBs for uncompressed files
-- [?] 90º degrees rotated DIBs for Windows CE files
+- [ ] 90º degrees rotated DIBs for Windows CE files
 - [X] Bitfield masks on v3 DIBs for Windows NT and Windows CE files
 - [X] Gamma correction for v4 and v5 DIBs
 - [X] ICC color spaces profiles for v5 DIBs
@@ -215,34 +215,42 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 - [ ] JPEG Compressed
 
-**Monochrome** (1-bit per pixel)
+**Monochrome** (1 bits-per-pixel)
 
 - [ ] Uncompressed
 
-**4 Colors Palette** (2-bit per pixel)
+**4 Colors Palette** (2 bits-per-pixel)
 
 - [ ] Uncompressed
 
-**16 Colors Palette** (4-bit per pixel)
+**16 Colors Palette** (4 bits-per-pixel)
 
 - [ ] Uncompressed
 - [ ] RLE-4 Compressed
 
-**256 Colors Palette** (8-bit per pixel)
+**256 Colors Palette** (8 bits-per-pixel)
 
 - [ ] Uncompressed
 - [ ] RLE-8 Compressed
 
-**16-bit RGB** (5-bit per pixel color)
+**16-bit RGB** (5 bits-per-pixel color)
 
 - [ ] Uncompressed - BGR555
 - [ ] Bitfields
 
-**24-bit RGB** (8-bit per pixel color)
+**24-bit RGB** (8 bits-per-pixel color)
 
 - [X] Uncompressed - BGR888
 
-**32-bit RGBA** (8-bit per pixel color + 8-bit Alpha)
+**32-bit RGBA** (8 bits-per-pixel color + 8-bit Alpha)
 
 - [X] Uncompressed - BGRA8880
 - [ ] Bitfields
+
+> [!NOTE]
+> 90º degrees rotated DIBs for Windows CE files, are probably for internal use of the Windows Win32 APIs. Not to be used on a file saved on a disk.
+> [!NOTE]
+> JPEG and PNG cpmpression, are for internal use on the Windows Win32 Printing APIs. Not to be used on a file saved on a disk.
+
+> [!IMPORTANT]
+> Information for IBM OS/2 1-bpp compression needed. Please help.
