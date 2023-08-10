@@ -733,7 +733,8 @@
       can be calculated by the formula:<br>
       &nbsp;&nbsp;&nbsp;&nbsp;<code>MaxNumberOfEntries = 1 &lt;&lt; BitsPerPixel;</code><br>
       To detect the presence of a color palette in a BMP file, use this formula:
-      <div class="divCode"><pre><code>
+    </p>
+    <div class="divCode"><pre><code>
       int StartOfPalBytes = 0;
       int NumberOfEntries = 0;
       int MaxNumberOfEntries = 1 &lt;&lt; BitmapCoreHeader.bcBitCount;
@@ -747,8 +748,8 @@
       &nbsp;&nbsp;&nbsp;&nbsp;NumberOfEntries = MaxNumberOfEntries;
       }
       RGBTRIPLE ColorPallet_RGB[] = loadColorPallet_RGB(NumberOfEntries);
-      </code></pre></div>
-    </p>
+    </code></pre></div>
+	  <p>&nbsp;</p>
     <table style="border: 1px solid #000000;">
       <caption>
         Table 3 - Windows RGBTRIPLE and OS/2 OS21XPALETTEELEMENT structures
@@ -817,7 +818,8 @@
       can be calculated by the formula:<br>
       &nbsp;&nbsp;&nbsp;&nbsp;<code>MaxNumberOfEntries = 1 &lt;&lt; BitsPerPixel;</code><br>
       To detect the presence of a color palette in a BMP file, use this formula:
-      <div class="divCode"><pre><code>
+    </p>
+    <div class="divCode"><pre><code>
       int StartOfPalBytes = 0;
       int NumberOfMasks = 0;
       int NumberOfMasksBytes = 0;
@@ -880,8 +882,8 @@
       &nbsp;&nbsp;&nbsp;&nbsp;BitmapInfoHeader.biClrImportant = (BitmapInfoHeader.biClrUsed == 0) ?  NumberOfEntries : BitmapInfoHeader.biClrUsed;
       }
       RGBQUAD ColorPallet_RGBA[] = loadColorPallet_RGBA(BitmapInfoHeader.biClrImportant);
-      </code></pre></div>
-    </p>
+    </code></pre></div>
+	  <p>&nbsp;</p>
     <table style="border: 1px solid #000000;">
       <caption>
         Table 4 - Windows RGBQUAD and OS/2 OS22XPALETTEELEMENT structures
@@ -1549,7 +1551,8 @@
                   <td>6</td>
                   <td><code>BI_ALPHABITFIELDS</code></td>
                   <td>Bitfields RGBA</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGBA bitfields masks. Is valid when used with 16- and 32-bpp bitmaps. Only valid on <code>BITMAPINFOHEADER</code>, for Windows CE 5.0 with .NET 4.0 or later.</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGBA bitfields masks. Is valid when used with
+				  16- and 32-bpp bitmaps. Only valid on <code>BITMAPINFOHEADER</code>, for Windows CE 5.0 with .NET 4.0 or later.</td>
                 </tr>
                 <tr>
                   <td>11</td>
