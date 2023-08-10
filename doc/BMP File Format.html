@@ -194,7 +194,7 @@
     </p>
     <p>&nbsp;</p>
     <h2>BMP File Structure According It's Version</h2>
-    <table>
+    <table  id="TableBMP">
       <tbody>
         <tr>
           <th colspan="5" class="classNoBorderBottom">Microsoft Windows</th>
@@ -499,8 +499,8 @@
       It consists of <code>Height</code> scan lines, with the size, in bytes of <code>ByteWidth</code>. Must be aligned to 8&hyphen;bit:
       &nbsp;&nbsp;&nbsp;&nbsp;<code>ByteWidth = ((Width * BitsPerPixel) / 8) + 1;</code><br>
       The total size of the <i>Windows DDB Bitmap Pixels</i>, can be calculated by the formula:
-      &nbsp;&nbsp;&nbsp;&nbsp;<code>DdbSize = Height * ByteWidth);</code><br>
-      Each pixel value occupies <code>BitsPerPixel</code> bits on the scan line, from left to right.<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<code>DdbSize = BITMAP16.Height * BITMAP16.ByteWidth);</code><br>
+      Each pixel value occupies <code>BITMAP16.BitsPerPixel</code> bits on the scan line, from left to right.<br>
       This value is an index to the Windows OS system pallet. The padding is ignored and normally is 0.
     </p>
     <p>
@@ -518,26 +518,65 @@
       The padding is ignored and normally is 0.
     </p>
     <p>&nbsp;</p>
-    <h2>BMP File Header v1 + Windows DDB Header <span style="color: #00FF00;">(10 Bytes)</span></h2>
+    <h2>BMP File Header v1 + Windows DDB Header <span style="color: #00FF00;">(12 Bytes)</span></h2>
     <p>This header/structure has created for Microsoft Windows 1.x bitmaps. All the integer values are
       stored in little&hyphen;endian format (<i>i.e.</i> least&hyphen;significant byte first). It has a total size of 10 bytes.
     </p>
     <p>This block of bytes is at the start of the file and is used to identify the file as an BMP
       file and that it is not damaged.
     </p>
-    <p>DDB files contain only a 10-byte file header followed by uncompressed bitmap data.</p>
+    <p>DDB files contain only a 12 bytes file header followed by uncompressed bitmap data.</p>
     <p>
       The image data immediately follows the header and is stored in an uncompressed format. Each pixel stores an index value into
       the fixed system colormap used by Windows 1.0. The presence of scan line margin may be determined by comparing the calculated
       width of a line in bytes with the actual width of the line in bytes stored as the value of the <code>ByteWidth</code> field.
     </p>
     <p>
-      The minimum value of <code>ByteWidth</code>, can be calculated by the formula:<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;<code>ByteWidth = ((Width * BitsPerPixel) / 8) + 1;</code>
+      The minimum value of <code>BITMAP16.bmWidthBytes</code>, can be calculated by the formula:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<code>BITMAP16.bmWidthBytes = ((BITMAP16.bmWidth * BITMAP16.bmBitsPerPixel)  + 7) / 8;</code>
     </p>
-    <table style="border: 1px solid #000000;">
+    <p>
+      On the examples I found online <a href="https://www.charlespetzold.com/src/ProgWin1.zip" target="_blank">Charles Petzold Books - &quot;Programming Windows, 1st edition&quot; Source Code</a>, <br>
+      the stucture defined on <a href="#Table1">Table 1</a>, and also refered on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDD&quot;</a>, <br>
+      is preceded by:
+      <table style="border: 1px solid #000000;" id="Table0">
+        <tbody>
+          <tr>
+            <th>Offset#</th>
+            <th>Size (Bytes)</th>
+            <th>Type</th>
+            <th>Field Name</th>
+            <th style="max-width: 500px;">Purpose</th>
+          </tr>
+          <tr>
+            <td>0000h</td>
+            <td>2</td>
+            <td>16&hyphen;bit unsigned</td>
+            <td>ResourceFileType</td>
+            <td class="classTextAlingLeft">
+              The following valid values are possible:
+              <ul>
+                <li>
+                  <code><b>0002h</b> (RT_BITMAP)</code> - Resource Bitmap Non-Discardable;
+                </li>
+                <li>
+                  <code><b>0102h</b> (RT_BITMAP | 0x0100)</code> - Resource Bitmap Discardable.
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <p>
+      On <a href="#Table1">Table 1</a>, and also refered on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDB&quot;</a>, <br>
+      the <code>BITMAP16</code> structure also have at the end a <code>DWORD</code> for <code>BITMAP16.bmBits</code> that serves as a memory pointer to the bitmap pixels.<br>
+      In a file on disk, the <code>BITMAP16.bmBits</code> field is usually not used (it's not clear whether some formats omit it entirely). So is set to 0.
+    </p>
+    <p>&nbsp;</p>
+    <table style="border: 1px solid #000000;" id="Table1">
       <caption>
-        Table 1 - Windows 1.x File and DDB Header structure
+        Table 1 - Windows 1.x File and DDB Header BITMAP16 structure
       </caption>
       <tbody>
         <tr>
@@ -547,32 +586,49 @@
           <th>Field Name</th>
           <th style="max-width: 500px;">Purpose</th>
         </tr>
+        <tr style="color: #FF0000;">
+          <td>-0002h</td>
+          <td>2</td>
+          <td>16&hyphen;bit unsigned</td>
+          <td>ResourceFileType</td>
+          <td class="classTextAlingLeft">
+            The following valid values are possible:
+            <ul>
+              <li>
+                <code><b>0002h</b> (RT_BITMAP)</code> - Resource Bitmap Non-Discardable;
+              </li>
+              <li>
+                <code><b>0102h</b> (RT_BITMAP | 0x0100)</code> - Resource Bitmap Discardable.
+              </li>
+            </ul>
+          </td>
+        </tr>
         <tr>
           <td>0000h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>FileType</td>
+          <td>bmType</td>
           <td class="classTextAlingLeft">The magic number used to identify the BMP file (always 0).</td>
         </tr>
         <tr>
           <td>0002h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Width</td>
+          <td>bmWidth</td>
           <td class="classTextAlingLeft">The bitmap image width, in pixels (must be &gt; 0).</td>
         </tr>
         <tr>
           <td>0004h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Height</td>
+          <td>bmHeight</td>
           <td class="classTextAlingLeft">The bitmap image height, in pixels (must be &gt; 0).</td>
         </tr>
         <tr>
           <td>0006h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>ByteWidth</td>
+          <td>bmWidthBytes</td>
           <td class="classTextAlingLeft">The width of the bitmap in bytes, per scan line. It is assumed that this value will
             include the size of any scan line margin that is present.
           </td>
@@ -581,14 +637,14 @@
           <td>0008h</td>
           <td>1</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Planes</td>
+          <td>bmPlanes</td>
           <td class="classTextAlingLeft">The number of color planes used to store the bitmap. This value is always 1.</td>
         </tr>
         <tr>
           <td>000Ah</td>
           <td>1</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>BitsPerPixel</td>
+          <td>bmBitsPixel</td>
           <td class="classTextAlingLeft">
             The number of bits&hyphen;per&hyphen;pixel.<br>
             The following valid values are possible:
@@ -597,6 +653,16 @@
               <li><b>4</b> - 16 colors bitmap (CGA/EGA)</li>
               <li><b>8</b> - 256 colors bitmap (VGA)</li>
             </ul>
+          </td>
+        </tr>
+        <tr style="color: #FF0000;">
+          <td>000Eh</td>
+          <td>4</td>
+          <td>32&hyphen;bit unsigned</td>
+          <td>bmBits</td>
+          <td class="classTextAlingLeft">
+            On a disk file, this value is always 0.<br>
+            On memory, serves as a memory pointer to the bitmap pixels.
           </td>
         </tr>
       </tbody>
@@ -613,7 +679,7 @@
     <p>The first two bytes of the BMP file format are normally the character &#39;B&#39; and then
       the character &#39;M&#39; in 1-byte ASCII encoding.
     </p>
-    <table style="border: 1px solid #000000;">
+    <table style="border: 1px solid #000000;" id="Table2">
       <caption>
         Table 2 - Windows BITMAPFILEHEADER and OS/2 OS2BMPFILEHEADER structures
       </caption>
@@ -750,7 +816,7 @@
       RGBTRIPLE ColorPallet_RGB[] = loadColorPallet_RGB(NumberOfEntries);
     </code></pre></div>
 	  <p>&nbsp;</p>
-    <table style="border: 1px solid #000000;">
+    <table style="border: 1px solid #000000;" id="Table3">
       <caption>
         Table 3 - Windows RGBTRIPLE and OS/2 OS21XPALETTEELEMENT structures
       </caption>
@@ -884,7 +950,7 @@
       RGBQUAD ColorPallet_RGBA[] = loadColorPallet_RGBA(BitmapInfoHeader.biClrImportant);
     </code></pre></div>
 	  <p>&nbsp;</p>
-    <table style="border: 1px solid #000000;">
+    <table style="border: 1px solid #000000;" id="Table4">
       <caption>
         Table 4 - Windows RGBQUAD and OS/2 OS22XPALETTEELEMENT structures
       </caption>
@@ -960,7 +1026,7 @@
       This is the second header in the file and follows immediately the File Header v2 (Windows <code>BITMAPFILEHEADER</code> or
       OS/2 <code>OS2BMPFILEHEADER</code> structures). Is used to describe the DIB: dimensions, bits&hyphen;per&hyphen;pixel, etc..
     </p>
-    <table style="border: 1px solid #000000;">
+    <table style="border: 1px solid #000000;" id="Table5">
       <caption>
         Table 5 - Windows BITMAPCOREHEADER and OS/2 OS21XBITMAPHEADER structures
       </caption>
@@ -1046,7 +1112,7 @@
       etc..
     </p>
     <p>The fields above 16 bytes and below 64 bytes, that aren't on the file, are assumed to be 0.</p>
-    <table style="border: 1px solid #000000;">
+    <table style="border: 1px solid #000000;" id="Table6">
       <caption>
         Table 6 - OS/2 OS22XBITMAPHEADER structure
       </caption>
@@ -1389,7 +1455,7 @@
       structure). Is used to describe the DIB: dimensions, bits&hyphen;per&hyphen;pixel, pallet size, compression, bitfields masks, ICC profile,
       etc..
     </p>
-    <table style="border: 1px solid #000000;">
+    <table style="border: 1px solid #000000;" id="Table7">
       <caption>
         Table 7 - Windows BITMAPINFOHEADER, BITMAPV4HEADER and BITMAPV5HEADER structures
       </caption>
