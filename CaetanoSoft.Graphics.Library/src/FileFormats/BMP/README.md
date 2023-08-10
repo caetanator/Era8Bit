@@ -145,7 +145,7 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 
 ### IBM OS/2 v1
 
-> **See Microsoft Windows v2**
+> **See [Microsoft Windows v2](#microsoft-windows-v2-1)**
 
 ### IBM OS/2 v2
 
