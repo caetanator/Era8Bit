@@ -1552,7 +1552,7 @@
                   <td><code>BI_ALPHABITFIELDS</code></td>
                   <td>Bitfields RGBA</td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGBA bitfields masks. Is valid when used with
-				  16- and 32-bpp bitmaps. Only valid on <code>BITMAPINFOHEADER</code>, for Windows CE 5.0 with .NET 4.0 or later.</td>
+				          16- and 32-bpp bitmaps. Only valid on <code>BITMAPINFOHEADER</code>, for Windows CE 5.0 with .NET 4.0 or later.</td>
                 </tr>
                 <tr>
                   <td>11</td>
@@ -1637,7 +1637,7 @@
           <td>biClrImportant</td>
           <td class="classTextAlingLeft">
             The number of significant colors present in the color palette/table.<br>
-            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>)
+            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>).
           </td>
         </tr>
         <tr>
@@ -1753,6 +1753,51 @@
               </tbody>
             </table>
           </td>
+        </tr>
+		<tr>
+          <td>0024h</td>
+          <td>4</td>
+          <td>CIEXYZTRIPLE</td>
+          <td>bV4Endpoints</td>
+          <td class="classTextAlingLeft">
+            The RGB color calibrated endpoints. Calibrated RGB is defined by the 1931 CIE XYZ standard.<br>
+            <code>CIEXYZTRIPLE</code>.
+          </td>
+        </tr>
+		<tr>
+          <td>0024h</td>
+          <td>4</td>
+          <td>32&hyphen;bit unsigned</td>
+          <td>bV4GammaRed</td>
+          <td class="classTextAlingLeft">
+            Tone response curve for red. This member is ignored unless <code>)BITMAPV4HEADER.CIEXYZTRIPLE</code>) values are calibrated RGB values and
+            <code>)BITMAPV4HEADER.bV4CSType</code> is set to <code>LCS_CALIBRATED_RGB</code>.<br>
+            Uses fixed 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
+
+          </td>
+        </tr>
+		<tr>
+          <td>0024h</td>
+          <td>4</td>
+          <td>32&hyphen;bit unsigned</td>
+          <td>bV4GammaGreen</td>
+          <td class="classTextAlingLeft">
+            The number of significant colors present in the color palette/table.<br>
+            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>)
+          </td>
+        </tr>
+		<tr>
+          <td>0024h</td>
+          <td>4</td>
+          <td>32&hyphen;bit unsigned</td>
+          <td>bV4GammaBlue</td>
+          <td class="classTextAlingLeft">
+            The number of significant colors present in the color palette/table.<br>
+            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>)
+          </td>
+        </tr>
+		<tr>
+          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV5HEADER <span style="color: #00FF00;">(108 Bytes)</span></td>
         </tr>
       </tbody>
     </table>
