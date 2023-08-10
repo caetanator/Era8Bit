@@ -248,8 +248,8 @@ http://fileformats.archiveteam.org/wiki/Windows_DDB
 - [ ] Bitfields
 
 > [!NOTE]
-> 90º degrees rotated DIBs for Windows CE files, are probably for internal use of the Windows Win32 APIs. Not to be used on a file saved on a disk.
-> JPEG and PNG cpmpression, are for internal use on the Windows Win32 Printing APIs. Not to be used on a file saved on a disk.
+> * 90º degrees rotated DIBs for Windows CE files, are probably for internal use of the Windows Win32 APIs. Not to be used on a file saved on a disk.
+> * JPEG and PNG cpmpression, are for internal use on the Windows Win32 Printing APIs. Not to be used on a file saved on a disk.
 
 > [!IMPORTANT]
 > Information for IBM OS/2 1-bpp "Huffman 1D" compression needed. Please help.
