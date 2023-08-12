@@ -17,8 +17,6 @@
     <title>BMP File Format</title>
     <!-- * Cascading Style Sheets v3.0 * -->
     <style>
-      /* Cascading Style Sheets v3.0 goes here */
-
       /* HTML BODY Tag Default Style */
       body {
         width: 100%;
@@ -68,7 +66,7 @@
       code {
         font-family: "Lucida Console", Lucida, "Courier New", Courier, monospace;
         font-size: 12pt;
-        background-color: #B4DCB8;
+        background-color: #C5EDC9;
       }
       /* HTML CAPTION Tag Default Style */
       caption {
@@ -80,6 +78,7 @@
         border-collapse: collapse;
         margin-left: auto;
         margin-right: auto;
+        max-width: 94%;
       }
       /* HTML TH Tag Default Style */
       th {
@@ -118,13 +117,18 @@
       }
        /* CSS Class Style for DIV CODE */
       .divCode {
-        background-color: #B4DCB8;
+        background: repeating-linear-gradient( 180deg, #C5EDC9, #C5EDC9 20px, #FEFEFE 20px, #FEFEFE 40px);
         margin-top: 0;
         margin-bottom: 0;
         margin-left: 24px;
         margin-right: 24px;
         border-width: 0;
         padding: 0;
+        max-width: 94%;
+      }
+      .divCode code {
+        background-color: inherit;
+        line-height: 20px;
       }
       /* Override styles when printing */
       @media print {
@@ -139,7 +143,6 @@
     </style>
     <!-- * ECMA JavaScript v6.0/2015 * -->
     <script>
-      /* JavaScript v6.0 goes here */
       // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-v3-or-Later
 
       // @license-end
@@ -195,20 +198,22 @@
     <p>&nbsp;</p>
     <h2>BMP File Structure According It's Version</h2>
     <table  id="TableBMP">
-      <tbody>
+      <thead>
         <tr>
           <th colspan="5" class="classNoBorderBottom">Microsoft Windows</th>
           <th colspan="2" class="classNoBorderBottom">IBM OS/2</th>
         </tr>
         <tr>
-          <th class="classNoBorderTop">v1</th>
-          <th class="classNoBorderTop">v2</th>
-          <th class="classNoBorderTop">v3</th>
-          <th class="classNoBorderTop">v4</th>
-          <th class="classNoBorderTop">v5</th>
-          <th class="classNoBorderTop">v1</th>
-          <th class="classNoBorderTop">v2</th>
+          <th class="classNoBorderTop">1.01</th>
+          <th class="classNoBorderTop">2.01</th>
+          <th class="classNoBorderTop">3.0 / NT 3.1</th>
+          <th class="classNoBorderTop">95 / NT 4.0</th>
+          <th class="classNoBorderTop">98 / 2000</th>
+          <th class="classNoBorderTop">1.0</th>
+          <th class="classNoBorderTop">v2.0</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td style="vertical-align: top;">
             <table style="border: 1px solid #000000; margin: 4px;">
@@ -216,8 +221,8 @@
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #C0C0FF;">
                     <p style="text-align: center;">
-                      BMP File Header v1 + <br>
-                      Windows DDB Header v1
+                      DDB File Header + <br>
+                      Windows DDB Header
                     </p>
                   </td>
                 </tr>
@@ -234,7 +239,7 @@
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v2</p>
+                    <p style="text-align: center;">BMP File Header v1</p>
                   </td>
                 </tr>
                 <tr>
@@ -271,7 +276,7 @@
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v2</p>
+                    <p style="text-align: center;">BMP File Header v1</p>
                   </td>
                 </tr>
                 <tr>
@@ -308,7 +313,7 @@
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v2</p>
+                    <p style="text-align: center;">BMP File Header v1</p>
                   </td>
                 </tr>
                 <tr>
@@ -345,7 +350,7 @@
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v2</p>
+                    <p style="text-align: center;">BMP File Header v1</p>
                   </td>
                 </tr>
                 <tr>
@@ -398,7 +403,7 @@
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v2</p>
+                    <p style="text-align: center;">BMP File Header v1</p>
                   </td>
                 </tr>
                 <tr>
@@ -435,7 +440,7 @@
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v2</p>
+                    <p style="text-align: center;">BMP File Header v1</p>
                   </td>
                 </tr>
                 <tr>
@@ -519,7 +524,7 @@
     </p>
     <p>&nbsp;</p>
     <h2>BMP File Header v1 + Windows DDB Header <span style="color: #00FF00;">(12 Bytes)</span></h2>
-    <p>This header/structure has created for Microsoft Windows 1.x bitmaps. All the integer values are
+    <p>This header/structure has created for Microsoft Windows 1.01 bitmaps and supported until at least Windows 2.03. All the integer values are
       stored in little&hyphen;endian format (<i>i.e.</i> least&hyphen;significant byte first). It has a total size of 10 bytes.
     </p>
     <p>This block of bytes is at the start of the file and is used to identify the file as an BMP
@@ -528,8 +533,8 @@
     <p>DDB files contain only a 12 bytes file header followed by uncompressed bitmap data.</p>
     <p>
       The image data immediately follows the header and is stored in an uncompressed format. Each pixel stores an index value into
-      the fixed system colormap used by Windows 1.0. The presence of scan line margin may be determined by comparing the calculated
-      width of a line in bytes with the actual width of the line in bytes stored as the value of the <code>ByteWidth</code> field.
+      the fixed system colormap used by Windows 1.0x. The presence of scan line margin may be determined by comparing the calculated
+      width of a line in bytes with the actual width of the line in bytes stored as the value of the <code>BITMAP16.bmWidthBytes</code> field.
     </p>
     <p>
       The minimum value of <code>BITMAP16.bmWidthBytes</code>, can be calculated by the formula:<br>
@@ -540,7 +545,7 @@
       the stucture defined on <a href="#Table1">Table 1</a>, and also refered on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDD&quot;</a>, <br>
       is preceded by:
       <table style="border: 1px solid #000000;" id="Table0">
-        <tbody>
+        <thead>
           <tr>
             <th>Offset#</th>
             <th>Size (Bytes)</th>
@@ -548,6 +553,8 @@
             <th>Field Name</th>
             <th style="max-width: 500px;">Purpose</th>
           </tr>
+        </thead>
+        <tbody>
           <tr>
             <td>0000h</td>
             <td>2</td>
@@ -578,7 +585,7 @@
       <caption>
         Table 1 - Windows 1.x File and DDB Header BITMAP16 structure
       </caption>
-      <tbody>
+      <thead>
         <tr>
           <th>Offset#</th>
           <th>Size (Bytes)</th>
@@ -586,6 +593,8 @@
           <th>Field Name</th>
           <th style="max-width: 500px;">Purpose</th>
         </tr>
+      </thead>
+      <tbody>
         <tr style="color: #FF0000;">
           <td>-0002h</td>
           <td>2</td>
@@ -668,9 +677,9 @@
       </tbody>
     </table>
     <p>&nbsp;</p>
-    <h2>BMP File Header v2 <span style="color: #00FF00;">(14 Bytes)</span></h2>
+    <h2>BMP File Header v1 <span style="color: #00FF00;">(14 Bytes)</span></h2>
     <p>
-      This header/structure has created for Microsoft Windows 2.x and IBM OS/2 1.x bitmaps. All the integer values are stored
+      This header/structure has created for Microsoft Windows 2.01 and IBM OS/2 1.0 bitmaps and is supported until nowdays. All the integer values are stored
       in little&hyphen;endian format (<i>i.e.</i> least&hyphen;significant byte first). It has a total size of 14 bytes.
     </p>
     <p>This block of bytes is at the start of the file and is used to identify the file as an BMP file
@@ -683,7 +692,7 @@
       <caption>
         Table 2 - Windows BITMAPFILEHEADER and OS/2 OS2BMPFILEHEADER structures
       </caption>
-      <tbody>
+      <thead>
         <tr>
           <th rowspan="2">Offset#</th>
           <th rowspan="2">Size (Bytes)</th>
@@ -697,6 +706,8 @@
           <th class="classNoBorderTop">Type</th>
           <th class="classNoBorderTop">Field Name</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>0000h</td>
           <td>2</td>
@@ -820,7 +831,7 @@
       <caption>
         Table 3 - Windows RGBTRIPLE and OS/2 OS21XPALETTEELEMENT structures
       </caption>
-      <tbody>
+      <thead>
         <tr>
           <th rowspan="2">Offset#</th>
           <th rowspan="2">Size (Bytes)</th>
@@ -834,6 +845,8 @@
           <th class="classNoBorderTop">Type</th>
           <th class="classNoBorderTop">Field Name</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>0000h</td>
           <td>1</td>
@@ -954,7 +967,7 @@
       <caption>
         Table 4 - Windows RGBQUAD and OS/2 OS22XPALETTEELEMENT structures
       </caption>
-      <tbody>
+      <thead>
         <tr>
           <th rowspan="2">Offset#</th>
           <th rowspan="2">Size (Bytes)</th>
@@ -968,6 +981,8 @@
           <th class="classNoBorderTop">Type</th>
           <th class="classNoBorderTop">Field Name</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>0000h</td>
           <td>1</td>
@@ -1030,7 +1045,7 @@
       <caption>
         Table 5 - Windows BITMAPCOREHEADER and OS/2 OS21XBITMAPHEADER structures
       </caption>
-      <tbody>
+      <thead>
         <tr>
           <th rowspan="2">Offset#</th>
           <th rowspan="2">Size (Bytes)</th>
@@ -1044,6 +1059,8 @@
           <th class="classNoBorderTop">Type</th>
           <th class="classNoBorderTop">Field Name</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>0000h</td>
           <td>4</td>
@@ -1116,7 +1133,7 @@
       <caption>
         Table 6 - OS/2 OS22XBITMAPHEADER structure
       </caption>
-      <tbody>
+      <thead>
         <tr>
           <th rowspan="2">Offset#</th>
           <th rowspan="2">Size (Bytes)</th>
@@ -1130,6 +1147,8 @@
           <th class="classNoBorderTop">Type</th>
           <th class="classNoBorderTop">Field Name</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>0000h</td>
           <td>4</td>
@@ -1459,7 +1478,7 @@
       <caption>
         Table 7 - Windows BITMAPINFOHEADER, BITMAPV4HEADER and BITMAPV5HEADER structures
       </caption>
-      <tbody>
+      <thead>
         <tr>
           <th>Offset#</th>
           <th>Size (Bytes)</th>
@@ -1470,6 +1489,8 @@
         <tr>
           <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPINFOHEADER <span style="color: #00FF00;">(40 Bytes)</span></td>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>0000h</td>
           <td>4</td>
@@ -1582,8 +1603,8 @@
                 <tr>
                   <td>3</td>
                   <td><code>BI_BITFIELDS</code></td>
-                  <td>Bitfields RGB</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGB bitfields masks. Only is valid when used with 16- and 32-bpp bitmaps.</td>
+                  <td>Bitfields RGBA</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGBA bitfields masks. Only is valid when used with 16- and 32-bpp bitmaps.</td>
                 </tr>
                 <tr>
                   <td>3</td>
@@ -1836,8 +1857,8 @@
           <td>32&hyphen;bit unsigned</td>
           <td>bV4GammaRed</td>
           <td class="classTextAlingLeft">
-            Tone response curve for red. This member is ignored unless <code>)BITMAPV4HEADER.CIEXYZTRIPLE</code>) values are calibrated RGB values and
-            <code>)BITMAPV4HEADER.bV4CSType</code> is set to <code>LCS_CALIBRATED_RGB</code>.<br>
+            Tone response curve for red. This member is ignored unless <code>BITMAPV4HEADER.CIEXYZTRIPLE</code> values are calibrated RGB values and
+            <code>BITMAPV4HEADER.bV4CSType</code> is set to <code>LCS_CALIBRATED_RGB</code>.<br>
             Uses fixed 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
 
           </td>
