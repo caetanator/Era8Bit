@@ -167,17 +167,45 @@
       color palette was added to both Windows and BMP file format, allowing user&hyphen;definable color data to be stored along with the
       bitmap data that used it. When stored in memory, this collection of information is known as a Microsoft Device Independent
       Bitmap, or DIB. When this information is written out to a file, it is known as the Microsoft Bitmap Format, or BMP.
-      When you hear references to the DIB file format, it is BMP that is being referred to.
+      When you hear references to the DIB file format, it is BMP that is being referred to.<br>
+      The DIB header v1 fields were optimazed for 16-bit (<code>WORD</code>) and uses the palette v1 (3 bytes per entry, BGR).
     </p>
     <p>
-      During the development of Windows BMP version 2, Microsoft shared responsibility with IBM for the development of early
-      versions of IBM's OS/2 operating system. When IBM Presentation Manager, the OS/2 graphical user interface, required a bitmap
-      format, the Windows BMP format was used. Thus, the Microsoft Windows 2.x and IBM OS/2 1.x BMP formats are identical.
+      During the development of Windows 2.0, Microsoft shared responsibility with IBM for the development of early
+      versions of IBM's OS/2 1.0 operating system. When IBM Presentation Manager, the OS/2 graphical user interface, required a bitmap
+      format, the Windows BMP v2 format was used. Thus, the Microsoft Windows BMP v2 and IBM OS/2 BMP v1 formats are identical.
     </p>
     <p>
-      The BMP format modified for Windows 3.0 differs only slightly from the IBM Presentation Manager bitmap format (OS/2 v2.x),
-      that preceded it. Note that later revisions designed to support Presentation Manager 2.x and above, have resulted in further
-      divergence between the Microsoft Windows and IBM OS/2 BMP file formats.
+      By now, VGA and 256 colors palette was the norm. The BMP file format created for Microsoft Windows 3.0 and Windows NT 3.1 (Windows BMP v3) differs only slightly from the IBM OS/2 2.0 (OS/2 BMP v2),
+      that preceded it.<br>
+      The Windows DIB header v3 and OS/2 DIB header v1 fields were optimazed for 32-bit (<code>DWORD</code>) and uses the palette v2 (4 bytes per entry, BGRA = 1 <code>DWORD</code>).
+      It added better palette suport and possibility of compression for the DIB pixels.<br>
+      The IBM Presentation Manager v2.0 and above, supported 3 versions (<i>aka</i> sizes) of OS/2 BMP v2 file format:
+      <ul>
+        <li>16 Bytes: Same as Windows BMP v2 and OS/2 v1, but with the fields optimazed for 32-bit (<code>DWORD</code>) and uses the palette v2 (4 bytes per entry, BGRA = 1 <code>DWORD</code>),<br>
+        except that 24-bit RLE compression is not supported by the Windows OS APIs;</li>
+        <li>40 Bytes: Same as Windows BMP v3, except that 24-bit RLE compression is not supported by the Windows OS APIs and
+        16 and 32 bits‐per‐pixel color deeph aren't supported by OS/2 OS APIs;</li>
+        <li>64 Bytes: Supports all OS/2 BMP v2 funcionality like Huffman 1D compression.</li>
+      </ul>
+    </p>
+    <p>
+      For Microsoft NT 3.5, Microsoft changed the specification of Windows BMP v3, in order that 16 and 32 bits‐per‐pixel color deeph and RGB bitfields compression could be
+      added to the Windows NT OS familly, by adding 3 <code>DWORD</code> bitfields masks after the DIB header v3 and before the optional palette v2.
+    </p>
+    <p>
+      For Microsoft Windows CE 1.0, Microsoft changed the specification of Windows BMP v3, in order that RGB 2 bits‐per‐pixel bitmaps could be
+      supported [only] by Windows CE OS familly. This is the only color deeph suported by Windows CE 1.0x.<br>
+      For Microsoft Windows CE 5 + .NET, Microsoft changed the specification of Windows BMP v3, in order that RGBA bitfields compression could be
+      added to the Windows CE OS familly, by adding 4 <code>DWORD</code> bitfields masks after the DIB header v3 and before the optional palette v2.
+    </p>
+    <p>
+      By this time SVGA and 16-bit color deeph was the norm. During the development of Windows 95, NT, 4.0 and CE 5.0, Microsoft created the Windows BMP v4 specification, on top of Windows BMP v3, by
+      adding 16 and 32 bits‐per‐pixel color deeph, RGBA bitfields and ICM color correction profiles.
+    </p>
+    <p>
+      By now, 3D acelareted XGA resolution with 32-bit color deeph were the norm. For Windows 98 and 2000, Microsoft created the Windows BMP v5 specification, on top of Windows BMP v4, by adding more ICM color
+      correction profiles support by external or embebed ICM profiles files.
     </p>
     <p>
       The structure of BMP format files is closely tied to the API of both Windows and OS/2. In this regard, BMP was never meant
@@ -185,15 +213,15 @@
       system APIs has changed, the BMP format has changed along with it.
     </p>
     <p>
-      There are currently four versions of BMP under Windows (2, 3 with NT and CE variations, 4 and 5) and two versions under OS/2
-      (1 and 2 with, six possible variations each).
-    </p>
-    <p>
       All the BMP versions originated on Intel based machines and thus share a common little&hyphen;endian heritage. The current BMP
-      format is otherwise hardware&hyphen;independent and can accommodate images with up to 32&hyphen;bit color (1, 4, 8, 16, 24 and 32
+      format is otherwise hardware&hyphen;independent and can accommodate images with up to 32&hyphen;bit color deeph (1, 2, 4, 8, 16, 24 and 32
       bit&hyphen;per&hyphen;color). Its basic design makes it a good general&hyphen;purpose format that can be used for color or black&hyphen;and&hyphen;white
       image storage if file size is not a factor. Its main virtues are its simplicity and widespread support
       in the PC marketplace.
+    </p>
+    <p>
+      There are currently four versions of BMP under Windows (2, 3 with NT and CE variations, 4 and 5) and two versions under OS/2
+      (1 and 2 with three possible variations).
     </p>
     <p>&nbsp;</p>
     <h2>BMP File Structure According It's Version</h2>
