@@ -142,52 +142,74 @@ namespace CaetanoSoft.Era8bit.Memory
         /// </returns>
         public int WriteByte(int location, int theByte)
         {
-            if ((location >= 0) && (location < this.BankSize))
+            if ((theByte >= 0) && (theByte <= 255))
             {
-                int chunkID = location % this.ChunkSize;
-                int chunkPosition = location - (chunkID * this.ChunkSize);
-                if (this.BankChunks != null)
-                {
-                    MemoryBankChunk chunk = this.BankChunks[location];
-                    if (chunk != null)
-                    {
-                        theByte = chunk.ReadByte(chunkPosition);
-                    }
-                    // else
-                    theByte = -1;
-                }
-                // else
-                theByte = -1;
-            }
-            // else
-            return theByte;
-            if (this.IsRAM)
-            {
+                // Byte OK
                 if ((location >= 0) && (location < this.BankSize))
                 {
-                    if ((theByte >= 0) && (theByte <= 255))
+                    // Memory Location OK
+                    int chunkID = location % this.ChunkSize;
+                    if ((chunkID >= 0) && (chunkID < this.BankChunks.Length))
                     {
-                        int ret = (int)this.MemoryChunk[location];
-                        this.MemoryChunk[location] = (byte)theByte;
-                        return ret;
+                        // Memory Chunk ID OK
+                        if (this.BankChunks != null)
+                        {
+                            // Memory Chunk Exists
+                            MemoryBankChunk chunk = this.BankChunks[chunkID];
+                            if (chunk != null)
+                            {
+                                int chunkPosition = location - (chunkID * this.ChunkSize);
+                                if ((chunkPosition >= 0) && (chunkPosition < chunk.Size))
+                                {
+                                    // Memory Chunk Position OK
+                                    if (chunk.IsRAM)
+                                    {
+                                        // Is RAM
+                                        theByte = chunk.WriteByte(chunkPosition, theByte);
+                                    }
+                                    else
+                                    {
+                                        // Can't write to ROM
+                                        return -1;
+                                    }
+                                }
+                                else
+                                {
+                                    // Memory Chunk Position is invalid
+                                    return -1;
+                                }
+                            }
+                            else
+                            {
+                                // Memory Chunk Position Doesn't Exists
+                                return -1;
+                            }
+                        }
+                        else
+                        {
+                            // Memory Chunk isn't valid
+                            return -1;
+                        }
                     }
-                    //else
-                    //{
-                        // Invalid byte
+                    else
+                    {
+                        // Memory Chunk Doesn't Exists
                         return -1;
-                    //}
+                    }
                 }
-                //else
-                //{
-                    // Invalid location
+                else
+                {
+                    // Memory Location invalid
                     return -1;
-                //}
+                }
             }
-            //else
-            //{
-                // Can't write to ROM
+            else
+            {
+                // Byte invalid
                 return -1;
-            //}
+            }
+
+            return theByte;
         }
 
         /// <summary>Gets the memory bank chunk.</summary>
@@ -195,11 +217,11 @@ namespace CaetanoSoft.Era8bit.Memory
         /// An vector with the bytes of this chunk, if is valid;
         /// <para><c>null</c> otherwise.</para>
         /// </returns>
-        public byte[] GetMemoryChunk()
+        public byte[] GetMemoryChunk(int chunkID)
         {
-            if (this.Type != MemoryBankChunkTypeEnum.Unknown)
+            if ((chunkID >= 0) && (chunkID < this.BankChunks.Length))
             {
-                return (byte[])this.MemoryChunk.Clone();
+                return (byte[])this.BankChunks[chunkID].GetMemoryChunk().Clone();
             }
             //else
             //{
@@ -208,39 +230,22 @@ namespace CaetanoSoft.Era8bit.Memory
             //}
         }
 
-        public bool SetMemoryChunk(byte[] chunk)
+        public bool SetMemoryChunk(int chunkID, byte[] chunk)
         {
 #if DEBUG
             Assert.IsNotNull(chunk, "'chunk' can't be null!");
             Assert.IsFalse((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
             Assert.IsFalse(this.BankSize != chunk.Length, "'chunk.Length' must be equal to 'this.BankSize'!");
 #endif
-            if (this.IsRAM)
+            if ((chunkID >= 0) && (chunkID < this.BankChunks.Length))
             {
-                if (this.Type != MemoryBankChunkTypeEnum.Unknown)
-                {
-                    if ((this.BankSize >= 0) && (this.MemoryChunk.Length == chunk.Length))
-                    {
-                        // OK, copy byte values
-                        chunk.CopyTo(this.MemoryChunk, 0);
-                        return true;
-                    }
-                    //else
-                    //{
-                        // Invalid byte
-                        return false;
-                    //}
-                }
-                //else
-                //{
-                    // Invalid memory bank chunk
-                    return false;
-                //}
+                this.BankChunks[chunkID].SetMemoryChunk(chunk);
+                return true;
             }
             //else
             //{
-                // Can't write to ROM
-                return false;
+            // Invalid memory bank chunk
+            return false;
             //}
         }
         #endregion // Class Methods

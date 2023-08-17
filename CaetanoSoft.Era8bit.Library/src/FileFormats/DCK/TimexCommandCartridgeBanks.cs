@@ -12,7 +12,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
     /// <summary>
     /// 
     /// </summary>
-    public class TimexCommandCartridgeBank
+    public class TimexCommandCartridgeBanks
     {
         #region Class Constants
         private const uint CHUNK_IS_RAM_FLAG = 0x01;
@@ -21,6 +21,8 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
         #endregion // Class Constants
 
         #region Class Properties
+        private DckFileHeaderStruct structDCK;
+
         public bool DataChanged { get; private set; } = false;
 
         public int MemoryBankID { get; set; } = (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK;
@@ -38,12 +40,12 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
         #endregion // Class Properties
 
         #region Class Constructors
-        public TimexCommandCartridgeBank()
+        public TimexCommandCartridgeBanks()
         {
             // Do nothing
         }
 
-        public TimexCommandCartridgeBank(Stream streamIn)
+        public TimexCommandCartridgeBanks(Stream streamIn)
         {
             this.Read(streamIn);
         }
@@ -128,45 +130,37 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                 {
                     memoryBaseStart = i * MemorySizeConstants.KB8;
                     memoryBaseEnd = ((i + 1) * MemorySizeConstants.KB8) - 1;
-                    switch (this.MemoryBanksChunks[i].Type)
+
+                    if ((this.structDCK.MemoryBankChunkType[i] & CHUNK_MEM_PRESENT_FLAG) == CHUNK_MEM_PRESENT_FLAG)
                     {
-                        case MemoryBankChunkTypeEnum.SYS_BANK_MEM:
-                            strAux = "Use the system memory bank ROM or RAM";
-                            break;
-
-                        case MemoryBankChunkTypeEnum.RAM_Volatile:
-                            strAux = "RAM (Volatile)";
-                            break;
-
-                        case MemoryBankChunkTypeEnum.ROM:
-                            strAux = "ROM";
-                            break;
-
-                        case MemoryBankChunkTypeEnum.RAM_Static:
+                        if ((this.structDCK.MemoryBankChunkType[i] & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG)
+                        {
                             strAux = "RAM (Static)";
-                            break;
-
-                        default:
-                            strAux = "Unknown memory chunk type";
-                            if(this.MemoryBanksChunks[i].IsRAM)
-                            {
-                                strAux += " RAM";
-                            }
-                            else
-                            {
-                                strAux += " ROM";
-                            }
-                            if (this.MemoryBanksChunks[i].IsStaticRAM || this.MemoryBanksChunks[i].IsROM)
-                            {
-                                strAux += " (on file)";
-                            }
-                            else
-                            {
-                                strAux += " (not on file)";
-                            }
-                            break;
+                        }
+                        else
+                        {
+                            strAux = "ROM";
+                        }
+                        
                     }
-                    strAux = String.Format("\t{0} - [{1,5:####0} - {2,5:####0}] / [{1:X4}h - {2:X4}h]: {3}", i, memoryBaseStart, memoryBaseEnd, strAux).ToString();
+                    else
+                    {
+                        if ((this.structDCK.MemoryBankChunkType[i] & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG)
+                        {
+                            strAux = "RAM (Volatile)";
+                        }
+                        else
+                        {
+                            strAux = "Use the system memory bank ROM or RAM";
+                        }
+                    }
+                    uint reserved = this.structDCK.MemoryBankChunkType[i] & CHUNK_RESERVED_MASK;
+                    if ((reserved) == 0)
+                    {
+                        // OK
+                    }
+                    strAux = String.Format("\t{0} - [{1,5:####0} - {2,5:####0}] / [{1:X4}h - {2:X4}h]: {3} Reserved: {4X2}h", 
+                                i, memoryBaseStart, memoryBaseEnd, strAux, reserved).ToString();
                     listRet.Add(new String[2] { null, strAux });
                 }
 
@@ -191,7 +185,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                         listRet.Add(new String[2] { "\tPrograming Language", strAux });
 
                         strAux = String.Format("{0,5:####0} / {0:X4}h", this.sLrosProgramHeader.StartingCode).ToString();
-                        listRet.Add(new String[2] { "\tMachine Code Start Adress", strAux });
+                        listRet.Add(new String[2] { "\tMachine Code Start Address", strAux });
 
                         // Memory Chunk Specification
                         uint memChunks = (uint)this.sLrosProgramHeader.MemoryChunkSpecification;
@@ -247,7 +241,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                         {
                             // AROS Machine Code
                             strAux = String.Format("{0,5:####0} / {0:X4}h", this.sArosProgramHeader.StartingCode).ToString();
-                            listRet.Add(new String[2] { "\tMachine Code Start Adress", strAux });
+                            listRet.Add(new String[2] { "\tMachine Code Start Address", strAux });
                         }
 
                         listRet.Add(new String[2] { "\tReserved RAM for Machine Code", this.sArosProgramHeader.ReservedRAM.ToString() + " Bytes"});
@@ -298,13 +292,15 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             //Assert.IsTrue(streamIn.CanRead, nameof(streamIn), "Stream isn't readable");
 
             //// 
-            EndianAwareBinaryReader binReader = new EndianAwareBinaryReader(streamIn, true);
+            EndianAwareBinaryReader binaryReader = new EndianAwareBinaryReader(streamIn, true);
             //// Read DCK File Header
-            DckFileHeaderStruct structDCK = (DckFileHeaderStruct)binReader.ReadStructure<DckFileHeaderStruct>(streamIn);
+            structDCK = (DckFileHeaderStruct)binaryReader.ReadStructure<DckFileHeaderStruct>();
 
             // Bank ID
             int nextByte = (int)structDCK.MemoryBankID;
-            if ((nextByte == (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK) || (nextByte == (int)Timex2068DefaultMemoryBanksIDsEnum.EXROM) || (nextByte == (int)Timex2068DefaultMemoryBanksIDsEnum.HOME))
+            if ((nextByte == (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK) || 
+                 (nextByte == (int)Timex2068DefaultMemoryBanksIDsEnum.EXROM) || 
+                 (nextByte == (int)Timex2068DefaultMemoryBanksIDsEnum.HOME))
             {
                 this.MemoryBankID = nextByte;
             }
@@ -323,56 +319,55 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             {
                 memoryBaseStart = i * MemorySizeConstants.KB8;
                 memoryBaseEnd = ((i + 1) * MemorySizeConstants.KB8) - 1;
-                this.MemoryBanksChunks[i] = new MemoryBankChunk();
-
                 nextByte = (int)structDCK.MemoryBankChunkType[i];
-                this.MemoryBanksChunks[i].IsRAM = ((nextByte & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG);
-                this.MemoryBanksChunks[i].IsOnFile = ((nextByte & CHUNK_MEM_PRESENT_FLAG) == CHUNK_MEM_PRESENT_FLAG);
+                if ((nextByte & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG)
+                {
+
+                }
+                if ((nextByte & CHUNK_MEM_PRESENT_FLAG) == CHUNK_MEM_PRESENT_FLAG)
+                {
+
+                }
                 if ((nextByte & CHUNK_RESERVED_MASK) == 0)
                 {
                     switch ((DckFileHeaderMemoryBankChunkTypeEnum)nextByte)
                     {
-                        case DckFileHeaderMemoryBankChunkTypeEnum.NON_EXISTENT:
-                            this.MemoryBanksChunks[i].Type = DckFileHeaderMemoryBankChunkTypeEnum.NON_EXISTENT;
+                        case DckFileHeaderMemoryBankChunkTypeEnum.ROM_NOT_ON_FILE:
                             switch (this.MemoryBankID)
                             {
                                 case (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK:
                                     // In this bank, when reading from non existing ROM/RAM, 255 (FFh) is returned
-                                    this.MemoryBanksChunks[i].MemoryChunk = new byte[MemorySizeConstants.KB8];
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\xFF', MemorySizeConstants.KB8));
+                                    this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0xFF);
                                     break;
 
                                 case (int)Timex2068DefaultMemoryBanksIDsEnum.EXROM:
-                                    // This memory bank is only partialy decoded (memory bank chunk 2), so the Extension ROM is shadoed in 8 KB chunks
-                                    // from adresses 16384 to 24575 ([4000h-5FFFh])
-                                    this.MemoryBanksChunks[i].MemoryChunk = new byte[MemorySizeConstants.KB8];
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\xFF', MemorySizeConstants.KB8));
+                                    // This memory bank is only partially decoded (memory bank chunk 2), so the Extension ROM is shadowed in 8 KB chunks
+                                    // from addresses 16384 to 24575 ([4000h-5FFFh])
+                                    this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8);
+                                    // TODO: Copy EXROM
                                     break;
 
                                 case (int)Timex2068DefaultMemoryBanksIDsEnum.HOME:
                                     // For this bank, if the memory chunk is not on the cartridge, the system 16 KB Home ROM and/or RAM are used
-                                    //this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', MemorySizeConstants.KB8));
+                                    this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8);
+                                    // TODO: Copy ROM or RAM
                                     break;
 
                                 default:
                                     // FIXME: Is this OK? Not supported memory bank
-                                    this.MemoryBanksChunks[i].MemoryChunk = new byte[MemorySizeConstants.KB8];
-                                    this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\xFF', MemorySizeConstants.KB8));
+                                    this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0x00);
                                     break;
                             }
                             break;
 
                         case DckFileHeaderMemoryBankChunkTypeEnum.RAM_NOT_ON_FILE:
                             // Fills the memory bank RAM chunk with 8 KB of zeros
-                            this.MemoryBanksChunks[i].Type = DckFileHeaderMemoryBankChunkTypeEnum.RAM_NOT_ON_FILE;
-                            this.MemoryBanksChunks[i].MemoryChunk = new byte[MemorySizeConstants.KB8];
-                            this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', MemorySizeConstants.KB8));
+                            this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0x00);
                             break;
 
                         case DckFileHeaderMemoryBankChunkTypeEnum.ROM_ON_FILE:
                             // Checks if this is Dock memory bank with a LROS or an AROS program
-                            this.MemoryBanksChunks[i].Type = DckFileHeaderMemoryBankChunkTypeEnum.ROM_ON_FILE;
-                            this.MemoryBanksChunks[i].MemoryChunk = new byte[MemorySizeConstants.KB8];
+                            this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0x00);
                             if (this.MemoryBankID == (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK)
                             {
                                 if (!ignoreDockTypeDetection)
@@ -385,61 +380,50 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                                     }
                                     else if (i == 4)
                                     {
-                                        // This is an AROS BASIC program with an optional machin code program
+                                        // This is an AROS BASIC program with an optional machine code program
                                         this.CartridgeDockType = DockHeaderCartridgeTypeEnum.AROS;
                                         ignoreDockTypeDetection = true;
                                     }
                                 }
                             }
-                            // Else is a Home bank 8 KB memory chunk, or some non suported extencion bank
+                            // Else is a Home bank 8 KB memory chunk, or some non supported extension bank
                             ++NumberOf8KChunksInFile;
                             break;
 
                         case DckFileHeaderMemoryBankChunkTypeEnum.RAM_ON_FILE:
-                            // This is a presinstent 8KB memory bank chunk
-                            this.MemoryBanksChunks[i].Type = DckFileHeaderMemoryBankChunkTypeEnum.RAM_ON_FILE;
-                            this.MemoryBanksChunks[i].MemoryChunk = new byte[MemorySizeConstants.KB8];
+                            // This is a pressinstent 8KB memory bank chunk
+                            this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0x00);
                             ++NumberOf8KChunksInFile;
                             break;
 
                         default:
-                            // FIXME: Bug? Should't be where
+                            // FIXME: Bug? Shouldn't be where
                             break;
                     }
                 }
                 else
                 {
                     // TODO: Bug? Unknown memory bank type
-                    this.MemoryBanksChunks[i].Type = DckFileHeaderMemoryBankChunkTypeEnum.Unknown;
-                    if (this.MemoryBanksChunks[i].IsOnFile)
-                    {
-                        // ROM or RAM from file
-                        this.MemoryBanksChunks[i].MemoryChunk = new byte[MemorySizeConstants.KB8];
-                        ++NumberOf8KChunksInFile;
-                    }
-                    if (this.MemoryBanksChunks[i].IsRAM)
-                    {
-                        // RAM not on file
-                        this.MemoryBanksChunks[i].MemoryChunk = Encoding.ASCII.GetBytes(new string('\0', MemorySizeConstants.KB8));
-                    }
+                    
                 }
                 // Read the 8 KB memory chunk from stream
-                if (this.MemoryBanksChunks[i].IsOnFile)
+                if ((structDCK.MemoryBankChunkType[i] & CHUNK_MEM_PRESENT_FLAG) == CHUNK_MEM_PRESENT_FLAG)
                 {
-                    EndianAwareBinaryReader.ReadBytes(streamIn, ref this.MemoryBanksChunks[i].MemoryChunk);
+                    this.MemoryBanksChunks[i].SetMemoryChunk(binaryReader.ReadBytes(MemorySizeConstants.KB8));
+
                     if (this.MemoryBankID == (int)Timex2068DefaultMemoryBanksIDsEnum.EXROM)
                     {
                         // Fix the partial decoding 
-                        // This memory bank is only partialy decoded (memory bank chunk 2), so the Extension ROM is shadoed in 8 KB chunks
-                        // from adresses 16384 to 24575 ([4000h-5FFFh])
+                        // This memory bank is only partialy decoded (memory bank chunk 2), so the Extension ROM is shadowed in 8 KB chunks
+                        // from addresses 16384 to 24575 ([4000h-5FFFh])
                         if (i == 2)
                         {
-                            this.MemoryBanksChunks[0].MemoryChunk = this.MemoryBanksChunks[2].MemoryChunk;
-                            this.MemoryBanksChunks[1].MemoryChunk = this.MemoryBanksChunks[2].MemoryChunk;
+                            this.MemoryBanksChunks[0].SetMemoryChunk(this.MemoryBanksChunks[2].GetMemoryChunk());
+                            this.MemoryBanksChunks[1].SetMemoryChunk(this.MemoryBanksChunks[2].GetMemoryChunk());
                         }
                         else
                         {
-                            this.MemoryBanksChunks[i].MemoryChunk = this.MemoryBanksChunks[2].MemoryChunk;
+                            this.MemoryBanksChunks[i].SetMemoryChunk(this.MemoryBanksChunks[2].GetMemoryChunk());
                         }
                     }
                     else if (this.MemoryBankID == (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK)
@@ -449,22 +433,18 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                             if (i == 0)
                             {
                                 // This is a LROS machine code program
-                                Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
-                                this.sLrosProgramHeader = (DockHeaderLrosStruct)EndianAwareBinaryReader.ReadStructure<DockHeaderLrosStruct>(stream);
-                                // Starting Address endian fix
-                                this.sLrosProgramHeader.StartingCode = EndianUtils.ConvertWord16_LE(this.sLrosProgramHeader.StartingCode);
+                                Stream stream = new MemoryStream(this.MemoryBanksChunks[i].GetMemoryChunk());
+                                EndianAwareBinaryReader binaryReaderBE = new EndianAwareBinaryReader(streamIn, false);
+                                this.sLrosProgramHeader = (DockHeaderLrosStruct)binaryReaderBE.ReadStructure<DockHeaderLrosStruct>();
                                 // LROS program header read completed
                                 ignoreDockProgramStartDetection = true;
                             }
                             else if (i == 4)
                             {
                                 // This is an AROS BASIC program with an optional machine code program
-                                Stream stream = new MemoryStream(this.MemoryBanksChunks[i].MemoryChunk);
-                                this.sArosProgramHeader = (DockHeaderArosStruct)EndianAwareBinaryReader.ReadStructure<DockHeaderArosStruct>(stream);
-                                // Starting Address endian fix
-                                this.sArosProgramHeader.StartingCode = EndianUtils.ConvertWord16_LE(this.sArosProgramHeader.StartingCode);
-                                // Reserved Machine Code RAM endian fix
-                                this.sArosProgramHeader.ReservedRAM = EndianUtils.ConvertWord16_LE(this.sArosProgramHeader.ReservedRAM);
+                                Stream stream = new MemoryStream(this.MemoryBanksChunks[i].GetMemoryChunk());
+                                EndianAwareBinaryReader binaryReaderBE = new EndianAwareBinaryReader(streamIn, false);
+                                this.sArosProgramHeader = (DockHeaderArosStruct)binaryReaderBE.ReadStructure<DockHeaderArosStruct>();
                                 // AROS program header read completed
                                 ignoreDockProgramStartDetection = true;
                             }

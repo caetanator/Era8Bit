@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaetanoSoft.Graphics.Librar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaetanoSoft.Era8bit.Library", "CaetanoSoft.Era8bit.Library\CaetanoSoft.Era8bit.Library.csproj", "{A605B2AE-CA82-414F-8BE9-8FD7422F8DBF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaViwer8Bit", "MediaViwer\MediaViwer8Bit.csproj", "{830C4CE5-DCD4-4FE5-B00F-E25348B7D408}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCK_InfoViewer", "DCK_InfoViewer\DCK_InfoViewer.csproj", "{830C4CE5-DCD4-4FE5-B00F-E25348B7D408}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

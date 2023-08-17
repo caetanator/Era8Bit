@@ -5,7 +5,7 @@
     <RootNamespace>CaetanoSoft.Era8bit</RootNamespace>
     <Authors>José Caetano Silva</Authors>
     <Company>CaetanoSoft</Company>
-    <Copyright>(c) 2016-2021 by José Caetano Silva</Copyright>
+    <Copyright>(c) 2016-2023 by José Caetano Silva</Copyright>
     <PackageLicenseFile>GPL.txt</PackageLicenseFile>
     <Description>This class library contains objects to help applications that emulate 8-bit era computers, like the Sinclair ZX Spectrum, Timex Computer 2068 and Commodore 64.</Description>
   </PropertyGroup>

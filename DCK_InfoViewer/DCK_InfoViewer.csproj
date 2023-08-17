@@ -6,13 +6,16 @@
     <OutputType>Exe</OutputType>
     <PackageId>DCK_InfoViewer</PackageId>
     <RuntimeIdentifiers>win7-x64;win10-x64;osx.10.10-x64</RuntimeIdentifiers>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <RootNamespace>CaetanoSof.Era8Bit.Programs.MediaViwer</RootNamespace>
+    <RootNamespace>CaetanoSof.Era8Bit.Programs.DCK_InfoViewer</RootNamespace>
+
     <Authors>José Caetano Silva</Authors>
+    <Company>CaetanoSoft</Company>
+    <Copyright>(c) 2016-2023 by José Caetano Silva</Copyright>
+    <PackageLicenseFile>GPL.txt</PackageLicenseFile>
     <Description>View Timex Sinclair 2068 (TS2068), Timex Computer (TC2068) and Unipolbrit Komputer 2086 (UK2086), Timex Command Cartridges (TCC) .DCK files information and content.</Description>
   </PropertyGroup>
 

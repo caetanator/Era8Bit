@@ -24,12 +24,13 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
 {
     /// <summary>
-    /// This class writes binary data (in the form of bytes) to a binary stream, aware of the endian of the system 
+    /// This class writes binary data (in the form of bytes) to a binary stream, aware of the endian of the system
     /// and the stream.
     /// <para>The bytes order of the data is swapped automatic.</para>
     /// <para>On strings, the code page is also converted, if necessary.</para>
@@ -42,9 +43,11 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         /// <summary>Initializes a new instance of the <see cref="EndianAwareBinaryWriter" /> class.</summary>
         /// <param name="output">The output stream to write data to.</param>
         /// <param name="encoding">The strings code-page encoding on the stream.</param>
-        /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian]. 
+		/// <param name="leaveOpen">if set to <c>true</c> [leave the stream open after the BinaryWriter object is disposed].
+        /// if set to <c>false</c> [closes the stream when the BinaryWriter object is disposed].</param>
+        /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian].
         /// if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryWriter(Stream output, Encoding encoding, bool isLittleEndian) : base(output, encoding)
+        public EndianAwareBinaryWriter(Stream output, Encoding encoding, bool leaveOpen, bool isLittleEndian) : base(output, encoding, leaveOpen)
         {
             // If the system endian is equal to the stream endian, no byte swap is needed, otherwise,
             // if one is big-endian and the other little-endian, then the bytes order must be swapped
@@ -55,14 +58,14 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         /// <para>Strings on the stream are assumed to the UTF-8 code-page encoding.</para>
         /// </summary>
         /// <param name="output">The output stream to write data to.</param>
-        /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian]. 
+        /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian].
         /// if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryWriter(Stream output, bool isLittleEndian) : this(output, Encoding.UTF8, isLittleEndian)
+        public EndianAwareBinaryWriter(Stream output, bool isLittleEndian) : this(output, Encoding.UTF8, false, isLittleEndian)
         {
             // Do nothing
         }
 
-        /// <summary>Writes a two-byte unsigned integer to the current stream and advances the stream position by 
+        /// <summary>Writes a two-byte unsigned integer to the current stream and advances the stream position by
         /// two bytes.</summary>
         /// <param name="value">The two-byte unsigned integer to write.</param>
         /// <exception cref="ArgumentException">Value must be between 0 and 0xFFFF!</exception>
@@ -94,7 +97,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         }
 
 
-        /// <summary>Writes a two-byte signed integer to the current stream and advances the stream position 
+        /// <summary>Writes a two-byte signed integer to the current stream and advances the stream position
         /// by two bytes.</summary>
         /// <param name="value">The two-byte signed integer to write.</param>
         public override void Write(short value)
@@ -138,7 +141,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         }
 
 
-        /// <summary>Writes a four-byte signed integer to the current stream and advances the stream position by 
+        /// <summary>Writes a four-byte signed integer to the current stream and advances the stream position by
         /// four bytes.</summary>
         /// <param name="value">The four-byte signed integer to write.</param>
         public override void Write(int value)
@@ -147,7 +150,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         }
 
 
-        /// <summary>Writes an eight-byte unsigned integer to the current stream and advances the stream position by 
+        /// <summary>Writes an eight-byte unsigned integer to the current stream and advances the stream position by
         /// eight bytes.</summary>
         /// <param name="value">The eight-byte unsigned integer to write.</param>
         public override void Write(ulong value)
@@ -190,7 +193,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         }
 
 
-        /// <summary>Writes an eight-byte signed integer to the current stream and advances the stream position by 
+        /// <summary>Writes an eight-byte signed integer to the current stream and advances the stream position by
         /// eight bytes.</summary>
         /// <param name="value">The eight-byte signed integer to write.</param>
         public override void Write(long value)
@@ -198,7 +201,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             this.Write((ulong)value);
         }
 
-        /// <summary>Writes a four-byte floating-point value to the current stream and advances the stream position by 
+        /// <summary>Writes a four-byte floating-point value to the current stream and advances the stream position by
         /// four bytes.</summary>
         /// <param name="value">The four-byte floating-point value to write.</param>
         public override void Write(float value)
@@ -230,10 +233,10 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             {
                 // Write the 32-bit floating-point to the stream
                 base.Write(value);
-            } 
+            }
         }
 
-        /// <summary>Writes an eight-byte floating-point value to the current stream and advances the stream 
+        /// <summary>Writes an eight-byte floating-point value to the current stream and advances the stream
         /// position by eight bytes.</summary>
         /// <param name="value">The eight-byte floating-point value to write.</param>
         public override void Write(double value)
@@ -320,5 +323,82 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             this.WriteBytes(ref buffer, 0, size);
         }
         */
+
+		/// https://stackoverflow.com/questions/2480116/marshalling-a-big-endian-byte-collection-into-a-struct-in-order-to-pull-out-value
+
+		private static void SwapStructFieldsEndianness(Type type, byte[] data, bool swapBytesEndian, int startOffset = 0)
+		{
+			// Swap big-endian/little-endian
+			if (swapBytesEndian)
+			{
+				foreach (var field in type.GetFields())
+				{
+					var fieldType = field.FieldType;
+					if (field.IsStatic)
+					{
+						// Don't process static fields
+						continue;
+					}
+
+					if (fieldType == typeof(string))
+					{
+						// Don't swap bytes for strings
+						continue;
+					}
+
+					var offset = Marshal.OffsetOf(type, field.Name).ToInt32();
+
+					// Handle enums
+					if (fieldType.IsEnum)
+					{
+						fieldType = Enum.GetUnderlyingType(fieldType);
+					}
+
+                    // Check for sub-fields to recurse if necessary
+                    var subFields = fieldType.GetFields();
+                   // subFields = subFields.Where(subField => subField.IsStatic == false).ToArray();
+
+					var effectiveOffset = startOffset + offset;
+
+					if (subFields.Length == 0)
+					{
+						Array.Reverse(data, effectiveOffset, Marshal.SizeOf(fieldType));
+					}
+					else
+					{
+						// Recurse
+						SwapStructFieldsEndianness(fieldType, data, swapBytesEndian, effectiveOffset);
+					}
+				}
+			}
+		}
+
+		public void WriteStructure<T>(T data) where T : struct
+        {
+            int size = Marshal.SizeOf<T>();
+            //byte[] rawData = new byte[size];
+            //Marshal.Copy(data, rawData, 0, size)
+            byte[] rawData = new byte[Marshal.SizeOf(data)];
+
+            GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
+            try
+            {
+                IntPtr rawDataPtr = handle.AddrOfPinnedObject();
+                Marshal.StructureToPtr(data, rawDataPtr, false);
+            }
+            finally
+            {
+                handle.Free();
+            }
+
+
+			// Swap big-endian/little-endian
+			if (this.swapBytesEndian)
+			{
+				SwapStructFieldsEndianness(typeof(T), rawData, this.swapBytesEndian);
+			}
+
+            base.Write(rawData, 0, size);
+        }
     }
 }

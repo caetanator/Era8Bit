@@ -128,7 +128,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             {
                 try
                 {
-                    TimexCommandCartridgeBank TCCBank = new TimexCommandCartridgeBank();
+                    TimexCommandCartridgeBanks TCCBank = new TimexCommandCartridgeBanks();
                     TCCBank.Read(cartridgeFile);
                     this.TCCBanks.Add(TCCBank);
                 }
@@ -205,7 +205,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             retList.Add(new String[2] { "File Name", this.FileName });
             retList.Add(new String[2] { "File Size", this.FileSize.ToString() + " Bytes" });
             retList.Add(new String[2] { "File Type Description", this.Description });
-            foreach (TimexCommandCartridgeBank TCCBank in this.TCCBanks)
+            foreach (TimexCommandCartridgeBanks TCCBank in this.TCCBanks)
             {
                 try
                 {
@@ -234,18 +234,18 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
         #endregion // Interface IMediaFormat
 
         #region Class Properties
-        List<TimexCommandCartridgeBank> TCCBanks;
+        List<TimexCommandCartridgeBanks> TCCBanks;
         #endregion // Class Properties
 
         #region Class Constructors
         public TimexCommandCartridge()
         {
-            TCCBanks = new List<TimexCommandCartridgeBank>();
+            TCCBanks = new List<TimexCommandCartridgeBanks>();
         }
 
         public TimexCommandCartridge(String fileName)
         {
-            TCCBanks = new List<TimexCommandCartridgeBank>();
+            TCCBanks = new List<TimexCommandCartridgeBanks>();
             this.Load(fileName);
         }
         #endregion // Class Constructors

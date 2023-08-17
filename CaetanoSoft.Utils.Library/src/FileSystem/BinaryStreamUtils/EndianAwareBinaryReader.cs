@@ -24,6 +24,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
@@ -45,8 +46,10 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         /// <summary>Initializes a new instance of the <see cref="EndianAwareBinaryReader" /> class.</summary>
         /// <param name="input">The input stream to read data from.</param>
         /// <param name="encoding">The strings code-page encoding on the stream.</param>
+		/// <param name="leaveOpen">if set to <c>true</c> [leave the stream open after the BinaryReader object is disposed]. 
+        /// if set to <c>false</c> [closes the stream when the BinaryReader object is disposed].</param>
         /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian]. if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryReader(Stream input, Encoding encoding, bool isLittleEndian) : base(input, encoding)
+        public EndianAwareBinaryReader(Stream input, Encoding encoding, bool leaveOpen, bool isLittleEndian) : base(input, encoding, leaveOpen)
         {
             // If the system endian is equal to the stream endian, no byte swap is needed, otherwise, if 
             // one is big-endian and the other little-endian, then the bytes order must be swapped
@@ -59,7 +62,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         /// </summary>
         /// <param name="input">The input stream to read data from.</param>
         /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian]. if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryReader(Stream input, bool isLittleEndian) : this(input, Encoding.UTF8, isLittleEndian)
+        public EndianAwareBinaryReader(Stream input, bool isLittleEndian) : this(input, Encoding.UTF8, false, isLittleEndian)
         {
             // Do nothing
         }
@@ -456,25 +459,76 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             // Return string
             return StrUTF8;
         }
+         */
+		 
+		/// https://stackoverflow.com/questions/2480116/marshalling-a-big-endian-byte-collection-into-a-struct-in-order-to-pull-out-value
+		
+		private static void SwapStructFieldsEndianness(Type type, byte[] data, bool swapBytesEndian, int startOffset = 0)
+		{
+			// Swap big-endian/little-endian
+			if (swapBytesEndian)
+			{
+				foreach (var field in type.GetFields())
+				{
+					var fieldType = field.FieldType;
+					if (field.IsStatic)
+					{
+						// Don't process static fields
+						continue;
+					}
+					
+					if (fieldType == typeof(string))
+					{
+						// Don't swap bytes for strings
+						continue;
+					}
 
-        public static T? ReadStructure<T>(Stream stream) where T : struct
-        {
-            if (stream == null)
-            {
-                // Error: Invalid stream to read from
-                return null;
-            }
-            
+					var offset = Marshal.OffsetOf(type, field.Name).ToInt32();
+
+					// Handle enums
+					if (fieldType.IsEnum)
+					{
+						fieldType = Enum.GetUnderlyingType(fieldType);
+					}
+
+                    // Check for sub-fields to recurse if necessary
+                    var subFields = fieldType.GetFields();
+                    // .Where(subField => subField.IsStatic == false).ToArray();
+
+					var effectiveOffset = startOffset + offset;
+
+					if (subFields.Length == 0)
+					{
+						Array.Reverse(data, effectiveOffset, Marshal.SizeOf(fieldType));
+					}
+					else
+					{
+						// Recurse
+						SwapStructFieldsEndianness(fieldType, data, swapBytesEndian, effectiveOffset);
+					}
+				}
+			}
+		}
+
+		public T? ReadStructure<T>() where T : struct
+        {          
             int size = Marshal.SizeOf<T>();
-            byte[] bytes = new byte[size];
-            if (stream.Read(bytes, 0, size) != size)
+            byte[] rawData = new byte[size];
+			
+            if (base.Read(rawData, 0, size) != size)
             {
                 // Error: Not enough bytes to read the structure
                 return null;
             }
 
+			// Swap big-endian/little-endian
+			if (this.swapBytesEndian)
+			{
+				SwapStructFieldsEndianness(typeof(T), rawData, this.swapBytesEndian);
+			}
+			
             // Convert the structure to .NET
-            GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+            GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
             try
             {
                 return (T)Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
@@ -484,6 +538,5 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 handle.Free();
             }
         }
-         */
     }
 }
