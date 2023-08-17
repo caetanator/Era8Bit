@@ -297,8 +297,10 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             //Assert.IsNull(streamIn);
             //Assert.IsTrue(streamIn.CanRead, nameof(streamIn), "Stream isn't readable");
 
+            //// 
+            EndianAwareBinaryReader binReader = new EndianAwareBinaryReader(streamIn, true);
             //// Read DCK File Header
-            DckFileHeaderStruct structDCK = (DckFileHeaderStruct)EndianAwareBinaryReader.ReadStructure<DckFileHeaderStruct>(streamIn);
+            DckFileHeaderStruct structDCK = (DckFileHeaderStruct)binReader.ReadStructure<DckFileHeaderStruct>(streamIn);
 
             // Bank ID
             int nextByte = (int)structDCK.MemoryBankID;

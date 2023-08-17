@@ -41,6 +41,7 @@ namespace CaetanoSoft.Era8bit.MediaFormats
 
         /// <summary>
         /// Floppy Disk/Diskette media format type.
+		/// <para>Used by  ZX Spectrum +3, +3B, Timex FDD 3 and 3000, etc..</para>
         /// </summary>
         FloppyDisk,
 
@@ -57,6 +58,7 @@ namespace CaetanoSoft.Era8bit.MediaFormats
 
         /// <summary>
         /// ROM and/or RAM memory cartridge media format type.
+		/// <para>Used by Sinclair ZX Interface II and Timex TS/TC 2068.</para>
         /// </summary>
         Cartridge,
 

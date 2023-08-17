@@ -62,7 +62,22 @@ namespace CaetanoSoft.Era8bit.MediaFormats
                 {
                     retObject = new TimexCommandCartridge(fileName);
                 }
+				else if (fileName.EndsWith(".rom", StringComparison.OrdinalIgnoreCase))
+                {
+                    // TODO: Not implemented
+                    throw new NotImplementedException();
+                }
                 else if (fileName.EndsWith(".scr", StringComparison.OrdinalIgnoreCase))
+                {
+                    // TODO: Not implemented
+                    throw new NotImplementedException();
+                }
+				else if (fileName.EndsWith(".dsk", StringComparison.OrdinalIgnoreCase))
+                {
+                    // TODO: Not implemented
+                    throw new NotImplementedException();
+                }
+				else if (fileName.EndsWith(".tzx", StringComparison.OrdinalIgnoreCase))
                 {
                     // TODO: Not implemented
                     throw new NotImplementedException();
