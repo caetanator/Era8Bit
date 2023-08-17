@@ -151,7 +151,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                         }
                         else
                         {
-                            strAux = "Use the system memory bank ROM or RAM";
+                            strAux = "ROM/RAM from HOME Bank";
                         }
                     }
                     uint reserved = this.structDCK.MemoryBankChunkType[i] & CHUNK_RESERVED_MASK;
@@ -159,7 +159,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                     {
                         // OK
                     }
-                    strAux = String.Format("\t{0} - [{1,5:####0} - {2,5:####0}] / [{1:X4}h - {2:X4}h]: {3} Reserved: {4X2}h", 
+                    strAux = String.Format("\t{0} - (Rb={4:X2}h) [{1,5:####0} - {2,5:####0}] / [{1:X4}h - {2:X4}h]: {3}", 
                                 i, memoryBaseStart, memoryBaseEnd, strAux, reserved).ToString();
                     listRet.Add(new String[2] { null, strAux });
                 }
@@ -315,7 +315,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             int memoryBaseEnd = -1;
             bool ignoreDockTypeDetection = false;
             bool ignoreDockProgramStartDetection = false;
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < structDCK.MemoryBankChunkType.Length; i++)
             {
                 memoryBaseStart = i * MemorySizeConstants.KB8;
                 memoryBaseEnd = ((i + 1) * MemorySizeConstants.KB8) - 1;
@@ -367,7 +367,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
 
                         case DckFileHeaderMemoryBankChunkTypeEnum.ROM_ON_FILE:
                             // Checks if this is Dock memory bank with a LROS or an AROS program
-                            this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0x00);
+                            this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8);
                             if (this.MemoryBankID == (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK)
                             {
                                 if (!ignoreDockTypeDetection)
@@ -387,13 +387,13 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                                 }
                             }
                             // Else is a Home bank 8 KB memory chunk, or some non supported extension bank
-                            ++NumberOf8KChunksInFile;
+                            ++this.NumberOf8KChunksInFile;
                             break;
 
                         case DckFileHeaderMemoryBankChunkTypeEnum.RAM_ON_FILE:
                             // This is a pressinstent 8KB memory bank chunk
                             this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0x00);
-                            ++NumberOf8KChunksInFile;
+                            ++this.NumberOf8KChunksInFile;
                             break;
 
                         default:
@@ -434,7 +434,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                             {
                                 // This is a LROS machine code program
                                 Stream stream = new MemoryStream(this.MemoryBanksChunks[i].GetMemoryChunk());
-                                EndianAwareBinaryReader binaryReaderBE = new EndianAwareBinaryReader(streamIn, false);
+                                EndianAwareBinaryReader binaryReaderBE = new EndianAwareBinaryReader(stream, false);
                                 this.sLrosProgramHeader = (DockHeaderLrosStruct)binaryReaderBE.ReadStructure<DockHeaderLrosStruct>();
                                 // LROS program header read completed
                                 ignoreDockProgramStartDetection = true;
@@ -443,7 +443,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                             {
                                 // This is an AROS BASIC program with an optional machine code program
                                 Stream stream = new MemoryStream(this.MemoryBanksChunks[i].GetMemoryChunk());
-                                EndianAwareBinaryReader binaryReaderBE = new EndianAwareBinaryReader(streamIn, false);
+                                EndianAwareBinaryReader binaryReaderBE = new EndianAwareBinaryReader(stream, false);
                                 this.sArosProgramHeader = (DockHeaderArosStruct)binaryReaderBE.ReadStructure<DockHeaderArosStruct>();
                                 // AROS program header read completed
                                 ignoreDockProgramStartDetection = true;

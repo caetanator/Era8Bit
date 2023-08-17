@@ -23,7 +23,8 @@ This numbering of banks is in according to convention used in various routines f
 After the first byte, following eight bytes corresponds to eight 8K chunks in the bank.
 Organization of each byte is as follows:
 
-    bit D0: 0 = read - only chunk, 1 = read / write chunk
+    bit D0: 0 = read - only chunk, 
+	        1 = read / write chunk
     bit D1: 0 = memory image for corresponding chunk is not present in DCK file, 
             1 = memory image is present in DCK file
     bits D2 - D7: reserved (all zeros)

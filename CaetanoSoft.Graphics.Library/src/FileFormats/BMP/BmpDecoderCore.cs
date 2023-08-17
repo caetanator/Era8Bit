@@ -565,7 +565,7 @@ namespace SixLabors.ImageSharp.Formats.Bmp
             if ((SourcePreRotateMask & (uint)this.infoHeader.Compression) == SourcePreRotateMask)
             {
                 this.infoHeader.IsSourcePreRotate = true;
-                this.infoHeader.Compression = (BmpCompression)((uint)this.infoHeader.Compression & (~SourcePreRotateMask
+                this.infoHeader.Compression = (BmpCompression)((uint)this.infoHeader.Compression & (~SourcePreRotateMask))
 				// TODO: What to do with this?
             }
 

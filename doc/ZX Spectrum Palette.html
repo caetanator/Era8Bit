@@ -315,18 +315,55 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;- color number 6 <span style="color:white; background:#EEEE00;">Yellow (#AAAA00)</span> is displayed as
                 <span style="color:white; background:#AA5500;">Brown (#AA5500)</span>;
                 </i></small>
-                <li>
-                  <small><i>
-                  Colors are order by GRBI, because that way they are order from the dark colors to the bright colors and that simplifies the conversion to gray scale on
-                  black-and-white TVs and monochrome monitores (green, amber and blue phosfer) and improves image quality;
-                  </i></small>
-                </li>
-                <li>
-                  <small><i>
-                  The intensity bit (I), can't be used for the 8x8 pixel matrix background color, because it is used as the flash bit (F), by the ZX Spectrum ULA and Timex SCLD.<br>
-                  Also, it's not used for the border color. It only afects the 8x8 pixel matrix forground/text color.
-                  </i></small>
-                </li>
+              </li>
+              <li>
+                <small><i>
+                Colors are order by GRBI, because that way they are order from the dark colors to the bright colors and that simplifies the conversion to gray scale on
+                black-and-white TVs and monochrome monitores (green, amber and blue phosfer) and improves image quality;
+                </i></small>
+              </li>
+              <li>
+                <small><i>
+                The intensity bit (I), can't be used for the 8x8 pixel matrix background color, because it is used as the flash bit (F), by the ZX Spectrum ULA and Timex SCLD.<br>
+                Also, it's not used for the border color. It only afects the 8x8 pixel matrix forground/text color.
+                </i></small>
+              </li>
+              <li>
+                <small><i>
+                The one byte color attribute for each character (8x8 pixels), has the following arrangement:
+                </i></small>
+                <table>
+                  <thead>
+                    <tr>
+                      <th rowspan="2">&nbsp;</th>
+                      <th colspan="4" style="border-bottom: 0;"">Paper/Background</th>
+                      <th colspan="4" style="border-bottom: 0;"">Ink/Forground</th>
+                    </tr>
+                    <tr>
+                      <th style="border-top: 0;">F</th>
+                      <th style="border-top: 0;">G<small><sub>p2</sub></small></th>
+                      <th style="border-top: 0;">R<small><sub>p1</sub></small></th>
+                      <th style="border-top: 0;">B<small><sub>p0</sub></small></th>
+                      <th style="border-top: 0;">I</th>
+                      <th style="border-top: 0;">G<small><sub>i2</sub></small></th>
+                      <th style="border-top: 0;">R<small><sub>i1</sub></small></th>
+                      <th style="border-top: 0;">B<small><sub>i0</sub></small></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Bit: </td>
+                      <td style="width: 36px;">7</td>
+                      <td style="width: 36px;">6</td>
+                      <td style="width: 36px;">5</td>
+                      <td style="width: 36px;">4</td>
+                      <td style="width: 36px;">3</td>
+                      <td style="width: 36px;">2</td>
+                      <td style="width: 36px;">1</td>
+                      <td style="width: 36px;">0</td>
+                    </tr>
+                  </tbody>
+                </table>
               </li>
             </ul>
           </td>

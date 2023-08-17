@@ -61,11 +61,11 @@ namespace CaetanoSoft.Era8bit.Memory
         public MemoryBankChunk(MemoryBankChunkTypeEnum type, int size, int initValue = -1)
         {
 #if DEBUG
-            Assert.IsFalse((type != MemoryBankChunkTypeEnum.Unknown) && 
-                            ((type == MemoryBankChunkTypeEnum.ROM) || (type == MemoryBankChunkTypeEnum.RAM_Static) || 
-                             (type == MemoryBankChunkTypeEnum.RAM_Volatile)), "'type' must be RAM or ROM!");
-            Assert.IsFalse((size >= MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64) && ((size % MemorySizeConstants.KB1) == 0), "'size' must be 1 KB to 64 KB!");
-            Assert.IsFalse((initValue >= 0) && (initValue <= 255), "'initValue' must be between 0 and 255!");
+            Assert.IsTrue((type != MemoryBankChunkTypeEnum.Unknown) && 
+                            ((type == MemoryBankChunkTypeEnum.SYS_BANK_MEM) || (type == MemoryBankChunkTypeEnum.ROM) || 
+                             (type == MemoryBankChunkTypeEnum.RAM_Static) || (type == MemoryBankChunkTypeEnum.RAM_Volatile)), "'type' must be RAM or ROM!");
+            Assert.IsTrue((size >= MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64) && ((size % MemorySizeConstants.KB1) == 0), "'size' must be 1 KB to 64 KB, in multiples of 1 KB!");
+            //Assert.IsFalse((initValue >= 0) && (initValue <= 255), "'initValue' must be between 0 and 255!");
 #endif
             // Validate the memory bank chunk type
             if (type != MemoryBankChunkTypeEnum.Unknown)
@@ -74,7 +74,7 @@ namespace CaetanoSoft.Era8bit.Memory
                 this.Type = type;
 
                 // Validate the memory bank chunk size
-                if ((size > MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64) && ((size % MemorySizeConstants.KB1) == 0))
+                if ((size >= MemorySizeConstants.KB1) && (size <= MemorySizeConstants.KB64) && ((size % MemorySizeConstants.KB1) == 0))
                 {
                     // OK, size is more or equal to 1 KB and less or equal to 64 KB, in multiples of 1 KB
                     this.Size = size;
@@ -88,13 +88,6 @@ namespace CaetanoSoft.Era8bit.Memory
                         {
                             this.MemoryChunk[i] = (byte)initValue;
                         }
-                    }
-                    else
-                    {
-                        // This memory bank chunk is invalid
-                        this.Type = MemoryBankChunkTypeEnum.Unknown;
-                        this.Size = 0;
-                        this.MemoryChunk = null;
                     }
                 }
                 else
@@ -237,18 +230,18 @@ namespace CaetanoSoft.Era8bit.Memory
         {
 #if DEBUG
             Assert.IsNotNull(chunk, "'chunk' can't be null!");
-            Assert.IsFalse((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
-            Assert.IsFalse(this.Size != chunk.Length, "'chunk.Length' must be equal to 'this.BankSize'!");
+            Assert.IsTrue((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
+            Assert.IsTrue(this.Size == chunk.Length, "'chunk.Length' must be equal to 'this.BankSize'!");
 #endif
-            if (this.IsRAM)
-            {
+            //if (this.IsRAM)
+            //{
                 if (this.Type != MemoryBankChunkTypeEnum.Unknown)
                 {
                     if ((this.Size >= 0) && (this.MemoryChunk.Length == chunk.Length))
                     {
                         // OK, copy byte values
                         chunk.CopyTo(this.MemoryChunk, 0);
-                        this.DataChanged = true;
+                        //this.DataChanged = true;
                         return true;
                     }
                     //else
@@ -262,11 +255,11 @@ namespace CaetanoSoft.Era8bit.Memory
                     // Invalid memory bank chunk
                     return false;
                 //}
-            }
+            //}
             //else
             //{
                 // Can't write to ROM
-                return false;
+                //return false;
             //}
         }
         #endregion // Class Methods

@@ -161,7 +161,6 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                 if (fileSize != 0)
                 {
                     throw new Exception("Bad file size");
-
                 }
             }
             catch (Exception ex)
@@ -202,7 +201,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
         public override List<String[]> GetInfo()
         {
             List<String[]> retList = new List<string[]>();
-            retList.Add(new String[2] { "File Name", this.FileName });
+            retList.Add(new String[2] { "File Name", Path.GetFileName(this.FileName) });
             retList.Add(new String[2] { "File Size", this.FileSize.ToString() + " Bytes" });
             retList.Add(new String[2] { "File Type Description", this.Description });
             foreach (TimexCommandCartridgeBanks TCCBank in this.TCCBanks)

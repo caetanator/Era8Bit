@@ -78,10 +78,6 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
                     {
                         mediaStream = null;
                     }
-
-                    WriteProperty("File Name", mediaFilePath);
-                    WriteProperty("File Size", (mediaStream != null) ? (mediaStream.Length.ToString()) : ("File Not Found"));
-                    WriteProperty("File Type Description", mediaObject.Description);
                 }
             }
             else
@@ -89,16 +85,13 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
                 FileStream mediaStream = null;
                 try
                 {
+                    
                     mediaStream = new FileStream(mediaFilePath, FileMode.Open, FileAccess.Read);
                 }
                 catch (Exception)
                 {
                     mediaStream = null;
                 }
-
-                WriteProperty("File Name", mediaFilePath);
-                WriteProperty("File Size", (mediaStream != null) ? (mediaStream.Length.ToString()) : ("File Not Found"));
-                WriteProperty("File Type Description", "Unknown Media Format");
             }
 
             Console.WriteLine();
@@ -121,9 +114,31 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
             }
         }
 
+        public static string[] ExpandFilePaths(string[] args)
+        {
+            var fileList = new List<string>();
+
+            foreach (var arg in args)
+            {
+                var substitutedArg = System.Environment.ExpandEnvironmentVariables(arg);
+
+                var dirPart = Path.GetDirectoryName(substitutedArg);
+                if (dirPart.Length == 0)
+                    dirPart = ".";
+
+                var filePart = Path.GetFileName(substitutedArg);
+
+                foreach (var filepath in Directory.GetFiles(dirPart, filePart))
+                    fileList.Add(filepath);
+            }
+
+            return fileList.ToArray();
+        }
+
         public static void PrintUsage()
         {
-            Console.WriteLine("Usage: MediaViewer8Bit [file | directory] [file | directory] ...");
+            Console.WriteLine(".DCK Info Viewer - (c) 2016-2023 CaetanoSoft/José Caetano Silva");
+            Console.WriteLine("Usage: DCK_InfoViewer [file | directory] [file | directory] ...");
             Console.WriteLine();
         }
 
@@ -135,15 +150,20 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
                 return;
             }
 
+            var fileList = ExpandFilePaths(args);
+
             // Set console colors
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(".DCK Info Viewer - (c) 2016-2023 CaetanoSoft/José Caetano Silva");
+            Console.ForegroundColor = ConsoleColor.Gray;
 
-            // Prosses files
+            // Process files
             try
             {
-                foreach (string path in args)
+                foreach (string path in fileList)
                 {
                     if (File.Exists(path))
                     {
@@ -169,9 +189,10 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
             }
             
             Console.WriteLine();
-
             Console.ResetColor();
+#if DEBUG
             String str = Console.ReadLine();
+#endif
         }
     }
 }

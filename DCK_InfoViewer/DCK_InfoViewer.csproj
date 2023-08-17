@@ -17,6 +17,7 @@
     <Copyright>(c) 2016-2023 by José Caetano Silva</Copyright>
     <PackageLicenseFile>GPL.txt</PackageLicenseFile>
     <Description>View Timex Sinclair 2068 (TS2068), Timex Computer (TC2068) and Unipolbrit Komputer 2086 (UK2086), Timex Command Cartridges (TCC) .DCK files information and content.</Description>
+    <StartupObject>CaetanoSof.Era8Bit.Programs.DCK_InfoViewer.DCK_InfoViewer</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
