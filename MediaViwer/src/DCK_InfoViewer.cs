@@ -1,5 +1,5 @@
 /**
- * MediaViewer.cs
+ * DCK_InfoViewer.cs
  *
  * PURPOSE
  *  Show the contents of 8-bit related files (.TZX, .TAP, .DCK, .IMG, etc.).
@@ -22,15 +22,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using CaetanoSof.Era8Bit.Library8Bit.MediaFormats;
 using System.IO;
 
-namespace CaetanoSof.Era8Bit.Programs.MediaViwer
+using CaetanoSoft.Era8bit;
+using CaetanoSoft.Era8bit.MediaFormats;
+
+namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
 {
-    public class MediaViewer
+    public class DCK_InfoViewer
     {
         private static void WriteError(String strErrorMessage)
         {
@@ -57,7 +56,7 @@ namespace CaetanoSof.Era8Bit.Programs.MediaViwer
 
         public static void ProcessFile(string mediaFilePath)
         {
-            IMediaFormat mediaObject = MediaFactory.Instance.GetMediaHandler(mediaFilePath);
+            IMediaFormat mediaObject = MediaFormatFactory.Instance.GetMediaHandler(mediaFilePath);
             if (mediaObject != null)
             {
                 List<String[]> info = mediaObject.GetInfo();
