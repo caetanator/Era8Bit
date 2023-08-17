@@ -91,19 +91,20 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
     ///			<list type="bullet">
     ///			    <item>
     ///			        <term>0</term>
-    ///			        <description>DOCK bank (TCC ROM and/or RAM up to 64 KB)</description>
+    ///			        <description>DOCK bank (TCC ROM and/or RAM up to 64 KB, in 8 KB chunks)</description>
     ///			    </item>
     ///			    <item>
     ///			        <term>1-253</term>
-    ///			        <description>Reserved banks (BEU RAM memory expansions of 64 KB)</description>
+    ///			        <description>Reserved banks (BEU RAM memory expansions of 64 KB, in 8 KB chunks)</description>
     ///			    </item>
     ///			    <item>
     ///			        <term>254</term>
-    ///			        <description>EXROM bank (Timex 2068 8 KB Extension ROM)</description>
+    ///			        <description>EXROM bank (Timex 2068 8 KB Extension ROM, starts at 4000h and repeats it self on this memory bank in all 
+    ///			        8 KB chunks above and bellow )</description>
     ///			    </item>
     ///			    <item>
     ///			        <term>255</term>
-    ///			        <description>HOME bank (Timex 2068 16 KB Home ROM + 48 KB RAM)</description>
+    ///			        <description>HOME bank (Timex 2068 16 KB Home ROM + 48 KB RAM, in 8 KB chunks)</description>
     ///			    </item>
     ///			</list>
     ///			</description>
@@ -146,7 +147,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
     /// <copyright>(c) 2016-2021 by José Caetano Silva</copyright>
     /// <license type="GPL-3">See LICENSE for full terms</license>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1, Size = 9)]
-    public struct DckHeaderStruct
+    public struct DckFileHeaderStruct
     {
         /// <summary>The memory bank identifier</summary>
         public byte MemoryBankID;

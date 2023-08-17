@@ -41,12 +41,12 @@ namespace CaetanoSoft.Era8bit.Memory
         /// Initializes a new instance of the <see cref="MemoryBankChunk" /> class.<br />
         /// This creates a new memory bank chunk.<br />
         /// <para>
-        /// If <c>type</c> is equal to <c>MemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
+        /// If <c>type</c> is equal to <c>DckFileHeaderMemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
         /// If <c>size</c> is not between 1 byte and 512 MB, the memory bank chunk is not created.<br />
         /// If <c>initValue</c> is not between 0 and 255, the memory bank chunk is not initialized with the value.
         /// </para>
         /// </summary>
-        /// <param name="id">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
+        /// <param name="id">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>DckFileHeaderMemoryBankChunkTypeEnum.Unknown</c>.</param>
         /// <param name="size">The size in bytes of the chunk (must be between 1 byte and 512 MB).</param>
         /// <param name="maxChunks">The initialize byte value for the memory bank chunk (must be between 0 and 255).</param>
         public MemoryBank(int id, int size, int numChunks)

@@ -21,4 +21,8 @@
     <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CaetanoSoft.Utils.Library\CaetanoSoft.Utils.Library.csproj" />
+  </ItemGroup>
+
 </Project>

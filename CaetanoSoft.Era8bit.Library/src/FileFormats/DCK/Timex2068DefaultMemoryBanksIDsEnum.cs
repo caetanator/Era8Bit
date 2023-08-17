@@ -45,7 +45,8 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
         DOCK = 0,
 
         /// <summary>
-        /// Replaces the TS2068/TC2068/UK2086 8 KB Extended ROM (starts at 4000h) by the one on the Timex cartridge format by ROM or RAM.
+        /// Replaces the TS2068/TC2068/UK2086 8 KB Extended ROM (starts at 4000h, and repeats it self each 8 KB above 
+        /// and bellow, on this memory bank) by the one on the Timex cartridge format by ROM or RAM.
         /// <para> use this bank.</para>
         /// </summary>
         EXROM = 254,
@@ -53,6 +54,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
         /// <summary>
         /// Replaces the TS2068/TC2068/UK2086 16 KB Home ROM (starts at 0000H) by the one on the Timex cartridge ROM or RAM.
         /// <para>"ZX Spectrum 16/48 KB", "Timex Computer 2048 Emulator" and "Timex Time Word" use this bank.</para>
+        /// This memory bank as 48 KB of RAM that can't be replaced.
         /// </summary>
         HOME = 255
     };

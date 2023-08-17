@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CaetanoSof.Utils.EndianUtils
+namespace CaetanoSoft.Utils.EndianUtils
 {
     /// <summary>
     /// Big and little endian utils for helping with the hardware architecture/CPU.

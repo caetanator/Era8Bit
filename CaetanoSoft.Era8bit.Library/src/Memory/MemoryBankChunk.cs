@@ -13,7 +13,7 @@ namespace CaetanoSoft.Era8bit.Memory
         #region Class Properties
         /// <summary>
         /// Gets or sets the type of the memory chunk. See <see cref="MemoryBankChunkTypeEnum" /> enumeration for more information.<br />
-        /// If this value is <c>MemoryBankChunkTypeEnum.Unknown</c>, them it's content is invalid. </summary>
+        /// If this value is <c>DckFileHeaderMemoryBankChunkTypeEnum.Unknown</c>, them it's content is invalid. </summary>
         /// <value>The memory chunk type.</value>
         public MemoryBankChunkTypeEnum Type { get; private set; } = MemoryBankChunkTypeEnum.Unknown;
 
@@ -34,7 +34,7 @@ namespace CaetanoSoft.Era8bit.Memory
 
         /// <summary>Gets a value indicating whether this instance is volatile RAM.</summary>
         /// <value><c>true</c> if this instance is volatile RAM; otherwise, <c>false</c>.</value>
-        public bool IsVolatilRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile); } }
+        public bool IsVolatileRAM { get { return (this.Type == MemoryBankChunkTypeEnum.RAM_Volatile); } }
 
         /// <summary>Gets a value indicating whether this instance is static RAM.</summary>
         /// <value><c>true</c> if this instance is static RAM; otherwise, <c>false</c>.</value>
@@ -50,12 +50,12 @@ namespace CaetanoSoft.Era8bit.Memory
         /// Initializes a new instance of the <see cref="MemoryBankChunk" /> class.<br />
         /// This creates a new memory bank chunk.<br />
         /// <para>
-        /// If <c>type</c> is equal to <c>MemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
+        /// If <c>type</c> is equal to <c>DckFileHeaderMemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
         /// If <c>size</c> is not between 1 byte and 512 MB, the memory bank chunk is not created.<br />
         /// If <c>initValue</c> is not between 0 and 255, the memory bank chunk is not initialized with the value.
         /// </para>
         /// </summary>
-        /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
+        /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>DckFileHeaderMemoryBankChunkTypeEnum.Unknown</c>.</param>
         /// <param name="size">The size in bytes of the chunk (must be between 1 byte and 512 MB).</param>
         /// <param name="initValue">The initialize byte value for the memory bank chunk (must be between 0 and 255).</param>
         public MemoryBankChunk(MemoryBankChunkTypeEnum type, int size, int initValue = -1)
@@ -111,11 +111,11 @@ namespace CaetanoSoft.Era8bit.Memory
         /// Initializes a new instance of the <see cref="MemoryBankChunk" /> class.<br />
         /// This creates a new memory bank chunk from a vector of bytes.<br />
         /// <para>
-        /// If <c>type</c> is equal to <c>MemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
+        /// If <c>type</c> is equal to <c>DckFileHeaderMemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
         /// If <c>chunk.Length</c> is not between 1 byte and 512 MB, the memory bank chunk is not created.<br />
         /// </para>
         /// </summary>
-        /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
+        /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>DckFileHeaderMemoryBankChunkTypeEnum.Unknown</c>.</param>
         /// <param name="chunk">The vector bytes to be copied to the chunk.</param>
         public MemoryBankChunk(MemoryBankChunkTypeEnum type, byte [] chunk) : this(type, chunk.Length, -1)
         {

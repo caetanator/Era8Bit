@@ -15,6 +15,11 @@ namespace CaetanoSoft.Era8bit.Memory
         Unknown = -1,
 
         /// <summary>
+        /// ROM memory chunk, not present, use the system memory bank ROM or RAM.
+        /// </summary>
+        SYS_BANK_MEM = 0,
+
+        /// <summary>
         /// Volatile RAM memory chunk.<br />
         /// RAM will be lost on power-down or reboot.
         /// </summary>

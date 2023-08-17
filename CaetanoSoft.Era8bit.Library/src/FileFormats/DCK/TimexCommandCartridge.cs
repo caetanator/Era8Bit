@@ -203,7 +203,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
         {
             List<String[]> retList = new List<string[]>();
             retList.Add(new String[2] { "File Name", this.FileName });
-            retList.Add(new String[2] { "File BankSize", this.FileSize.ToString() + " Bytes" });
+            retList.Add(new String[2] { "File Size", this.FileSize.ToString() + " Bytes" });
             retList.Add(new String[2] { "File Type Description", this.Description });
             foreach (TimexCommandCartridgeBank TCCBank in this.TCCBanks)
             {
