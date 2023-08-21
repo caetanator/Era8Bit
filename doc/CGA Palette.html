@@ -312,51 +312,51 @@
               <li>
                 <small><i>
                   Color number 6 <span style="color:white; background:#AA5500;">Brown (#AA5500)</span> should be
-                  <span style="color:white; background:#AAAA00;">Dark Yellow (#AAAA00)</span>, but IBM changed the hardware on it's CGA monitors
-                  to swap the colors (the brown is more ussefull than the dark yellow). Most of the clones did the same.
+                  <span style="color:white; background:#AAAA00;">Dark Yellow (#AAAA00)</span>, but IBM changed the hardware on its CGA monitors
+                  to swap the colors (the brown is more useful than the dark yellow). Most of the clones did the same.
                 </i></small>
               </li>
               <li>
                 <small><i>
                 By default, in text mode, the intensity bit (I), can't be used for the text background color because it is used as the flash bit (F).
-                So it's normaly used for the text forground color.<br>
+                So it's normally used for the text foreground color.<br>
                 This can be changed by altering a CGA register, that changes the Flash bit to Intensity bit, for the background color.<br>
-                On graphics mode, this isue doesn't exist.
+                On graphics mode, this issue doesn't exist, because it's used 4 bit (IRGB) per pixel (2 pixels for each byte) on Hi-Color mode, and
+                2 bits (palette index) per pixel (4 pixels for each byte) on Hi-Resolution mode. It can also use 1 bit per pixel (8 pixels per byte) on monochrome
+                mode.
                 </i></small>
               </li>
               <li>
-                <small><i>
-                The one byte color attribute for each character, has the following arrangement:
-                </i></small>
+                <small><i>The 1-byte color attribute for each character, has the following arrangement:<br></i></small>
                 <table>
                   <thead>
                     <tr>
-                      <th rowspan="2">&nbsp;</th>
-                      <th colspan="4" style="border-bottom: 0;"">Background</th>
-                      <th colspan="4" style="border-bottom: 0;"">Forground</th>
+                      <th rowspan="2" style="border-top: 0; border-left: 0; background-color: rgba(255, 255, 255, 0.0);"><small>&nbsp;</small></th>
+                      <th colspan="4" style="border-bottom: 0;"><small>Background</small></th>
+                      <th colspan="4" style="border-bottom: 0;"><small>Foreground</small></th>
                     </tr>
                     <tr>
-                      <th style="border-top: 0;">F/I</th>
-                      <th style="border-top: 0;">R<small><sub>p2</sub></small></th>
-                      <th style="border-top: 0;">G<small><sub>p1</sub></small></th>
-                      <th style="border-top: 0;">B<small><sub>p0</sub></small></th>
-                      <th style="border-top: 0;">I</th>
-                      <th style="border-top: 0;">R<small><sub>i2</sub></small></th>
-                      <th style="border-top: 0;">G<small><sub>i1</sub></small></th>
-                      <th style="border-top: 0;">B<small><sub>i0</sub></small></th>
+                      <th style="border-top: 0;"><small>F</small></th>
+                      <th style="border-top: 0;"><small>R<sub>p2</sub></small></th>
+                      <th style="border-top: 0;"><small>G<sub>p1</sub></small></th>
+                      <th style="border-top: 0;"><small>B<sub>p0</sub></small></th>
+                      <th style="border-top: 0;"><small>I</small></th>
+                      <th style="border-top: 0;"><small>R<sub>i2</sub></small></th>
+                      <th style="border-top: 0;"><small>G<sub>i1</sub></small></th>
+                      <th style="border-top: 0;"><small>B<sub>i0</sub></small></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Bit: </td>
-                      <td style="width: 36px;">7</td>
-                      <td style="width: 36px;">6</td>
-                      <td style="width: 36px;">5</td>
-                      <td style="width: 36px;">4</td>
-                      <td style="width: 36px;">3</td>
-                      <td style="width: 36px;">2</td>
-                      <td style="width: 36px;">1</td>
-                      <td style="width: 36px;">0</td>
+                      <td><small><b>Bit: </b></small></td>
+                      <td style="width: 34px;"><small>7</small></td>
+                      <td style="width: 34px;"><small>6</small></td>
+                      <td style="width: 34px;"><small>5</small></td>
+                      <td style="width: 34px;"><small>4</small></td>
+                      <td style="width: 34px;"><small>3</small></td>
+                      <td style="width: 34px;"><small>2</small></td>
+                      <td style="width: 34px;"><small>1</small></td>
+                      <td style="width: 34px;"><small>0</small></td>
                     </tr>
                   </tbody>
                 </table>

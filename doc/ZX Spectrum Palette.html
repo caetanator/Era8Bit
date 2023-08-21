@@ -302,16 +302,16 @@
             <ul>
               <li>
                 <small><i>
-                Color number 8 <span style="color:white; background:#000000;">Black (#00000)</span> is displayed by some clones (specialy on NTSC computers)
+                Color number 8 <span style="color:white; background:#000000;">Black (#00000)</span> is displayed by some clones (specially on NTSC computers)
                 as <span style="color:white; background:#AAAAAA;">Dark Gray (#AAAAAA)</span>.
                 </i></small>
               </li>
               <li>
                 <small><i>
-                On Sinclair ZX Spectrum +128K (Toastrack) and Sinclair ZX Spectrum +2 (Gray), if connected to a CGA monitor by the RGBI conector, the displayed
+                On Sinclair ZX Spectrum +128K (Toastrack) and Sinclair ZX Spectrum +2 (Gray), if connected to a CGA monitor by the RGBI connector, the displayed
                 colors are the ones for the CGA standard palette, being the most significant changes:<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;- color number 8 <span style="color:white; background:#000000;">Black (#00000)</span> is displayed as
-                as <span style="color:white; background:#AAAAAA;">Dark Gray (#AAAAAA)</span>;<br>
+                <span style="color:white; background:#AAAAAA;">Dark Gray (#AAAAAA)</span>;<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;- color number 6 <span style="color:white; background:#EEEE00;">Yellow (#AAAA00)</span> is displayed as
                 <span style="color:white; background:#AA5500;">Brown (#AA5500)</span>;
                 </i></small>
@@ -319,48 +319,47 @@
               <li>
                 <small><i>
                 Colors are order by GRBI, because that way they are order from the dark colors to the bright colors and that simplifies the conversion to gray scale on
-                black-and-white TVs and monochrome monitores (green, amber and blue phosfer) and improves image quality;
+                black-and-white TVs and monochrome monitors (green, amber and blue phosphor) and improves image quality;
                 </i></small>
               </li>
               <li>
                 <small><i>
-                The intensity bit (I), can't be used for the 8x8 pixel matrix background color, because it is used as the flash bit (F), by the ZX Spectrum ULA and Timex SCLD.<br>
-                Also, it's not used for the border color. It only afects the 8x8 pixel matrix forground/text color.
+                The intensity bit (I), is used for both the foreground and background color on the 8x8 pixel matrix and it can't be used on the border color.<br>
+                This is due to the way the ZX Spectrum ULA and Timex SCLD (and the equivalent on the clones) work.<br>
+                The flash bit (F), timely swaps the foreground and background colors on the 8x8 pixel matrix and it can't be used on the border color.
                 </i></small>
               </li>
               <li>
-                <small><i>
-                The one byte color attribute for each character (8x8 pixels), has the following arrangement:
-                </i></small>
+                <small><i>The 1-byte color attribute for each character (8x8 pixels), has the following arrangement:<br></i></small>
                 <table>
                   <thead>
                     <tr>
-                      <th rowspan="2">&nbsp;</th>
-                      <th colspan="4" style="border-bottom: 0;"">Paper/Background</th>
-                      <th colspan="4" style="border-bottom: 0;"">Ink/Forground</th>
+                      <th rowspan="2" style="border-top: 0; border-left: 0; background-color: rgba(255, 255, 255, 0.0);"><small>&nbsp;</small></th>
+                      <th colspan="4" style="border-bottom: 0;"><small>Paper/Background</small></th>
+                      <th colspan="4" style="border-bottom: 0;"><small>Ink/Foreground</small></th>
                     </tr>
                     <tr>
-                      <th style="border-top: 0;">F</th>
-                      <th style="border-top: 0;">G<small><sub>p2</sub></small></th>
-                      <th style="border-top: 0;">R<small><sub>p1</sub></small></th>
-                      <th style="border-top: 0;">B<small><sub>p0</sub></small></th>
-                      <th style="border-top: 0;">I</th>
-                      <th style="border-top: 0;">G<small><sub>i2</sub></small></th>
-                      <th style="border-top: 0;">R<small><sub>i1</sub></small></th>
-                      <th style="border-top: 0;">B<small><sub>i0</sub></small></th>
+                      <th style="border-top: 0;"><small>F</small></th>
+                      <th style="border-top: 0;"><small>G<sub>p2</sub></small></th>
+                      <th style="border-top: 0;"><small>R<sub>p1</sub></small></th>
+                      <th style="border-top: 0;"><small>B<sub>p0</sub></small></th>
+                      <th style="border-top: 0;"><small>I</small></th>
+                      <th style="border-top: 0;"><small>G<sub>i2</sub></small></th>
+                      <th style="border-top: 0;"><small>R<sub>i1</sub></small></th>
+                      <th style="border-top: 0;"><small>B<sub>i0</sub></small></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Bit: </td>
-                      <td style="width: 36px;">7</td>
-                      <td style="width: 36px;">6</td>
-                      <td style="width: 36px;">5</td>
-                      <td style="width: 36px;">4</td>
-                      <td style="width: 36px;">3</td>
-                      <td style="width: 36px;">2</td>
-                      <td style="width: 36px;">1</td>
-                      <td style="width: 36px;">0</td>
+                      <td><small><b>Bit: </b></small></td>
+                      <td style="width: 34px;"><small>7</small></td>
+                      <td style="width: 34px;"><small>6</small></td>
+                      <td style="width: 34px;"><small>5</small></td>
+                      <td style="width: 34px;"><small>4</small></td>
+                      <td style="width: 34px;"><small>3</small></td>
+                      <td style="width: 34px;"><small>2</small></td>
+                      <td style="width: 34px;"><small>1</small></td>
+                      <td style="width: 34px;"><small>0</small></td>
                     </tr>
                   </tbody>
                 </table>
