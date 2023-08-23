@@ -117,7 +117,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                         break;
 
                     default:
-                        strAux = "Reserved REU Memory Bank ID " + this.MemoryBankID;
+                        strAux = "Reserved REU Memory Bank ID " + this.MemoryBankID.ToString().Trim();
                         break;
                 }
                 listRet.Add(new String[2] { "Cartridge Memory Bank ID", strAux });
@@ -135,23 +135,39 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                     {
                         if ((this.structDCK.MemoryBankChunkType[i] & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG)
                         {
-                            strAux = "RAM (Static)";
+                            strAux = "RAM (Static) from Cartridge";
                         }
                         else
                         {
-                            strAux = "ROM";
+                            strAux = "ROM from Cartridge";
                         }
-                        
                     }
                     else
                     {
                         if ((this.structDCK.MemoryBankChunkType[i] & CHUNK_IS_RAM_FLAG) == CHUNK_IS_RAM_FLAG)
                         {
-                            strAux = "RAM (Volatile)";
+                            strAux = "RAM (Volatile) from Cartridge";
                         }
                         else
                         {
-                            strAux = "ROM/RAM from HOME Bank";
+                            switch (this.MemoryBankID)
+                            {
+                                case (int)Timex2068DefaultMemoryBanksIDsEnum.HOME:
+                                case (int)Timex2068DefaultMemoryBanksIDsEnum.DOCK:
+                                    strAux = (i < 2) ? "ROM" : "RAM";
+                                    strAux = strAux + " from HOME Bank";
+                                    break;
+
+                                case (int)Timex2068DefaultMemoryBanksIDsEnum.EXROM:
+                                    strAux = (i == 2) ? "ROM" : "ROM (Copy)";
+                                    strAux = strAux + " from EXROM Bank";
+                                    break;
+
+                                default:
+                                    strAux = "Return 255 (FFh) from any memory position";
+                                    break;
+                            }
+                            
                         }
                     }
                     uint reserved = this.structDCK.MemoryBankChunkType[i] & CHUNK_RESERVED_MASK;
@@ -391,7 +407,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                             break;
 
                         case DckFileHeaderMemoryBankChunkTypeEnum.RAM_ON_FILE:
-                            // This is a pressinstent 8KB memory bank chunk
+                            // This is a persistent 8KB memory bank chunk
                             this.MemoryBanksChunks[i] = new MemoryBankChunk((MemoryBankChunkTypeEnum)nextByte, MemorySizeConstants.KB8, 0x00);
                             ++this.NumberOf8KChunksInFile;
                             break;
@@ -414,7 +430,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                     if (this.MemoryBankID == (int)Timex2068DefaultMemoryBanksIDsEnum.EXROM)
                     {
                         // Fix the partial decoding 
-                        // This memory bank is only partialy decoded (memory bank chunk 2), so the Extension ROM is shadowed in 8 KB chunks
+                        // This memory bank is only partially decoded (memory bank chunk 2), so the Extension ROM is shadowed in 8 KB chunks
                         // from addresses 16384 to 24575 ([4000h-5FFFh])
                         if (i == 2)
                         {

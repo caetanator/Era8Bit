@@ -33,20 +33,33 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
     {
         private static void WriteError(String strErrorMessage)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(strErrorMessage);
-            Console.ForegroundColor = ConsoleColor.White;
+            if (Console.IsOutputRedirected == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(strErrorMessage);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.Error.WriteLine(strErrorMessage);
+            }
         }
 
         private static void WriteProperty(String strProperty, String strValue)
         {
             if(strProperty != null)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                if (Console.IsOutputRedirected == false)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
                 Console.Write("{0}: ", strProperty);
             }
 
-            Console.ForegroundColor = ConsoleColor.White;
+            if (Console.IsOutputRedirected == false)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+            }
             if (strValue != null)
             {
                 Console.Write(strValue);
@@ -85,7 +98,6 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
                 FileStream mediaStream = null;
                 try
                 {
-                    
                     mediaStream = new FileStream(mediaFilePath, FileMode.Open, FileAccess.Read);
                 }
                 catch (Exception)
@@ -153,13 +165,20 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
             var fileList = ExpandFilePaths(args);
 
             // Set console colors
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
+            if (Console.IsOutputRedirected == false)
+            {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine();
+            }
             Console.WriteLine(".DCK Info Viewer - (c) 2016-2023 CaetanoSoft/José Caetano Silva");
-            Console.ForegroundColor = ConsoleColor.Gray;
-
+            Console.WriteLine();
+            if (Console.IsOutputRedirected == false)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+            }
             // Process files
             try
             {
@@ -183,13 +202,15 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
             }
             catch (Exception ex)
             {
-
                 WriteError("Exception Error: ");
                 WriteError(ex.Message);
             }
             
             Console.WriteLine();
-            Console.ResetColor();
+            if (Console.IsOutputRedirected == false)
+            {
+                Console.ResetColor();
+            }
 #if DEBUG
             String str = Console.ReadLine();
 #endif
