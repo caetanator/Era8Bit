@@ -18,6 +18,9 @@ https://en.wikipedia.org/wiki/BMP_file_format
 http://www.fileformat.info/format/bmp/egff.htm
 http://www.fileformat.info/format/os2bmp/egff.htm
 http://fileformats.archiveteam.org/wiki/Windows_DDB
+https://komh.github.io/os2books/os2tk45/gpi3/027_L2H_BITMAPINFO2FieldulCo.html
+https://github.com/bitwiseworks/os2tk45/blob/master/h/pmbitmap.h
+https://flylib.com/books/en/4.267.1.73/1/
 
 
 # Supported BMP File Formats

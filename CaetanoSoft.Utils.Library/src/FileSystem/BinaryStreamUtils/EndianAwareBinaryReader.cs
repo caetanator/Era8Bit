@@ -103,26 +103,12 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
 
             if (this.swapBytesEndian)
             {
-                // Convert 16-bit unsigned integer to array
-                /*
-                byte[] buffer = new byte[2];
-                // LE
-                buffer[1] = (byte)(value >> 8);
-                buffer[0] = (byte)(value);
-                //BE
-                buffer[0] = (byte)(value >> 8);
-                buffer[1] = (byte)(value);
-                 */
                 byte[] buffer = BitConverter.GetBytes(value);
                 Array.Reverse(buffer);
 
                 // Converts back to 16-bit unsigned integer
                 value = BitConverter.ToUInt16(buffer, 0);
             }
-            //else
-            //{
-
-            //}
 
             return value;
         }

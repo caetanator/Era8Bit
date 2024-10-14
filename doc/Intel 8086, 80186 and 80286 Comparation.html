@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <!-- HTML v5 Head -->
+  <head>
+    <!-- * Metadata * -->
+    <meta charset="utf-8">
+    <meta name="robots" content="all">
+    <meta name="description" content="Intel CPU 8086, 80186, 80286, 80386 and 80486 comparation table.">
+    <meta name="keywords" content="Jos&eacute; Caetano Silva, CaetanoSoft, Intel CPU, 8086, 80186, 80286, 80386, 80486, x86, i286, i386, i486">
+    <meta name="author" content="&copy; 2023-2024 Jos&eacute; Caetano Silva. All Rights Reserved.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Copyright Link -->
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-sa/3.0/">
+    <!-- * Page Shortcut Icon * -->
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <!-- * Page Title * -->
+    <title>Intel CPU 8086, 80186, 80286, 80386 and 80486 Comparation Table</title>
+    <!-- * Cascading Style Sheets v3.0 * -->
+    <style>
+      /* HTML BODY Tag Default Style */
+      body {
+        width: auto;
+        height: auto;
+        margin: 20px;
+        border-width: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+        color: #000000;
+        text-align: left;
+        vertical-align: top;
+        font: normal 10pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        align-items: center;
+        align-content: space-evenly;
+        justify-content: space-evenly;
+      }
+      /* HTML P Tag Default Style */
+      p {
+        text-align: justify;
+        hyphens: auto;
+      }
+      /* HTML H1 Tag Default Style */
+      h1 {
+        color: #0C0CFF;
+        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-size: 20pt;
+        font-weight: bold !important;
+        text-align: center;
+        text-decoration: underline;
+      }
+      /* HTML H2 Tag Default Style */
+      h2 {
+        color: #0C0CFF;
+        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-size: 16pt;
+        font-weight: bold;
+      }
+      /* HTML PRE Tag Default Style */
+      pre {
+        margin: 0;
+        margin-left: auto;
+        margin-right: auto;
+        border-width: 0;
+        padding: 0;
+      }
+      /* HTML CODE Tag Default Style */
+      code {
+        font-family: "Lucida Console", Lucida, "Courier New", Courier, monospace;
+        font-size: 10pt;
+        background-color: #C5EDC9;
+      }
+      /* HTML CAPTION Tag Default Style */
+      caption {
+        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-size: 12pt !important;
+      }
+      /* HTML TABLE Tag Default Style */
+      table {
+        border: none;
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 94%;
+      }
+      /* HTML TH Tag Default Style */
+      th {
+        background-color: #F0F0F0;
+        border: 4px solid #000000;
+        border-collapse: collapse;
+        padding: 4px;
+        width: auto;
+        height: auto;
+        text-align: center;
+        vertical-align: middle;
+        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font-weight: bold;
+        hyphens: none;
+      }
+      /* HTML TD Tag Default Style */
+      td {
+        border: 4px solid #000000;
+        border-collapse: collapse;
+        padding: 4px;
+        width: auto;
+        height: auto;
+        text-align: center;
+        vertical-align: middle;
+        font: normal 10pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        hyphens: auto;
+      }
+      td ul {
+        list-style-position: outside;
+        margin: 0;
+        border-width: 0;
+        padding: 0;
+      }
+      td ul li {
+        margin-left: 30px;
+        border-width: 0;
+        padding: 2px;
+      }
+      .classTdAsTh {
+        background-color: #F0F0F0;
+        text-align: left;
+        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font-weight: bold;
+        width: none;
+        hyphens: none;
+      }
+      /* CSS Class Style for no border on the bottom */
+      .classNoBorderBottom {
+        border-bottom: 4px none #FFFFFF !important;
+      }
+      /* CSS Class Style for no border on the top */
+      .classNoBorderTop {
+        border-top: 4px none #FFFFFF !important;
+      }
+      /* CSS Class Style for no border on the left */
+      .classNoBorderLeft {
+        border-left: 4px none #FFFFFF !important;
+      }
+      /* CSS Class Style for no background color */
+      .classNoBackgroundColor {
+        background-color: transparent; !important;
+      }
+      /* CSS Class Style for text align left */
+      .classTextAlingLeft {
+        text-align: left !important;
+      }
+      /* CSS Class Style for text align center */
+      .classTextAlingCenter {
+        text-align: center !important;
+      }
+      /* CSS Class Style for center table in table cell */
+      .classTableInTableCenter {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      /* CSS Class Style for DIV CODE */
+      .divCode {
+        background: repeating-linear-gradient( 180deg, #C5EDC9, #C5EDC9 20px, #FEFEFE 20px, #FEFEFE 40px);
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 24px;
+        margin-right: 24px;
+        border-width: 0;
+        padding: 0;
+        max-width: 94%;
+      }
+      .divCode code {
+        background-color: inherit;
+        line-height: 20px;
+      }
+      /* Override styles when printing */
+      @media print {
+        body {
+          size: A4;
+          margin: 1.5cm;
+        }
+        h1 {
+          page-break-before: always;
+        }
+        h1, h2, h3, h4, h5 {
+          page-break-after: avoid;
+        }
+        table, figure {
+          page-break-inside: avoid;
+        }
+      }
+      /* Override styles when printing as a book */
+      /* Target all pages */
+      @page {
+        size: A4;
+        margin: 1.5cm;
+        h1 {
+          page-break-before: always;
+        }
+        h1, h2, h3, h4, h5 {
+          page-break-after: avoid;
+        }
+        table, figure {
+          page-break-inside: avoid;
+        }
+      }
+    </style>
+    <!-- * ECMA JavaScript v6.0/2015 * -->
+    <script>
+    <!-- * ECMA JavaScript v6.0/2015 * -->
+    <script>
+      // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-v3-or-Later
+      
+      // @license-end
+    </script>
+  </head>
+  <!-- * HTML v5 Body * -->
+  <body lang="en">
+    <h1>Intel CPU 8086, 80186, 80286, 80386 and 80486 Comparation Table</h1>
+    <p>&nbsp;</p>
+    <table id="Table1">
+      <caption><b>Table 1:</b> Intel CPU 8086, 80186, 80286, 80386 and 80486 Comparation Table</caption>
+      <thead>
+        <tr>
+          <th class="classNoBorderTop classNoBorderLeft classNoBackgroundColor" style="min-width: 250px;"><small>&nbsp;</small></th>
+          <th style="min-width: 140px;">Intel 8086 Microprocessor</th>
+          <th style="min-width: 140px;">Intel 8088 Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80186 Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80286 Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80386(DX) Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80386SX Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80386SL Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80486DX Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80486SX Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80486SL Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80486DX2 Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80486SX2 Microprocessor</th>
+          <th style="min-width: 140px;">Intel 80486DX4 Microprocessor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="classTdAsTh">Released Date:</td>
+          <td>June 1978</td>
+          <td>June 1979</td>
+          <td>January 1982</td>
+          <td>February 1982</td>
+          <td>October 1985</td>
+          <td>June 1988</td>
+          <td>October 1990</td>
+          <td>April 1989</td>
+          <td>April 1991</td>
+          <td>November 1992</td>
+          <td>March 1992</td>
+          <td>March 1994</td>
+          <td>March 1994</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">CPU Internal Architecture:</td>
+          <td>16-bit processor</td>
+          <td>16-bit processor</td>
+          <td>16-bit processor</td>
+          <td>16-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+          <td>32-bit processor</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">CPU Data Bus Lines:</td>
+          <td>16-bit data bus</td>
+          <td>8-bit data bus</td>
+          <td>16-bit data bus</td>
+          <td>16-bit data bus</td>
+          <td>32-bit data bus</td>
+          <td>16-bit data bus</td>
+          <td>16-bit data bus</td>
+          <td>32-bit data bus</td>
+          <td>32-bit data bus</td>
+          <td>32-bit data bus</td>
+          <td>32-bit data bus</td>
+          <td>32-bit data bus</td>
+          <td>32-bit data bus</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">CPU Address Bus Lines:</td>
+          <td>Segmented 20-bit address bus</td>
+          <td>Segmented 20-bit address bus</td>
+          <td>Segmented 20-bit address bus</td>
+          <td>Segmented 24-bit address bus</td>
+          <td>Flat 32-bit address bus</td>
+          <td>Flat 24-bit address bus</td>
+          <td>Flat 24-bit address bus</td>
+          <td>Flat 32-bit address bus</td>
+          <td>Flat 32-bit address bus</td>
+          <td>Flat 32-bit address bus</td>
+          <td>Flat 32-bit address bus</td>
+          <td>Flat 32-bit address bus</td>
+          <td>Flat 32-bit address bus</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">Memory Addressing Modes:</td>
+          <td>Real Mode</td>
+          <td>Real Mode</td>
+          <td>Real Mode</td>
+          <td>Real Mode; Protected Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+          <td>Real Mode; Protected Mode; Virtual Mode</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">Maximum Physical Memory:</td>
+          <td>2<sup>20</sup>&nbsp;=&nbsp;1&nbsp;MB physical memory</td>
+          <td>2<sup>20</sup>&nbsp;=&nbsp;1&nbsp;MB physical memory</td>
+          <td>2<sup>20</sup>&nbsp;=&nbsp;1&nbsp;MB physical memory</td>
+          <td>2<sup>24</sup>&nbsp;=&nbsp;16&nbsp;MB physical memory</td>
+          <td>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB physical memory</td>
+          <td>2<sup>24</sup>&nbsp;=&nbsp;16&nbsp;MB physical memory</td>
+          <td>2<sup>24</sup>&nbsp;=&nbsp;16&nbsp;MB physical memory</td>
+          <td>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB physical memory</td>
+          <td>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB physical memory</td>
+          <td>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB physical memory</td>
+          <td>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB physical memory</td>
+          <td>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB physical memory</td>
+          <td>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB physical memory</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">Maximum Virtual Memory:</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>30</sup>&nbsp;=&nbsp;1&nbsp;GB virtual address, in protected mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            <ul>
+              <li>2<sup>32</sup>&nbsp;=&nbsp;4&nbsp;GB virtual address, in protected mode</li>
+              <li>16381 segments of up to 4&nbsp;GB each = 64&nbsp;TB of virtual memory, in virtual mode</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">Prefetch Queue:</td>
+          <td>3 x 2 = 6-byte</td>
+          <td>3 x 2 = 6-byte</td>
+          <td>3 x 2 = 6-byte</td>
+          <td>3 x 2 = 6-byte</td>
+          <td>4 x 4 = 16-byte</td>
+          <td>4 x 4 = 16-byte</td>
+          <td>4 x 4 = 16-byte</td>
+          <td>2 x 16 = 32-byte</td>
+          <td>2 x 16 = 32-byte</td>
+          <td>2 x 16 = 32-byte</td>
+          <td>2 x 16 = 32-byte</td>
+          <td>2 x 16 = 32-byte</td>
+          <td>2 x 16 = 32-byte</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">L1 Cache:</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td>0 KB or 16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>0 KB or 16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>0 KB or 16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>8 KB Integrated on the CPU chip</td>
+          <td>8 KB Integrated on the CPU chip</td>
+          <td>8 KB Integrated on the CPU chip</td>
+          <td>8 KB Integrated on the CPU chip</td>
+          <td>8 KB Integrated on the CPU chip</td>
+          <td>16 KB Integrated on the CPU chip</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">L2 Cache:</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td class="classTextAlingCenter" style="color: #FF0000">Not supported</td>
+          <td>16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>16 to 64 KB on the motherboard (FSB frequency)</td>
+          <td>16 to 64 KB on the motherboard (FSB frequency)</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">CPU Clock Rates (in MHz):</td>
+          <td>4; 5; 8; 10</td>
+          <td>4.77/5; 8; 10</td>
+          <td>6; 8; 10; 16; 20; 25; 33; 40</td>
+          <td>4; 6; 8; 12.5; 16; 20; 25</td>
+          <td>12.5/16; 20; 25; 33</td>
+          <td>16; 20; 25; 33</td>
+          <td>20; 25</td>
+          <td>25; 33; 50</td>
+          <td>16; 20; 25; 33</td>
+          <td>20; 25; 33</td>
+          <td>40; 50; 66</td>
+          <td>50; 66</td>
+          <td>75; 100</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">FSB Clock Rates (in MHz):</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Same as CPU clock frequency</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Same as CPU clock frequency</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Same as CPU clock frequency</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Same as CPU clock frequency</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Same as CPU clock frequency</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Same as CPU clock frequency</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Same as CPU clock frequency</td>
+          <td>16; 20; 25; 33; 50</td>
+          <td>16; 20; 25; 33; 50</td>
+          <td>16; 20; 25; 33; 50</td>
+          <td>16; 20; 25; 33; 50</td>
+          <td>16; 20; 25; 33; 50</td>
+          <td>16; 20; 25; 33; 50</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">Floating-Point Unit (FPU):</td>
+          <td>Intel 8087 Math Coprocessor</td>
+          <td>Intel 8087 Math Coprocessor</td>
+          <td>Intel 80187 Math Coprocessor</td>
+          <td>Intel 80287 Math Coprocessor</td>
+          <td>Intel 80387(DX) Math Coprocessor</td>
+          <td>Intel 80387SX Math Coprocessor</td>
+          <td>Intel 80387SL Math Coprocessor</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Integrated on the CPU chip</td>
+          <td>Intel 80487SX Math Coprocessor</td>
+          <td>Intel 80487SL Math Coprocessor</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Integrated on the CPU chip</td>
+          <td>Intel 80487SX2 Math Coprocessor</td>
+          <td class="classTextAlingCenter" style="color: #00FF00">Integrated on the CPU chip</td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">Integrated Circuitry (IC) Packaging:</td>
+           <td class="classTextAlingLeft">
+            Available with 29K million transistors in:
+            <ul>
+              <li>40-pin Dual In-line Package (DIP) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 29K million transistors in:
+            <ul>
+              <li>40-pin surface-mounted Plastic Leaded Chip Carrier (PLCC);</li>
+              <li>40-pin Dual In-line Package (DIP) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 55K million transistors in:
+            <ul>
+              <li>68-pin surface-mounted Plastic Leaded Chip Carrier (PLCC);</li>
+              <li>68-pin Ceramic Leadless Chip Carrier (CLCC);</li>
+              <li>68-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 134K million transistors in:
+            <ul>
+              <li>68-pin surface-mounted Plastic Leaded Chip Carrier (PLCC);</li>
+              <li>68-pin Ceramic Leadless Chip Carrier (CLCC);</li>
+              <li>68-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 275K million transistors in:
+            <ul>
+              <li>132-pin surface-mounted Plastic Quad Flat Package (PQFP);</li>
+              <li>132-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 275K million transistors in:
+            <ul>
+              <li>100-pin surface-mounted Bumpered Quad Flat Package (BQFP);</li>
+              <li>88-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 855K million transistors in:
+            <ul>
+              <li>100-pin surface-mounted Bumpered Quad Flat Package (BQFP);</li>
+              <li>88-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 1.2 million transistors in:
+            <ul>
+              <li>196-pin surface-mounted Plastic Quad Flat Package (PQFP);</li>
+              <li>208-pin surface-mounted Small Quad Flat Package (SQFP);</li>
+              <li>169-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 1.185 million transistors in:
+            <ul>
+              <li>196-pin surface-mounted Plastic Quad Flat Package (PQFP);</li>
+              <li>208-pin surface-mounted Small Quad Flat Package (SQFP);</li>
+              <li>169-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 1.4 million transistors in:
+            <ul>
+              <li>196-pin surface-mounted Plastic Quad Flat Package (PQFP);</li>
+              <li>208-pin surface-mounted Small Quad Flat Package (SQFP);</li>
+              <li>169-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 1.4 million transistors in:
+            <ul>
+              <li>196-pin surface-mounted Plastic Quad Flat Package (PQFP);</li>
+              <li>208-pin surface-mounted Small Quad Flat Package (SQFP);</li>
+              <li>169-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 1.3 million transistors in:
+            <ul>
+              <li>196-pin surface-mounted Plastic Quad Flat Package (PQFP);</li>
+              <li>208-pin surface-mounted Small Quad Flat Package (SQFP);</li>
+              <li>169-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+          <td class="classTextAlingLeft">
+            Available with 1.6 million transistors in:
+            <ul>
+              <li>196-pin surface-mounted Plastic Quad Flat Package (PQFP);</li>
+              <li>208-pin surface-mounted Small Quad Flat Package (SQFP);</li>
+              <li>169-pin Pin Grid Array (PGA) package.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="classTdAsTh">Notes:</td>
+          <td>
+            DMA channels, programmable interrupt controller, programmable timers,
+            programmable chip select logic are not incorporated in the 8086 processor
+          </td>
+          <td>
+            DMA channels, programmable interrupt controller, programmable timers,
+            programmable chip select logic are not incorporated in the 8088 processor
+          </td>
+          <td>
+            DMA channels, programmable interrupt controller, programmable timers,
+            programmable chip select logic are not incorporated in the 80186 processor
+          </td>
+          <td>
+            High-speed DMA channels, programmable interrupt controller, programmable timers,
+            programmable chip select logic are incorporated in the 80286 processor
+          </td>
+          <td>DX -&gt; Double-word eXternal</td>
+          <td>SX -&gt; Single-word eXternal</td>
+          <td>
+            SL -&gt; Single-word external Low-power<br>
+            Integrated CPU cache, ISA bus and memory controllers
+          </td>
+          <td>DX -&gt; Double-word eXternal</td>
+          <td>SX -&gt; Single-word eXternal</td>
+          <td>SX -&gt; Single-word eXternal</td>
+          <td>
+            DX2 -&gt; Double-word eXternal 2xFSB<br>
+            Internal CPU 2 x FSB clock multiplier
+          </td>
+          <td>
+            SX2 -&gt; Single-word eXternal 2xFSB<br>
+            Internal CPU 2 x FSB clock multiplier
+          </td>
+          <td>
+            DX4 -&gt; Double-word eXternal 3xFSB<br>
+            Internal CPU 3 x FSB clock multiplier
+          </td>
+        </tr>
+    </table>
+    <p>&nbsp;</p>
+  </body>
+</html>

@@ -19,7 +19,7 @@
     <style>
       /* HTML BODY Tag Default Style */
       body {
-        width: 100%;
+        width: auto;
         height: auto;
         margin: 20px;
         border-width: 0;
@@ -28,7 +28,7 @@
         color: #000000;
         text-align: left;
         vertical-align: top;
-        font: normal 12pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        font: normal 10pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
         align-items: center;
         align-content: space-evenly;
         justify-content: space-evenly;
@@ -42,7 +42,7 @@
       h1 {
         color: #0C0CFF;
         font-family: Garamond, Georgia, "Times New Roman", Times, serif;
-        font-size: 26pt;
+        font-size: 20pt;
         font-weight: bold !important;
         text-align: center;
         text-decoration: underline;
@@ -50,8 +50,8 @@
       /* HTML H2 Tag Default Style */
       h2 {
         color: #0C0CFF;
-        font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-        font-size: 18pt;
+        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-size: 16pt;
         font-weight: bold;
       }
       /* HTML PRE Tag Default Style */
@@ -65,16 +65,17 @@
       /* HTML CODE Tag Default Style */
       code {
         font-family: "Lucida Console", Lucida, "Courier New", Courier, monospace;
-        font-size: 12pt;
+        font-size: 10pt;
         background-color: #C5EDC9;
       }
       /* HTML CAPTION Tag Default Style */
       caption {
         font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-size: 12pt !important;
       }
       /* HTML TABLE Tag Default Style */
       table {
-        border: 4px solid #000000;
+        border: none;
         border-collapse: collapse;
         margin-left: auto;
         margin-right: auto;
@@ -85,23 +86,45 @@
         background-color: #F0F0F0;
         border: 4px solid #000000;
         border-collapse: collapse;
+        padding: 4px;
         width: auto;
         height: auto;
         text-align: center;
         vertical-align: middle;
-        font: normal 14pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
         font-weight: bold;
+        hyphens: none;
       }
       /* HTML TD Tag Default Style */
       td {
         border: 4px solid #000000;
         border-collapse: collapse;
+        padding: 4px;
         width: auto;
         height: auto;
         text-align: center;
         vertical-align: middle;
-        font: normal 12pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        font: normal 10pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
         hyphens: auto;
+      }
+      td ul {
+        list-style-position: outside;
+        margin: 0;
+        border-width: 0;
+        padding: 0;
+      }
+      td ul li {
+        margin-left: 30px;
+        border-width: 0;
+        padding: 2px;
+      }
+      .classTdAsTh {
+        background-color: #F0F0F0;
+        text-align: left;
+        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font-weight: bold;
+        width: none;
+        hyphens: none;
       }
       /* CSS Class Style for no border on the bottom */
       .classNoBorderBottom {
@@ -111,11 +134,30 @@
       .classNoBorderTop {
         border-top: 4px none #FFFFFF !important;
       }
+      /* CSS Class Style for no border on the left */
+      .classNoBorderLeft {
+        border-left: 4px none #FFFFFF !important;
+      }
+      /* CSS Class Style for no background color */
+      .classNoBackgroundColor {
+        background-color: transparent; !important;
+      }
       /* CSS Class Style for text align left */
       .classTextAlingLeft {
         text-align: left !important;
       }
-       /* CSS Class Style for DIV CODE */
+      /* CSS Class Style for text align center */
+      .classTextAlingCenter {
+        text-align: center !important;
+      }
+      /* CSS Class Style for center table in table cell */
+      .classTableInTableCenter {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      /* CSS Class Style for DIV CODE */
       .divCode {
         background: repeating-linear-gradient( 180deg, #C5EDC9, #C5EDC9 20px, #FEFEFE 20px, #FEFEFE 40px);
         margin-top: 0;
@@ -133,12 +175,33 @@
       /* Override styles when printing */
       @media print {
         body {
-          margin: 0;
+          size: A4;
+          margin: 1.5cm;
+        }
+        h1 {
+          page-break-before: always;
+        }
+        h1, h2, h3, h4, h5 {
+          page-break-after: avoid;
+        }
+        table, figure {
+          page-break-inside: avoid;
         }
       }
+      /* Override styles when printing as a book */
       /* Target all pages */
       @page {
-        margin: 1cm;
+        size: A4;
+        margin: 1.5cm;
+        h1 {
+          page-break-before: always;
+        }
+        h1, h2, h3, h4, h5 {
+          page-break-after: avoid;
+        }
+        table, figure {
+          page-break-inside: avoid;
+        }
       }
     </style>
     <!-- * ECMA JavaScript v6.0/2015 * -->
@@ -152,8 +215,8 @@
   <body lang="en">
     <h1>Sinclair ZX Spectrum and Clones Palette - 15 Colors</h1>
     <p>&nbsp;</p>
-    <table style="max-width: 90%;">
-      <caption>Full Sinclair ZX Spectrum and Clones 15-Color Palette</caption>
+    <table id="Table1">
+      <caption><b>Table 1:</b> Full Sinclair ZX Spectrum and Clones 15-Color Palette</caption>
       <thead>
         <tr>
           <th rowspan="2">Color<br>Number</th>
@@ -334,7 +397,7 @@
                 <table>
                   <thead>
                     <tr>
-                      <th rowspan="2" style="border-top: 0; border-left: 0; background-color: rgba(255, 255, 255, 0.0);"><small>&nbsp;</small></th>
+                      <th rowspan="2" class="classNoBorderTop classNoBorderLeft classNoBackgroundColor"><small>&nbsp;</small></th>
                       <th colspan="4" style="border-bottom: 0;"><small>Paper/Background</small></th>
                       <th colspan="4" style="border-bottom: 0;"><small>Ink/Foreground</small></th>
                     </tr>
@@ -351,7 +414,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td><small><b>Bit: </b></small></td>
+                      <td class="classTdAsTh"><small>Bit:</small></td>
                       <td style="width: 34px;"><small>7</small></td>
                       <td style="width: 34px;"><small>6</small></td>
                       <td style="width: 34px;"><small>5</small></td>

@@ -1,11 +1,8 @@
-﻿// Copyright (c) Six Labors and contributors.
-// Licensed under the Apache License, Version 2.0.
-
+﻿
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using SixLabors.ImageSharp.Memory;
-using SixLabors.ImageSharp.PixelFormats;
+
 
 namespace SixLabors.ImageSharp.Formats.Bmp
 {
@@ -231,7 +228,7 @@ namespace SixLabors.ImageSharp.Formats.Bmp
 
         /// <summary>
         /// Looks up color values and builds the image from de-compressed RLE8 data.
-        /// Compresssed RLE8 stream is uncompressed by <see cref="UncompressRle8(int, Buffer{byte})"/>
+        /// Compressed RLE8 stream is uncompressed by <see cref="UncompressRle8(int, Buffer{byte})"/>
         /// </summary>
         /// <typeparam name="TPixel">The pixel format.</typeparam>
         /// <param name="pixels">The <see cref="PixelAccessor{TPixel}"/> to assign the palette to.</param>
@@ -565,7 +562,7 @@ namespace SixLabors.ImageSharp.Formats.Bmp
             if ((SourcePreRotateMask & (uint)this.infoHeader.Compression) == SourcePreRotateMask)
             {
                 this.infoHeader.IsSourcePreRotate = true;
-                this.infoHeader.Compression = (BmpCompression)((uint)this.infoHeader.Compression & (~SourcePreRotateMask))
+                this.infoHeader.Compression = (BmpCompression)((uint)this.infoHeader.Compression & (~SourcePreRotateMask));
 				// TODO: What to do with this?
             }
 

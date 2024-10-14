@@ -205,48 +205,58 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
 
         /// <summary>
         /// Specifies the color space of the DIB.
-        /// <see cref="BmpColorSpace"/>
+        /// <see cref="EnumColorSpace"/>
         /// </summary>
         public uint ColorSpaceType;
 
         /// <summary>
         /// A structure that specifies the x, y and z coordinates of the three colors that correspond to the
         /// red, green and blue endpoints for the logical color space associated with the bitmap. <see cref="WinCieXyzTriple"/>.
-        /// This member is ignored unless the <c>Win32InfoHeaderV5.ColorSpaceType</c> member specifies <seealso cref="BmpColorSpace.Calibrated_RGB"/>.
+        /// This member is ignored unless the <c>Win32InfoHeaderV5.ColorSpaceType</c> member specifies <seealso cref="EnumColorSpace.Calibrated_RGB"/>.
         /// <para>
         /// <b>Note:</b> A color space is a model for representing color numerically in terms of three or more coordinates.
         /// For example, the RGB color space represents colors in terms of the red, green and blue coordinates.
         /// </para>
         /// </summary>
-        public WinCieXyzTriple Endpoints;
+        public Win32CieXyzTriple Endpoints;
 
         /// <summary>
         /// Tone response curve for red.
         /// This member is ignored unless color values are calibrated RGB values and <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <c>Win32InfoHeaderV5.ColorSpaceType</c>.
-        /// Specify in unsigned fixed 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.
 		///
-		/// The required DWORD bit format for the lcsGammaRed, lcsGammaGreen, and lcsGammaBlue is an 8.8 fixed point integer left-shifted
+		/// The required <c>DWORD</c> bit format for the  <c>GammaRed</c> is an 8.8 fixed point integer left-shifted
 		/// by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
 		/// of the 32-bit DWORD is:
-		///        0x00000000nnnnnnnnFFFFFFFF00000000
+		///        0x00000000nnnnnnnnffffffff00000000
+		/// <remarks>Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.</remarks>
 		/// <seealso href="https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-logcolorspacea">See this Microsoft link for more information.</seealso>
-        /// <see cref="BmpColorSpace.Calibrated_RGB"/>.
+        /// <see cref="EnumColorSpace.Calibrated_RGB"/>.
         /// </summary>
         public uint GammaRed;
 
         /// <summary>
         /// Tone response curve for green.
         /// This member is ignored unless color values are calibrated RGB values and <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <c>Win32InfoHeaderV5.ColorSpaceType</c>.
-        /// Specify in unsigned fixed 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.
-        /// <see cref="BmpColorSpace.Calibrated_RGB"/>.
+		///
+		/// The required <c>DWORD</c> bit format for the  <c>GammaGreen</c> is an 8.8 fixed point integer left-shifted
+		/// by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+		/// of the 32-bit DWORD is:
+		///        0x00000000nnnnnnnnffffffff00000000
+		/// <remarks>Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.</remarks>
+        /// <see cref="EnumColorSpace.Calibrated_RGB"/>.
         /// </summary>
         public uint GammaGreen;
 
         /// <summary>
         /// Tone response curve for blue.
-        /// This member is ignored unless color values are calibrated RGB values and <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <c>Win32InfoHeaderV5.ColorSpaceType</c>.
-        /// Specify in unsigned fixed 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.
-        /// <see cref="BmpColorSpace.Calibrated_RGB"/>.
+        /// This member is ignored unless color values are calibrated RGB values and <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <c>EnumColorSpace.Calibrated_RGB</c>.
+		///
+		/// The required <c>DWORD</c> bit format for the  <c>GammaBlue</c> is an 8.8 fixed point integer left-shifted
+		/// by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+		/// of the 32-bit DWORD is:
+		///        0x00000000nnnnnnnnffffffff00000000
+        /// <remarks>Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.</remarks>
+        /// <see cref="EnumColorSpace.Calibrated_RGB"/>.
         /// </summary>
         public uint GammaBlue;
 
@@ -254,7 +264,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
 
         /// <summary>
         /// Rendering intent for bitmap.
-        /// <see cref="BmpColorSpaceIntent"/>
+        /// <see cref="EnumColorSpaceIntent"/>
         /// <para>The Independent Color Management interface (ICM) 2.0 allows International Color Consortium (ICC) color profiles
         /// to be linked or embedded in DIBs.</para>
         /// </summary>
@@ -262,19 +272,19 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
 
         /// <summary>
         /// The offset, in bytes, from the beginning of the <c>Win32InfoHeaderV5</c> structure to the start of the profile data.
-        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <see cref="BmpColorSpace.ProfileLinked"/> or
-        /// <see cref="BmpColorSpace.ProfileEmbedded"/>.
+        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <see cref="EnumColorSpace.ProfileLinked"/> or
+        /// <see cref="EnumColorSpace.ProfileEmbedded"/>.
         /// <para>If the profile is embedded, profile data is the actual ICM 2.0 profile.</para>
         /// <para>If the profile is linked,  profile data is the null-terminated file name of the ICM 2.0 profile or
         /// the fully qualified path (including a network path) of the profile used by the DIB.
         /// It must be composed exclusively of characters from the Windows character set (code page 1252). This cannot be a Unicode string.</para>
         /// </summary>
-        public uint ProfileData;
+        public uint ProfileDataOffset;
 
         /// <summary>
         /// Size, in bytes, of embedded profile data.
-        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <see cref="BmpColorSpace.ProfileLinked"/> or
-        /// <see cref="BmpColorSpace.ProfileEmbedded"/>.
+        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <see cref="EnumColorSpace.ProfileLinked"/> or
+        /// <see cref="EnumColorSpace.ProfileEmbedded"/>.
         /// <para>The profile data (if present) should follow the color table.</para>
         /// <para>For packed DIBs, the profile data should follow the bitmap bits similar to the file format.</para>
         /// </summary>

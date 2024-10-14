@@ -119,11 +119,11 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
             }
 
             // Recurse into subdirectories of this directory.
-            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
-            foreach (string subdirectory in subdirectoryEntries)
-            {
-                ProcessDirectory(subdirectory);
-            }
+            //string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            //foreach (string subdirectory in subdirectoryEntries)
+            //{
+            //    ProcessDirectory(subdirectory);
+            //}
         }
 
         public static string[] ExpandFilePaths(string[] args)
@@ -147,6 +147,7 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
             return fileList.ToArray();
         }
 
+        /// <summary>Prints the usage, aka arguments for the "DCK_InfoViewer" program.</summary>
         public static void PrintUsage()
         {
             Console.WriteLine(".DCK Info Viewer - (c) 2016-2023 CaetanoSoft/José Caetano Silva");
@@ -158,13 +159,15 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
         {
             if(args.Length <= 0)
             {
+                // Error, no arguments passed
                 PrintUsage();
                 return;
             }
 
+            // Expand file paths
             var fileList = ExpandFilePaths(args);
 
-            // Set console colors
+            // Set console colors and clear the screen
             if (Console.IsOutputRedirected == false)
             {
                 Console.BackgroundColor = ConsoleColor.Black;
@@ -173,8 +176,10 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine();
             }
+            // Write the program name and copyright
             Console.WriteLine(".DCK Info Viewer - (c) 2016-2023 CaetanoSoft/José Caetano Silva");
             Console.WriteLine();
+            // Change foreground color
             if (Console.IsOutputRedirected == false)
             {
                 Console.ForegroundColor = ConsoleColor.White;
@@ -192,7 +197,7 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
                     else if (Directory.Exists(path))
                     {
                         // This path is a directory
-                        ProcessDirectory(path);
+                        //ProcessDirectory(path);
                     }
                     else
                     {
@@ -205,8 +210,9 @@ namespace CaetanoSof.Era8Bit.Programs.DCK_InfoViewer
                 WriteError("Exception Error: ");
                 WriteError(ex.Message);
             }
-            
+            // Write a blank line
             Console.WriteLine();
+            // Reset the console colors
             if (Console.IsOutputRedirected == false)
             {
                 Console.ResetColor();

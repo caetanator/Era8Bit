@@ -20,6 +20,22 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         Calibrated_RGB = 0x00000000,
 
         /// <summary>
+        /// Use destination device RGB. The endpoints and gamma values fields, are ignored.
+        /// <para>
+        /// Equals 0x00000001 (in hexadecimal).
+        /// </para>
+        /// </summary>
+        Device_RGB = 0x00000001,
+
+        /// <summary>
+        /// Use destination device CMYK. The endpoints and gamma values fields, are ignored.
+        /// <para>
+        /// Equals 0x00000001 (in hexadecimal).
+        /// </para>
+        /// </summary>
+        Device_CMYK = 0x00000002,
+
+        /// <summary>
         /// The bitmap is in sRGB color space.
         /// <para>
         /// Equals 'sRGB' (in ASCII) or 0x73524742 (in hexadecimal).

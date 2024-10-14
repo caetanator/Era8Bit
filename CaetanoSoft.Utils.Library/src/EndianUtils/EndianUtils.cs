@@ -69,7 +69,7 @@ namespace CaetanoSoft.Utils.EndianUtils
         {
             get
             {
-                return !(BitConverter.IsLittleEndian);
+                return m_isBigEndian;
                 /*
                 int i = 0x12345678;
                 if ((byte)i == 0x12)
@@ -92,7 +92,7 @@ namespace CaetanoSoft.Utils.EndianUtils
         {
             get
             {
-                return BitConverter.IsLittleEndian;
+                return m_isLittleEndian;
                 /*
                 int i = 0x12345678;
                 if ((byte)i == 0x78)
@@ -107,32 +107,84 @@ namespace CaetanoSoft.Utils.EndianUtils
             private set { }
         }
 
-        public static ushort ConvertWord16_BE(ushort word16)
+        /// <summary>Converts, if necessary, an 16-bit unsigned integer to big-endian.</summary>
+        /// <param name="word16">The 16-bit unsigned integer to be converted to big-endian.</param>
+        /// <returns>
+        ///   The 16-bit unsigned integer to be converted to big-endian.
+        /// </returns>
+        public static ushort ConvertUInt16_BE(ushort word16)
         {
             if(EndianUtils.IsBigEndian)
             {
                 return word16;
             }
-            
-            byte[] buffer = BitConverter.GetBytes(word16);
-            byte b0 = buffer[0];
-            byte b1 = buffer[1];
+
+            // Convert 16-bit unsigned integer to array
+            byte[] buffer = new byte[2];
+            buffer[1] = (byte)(word16 >> 8);
+            buffer[0] = (byte)(word16);
 
             return (ushort)(((buffer[0] << 8) | buffer[1]) & 0xFFFF);
         }
 
-        public static ushort ConvertWord16_LE(ushort word16)
+        /// <summary>Converts, if necessary, an 16-bit unsigned integer to little-endian.</summary>
+        /// <param name="word16">The 16-bit unsigned integer to be converted to little-endian.</param>
+        /// <returns>
+        ///   The 16-bit unsigned integer to be converted to little-endian.
+        /// </returns>
+        public static ushort ConvertUInt16_LE(ushort word16)
         {
             if (EndianUtils.IsLittleEndian)
             {
                 return word16;
             }
 
-            byte[] buffer = BitConverter.GetBytes(word16);
-            byte b0 = buffer[0];
-            byte b1 = buffer[1];
+            // Convert 16-bit unsigned integer to array
+            byte[] buffer = new byte[2];
+            buffer[1] = (byte)(word16 >> 8);
+            buffer[0] = (byte)(word16);
 
-            return (ushort)(((buffer[1] << 8) | buffer[0]) & 0xFFFF);
+            return (ushort)(((buffer[0] << 8) | buffer[1]) & 0xFFFF);
+        }
+
+        /// <summary>Converts, if necessary, an 16-bit signed integer to big-endian.</summary>
+        /// <param name="int16">The 16-bit signed integer to be converted to big-endian.</param>
+        /// <returns>
+        ///   The 16-bit signed integer to be converted to big-endian.
+        /// </returns>
+        public static short ConvertSInt16_BE(short int16)
+        {
+            if (EndianUtils.IsBigEndian)
+            {
+                return int16;
+            }
+
+            // Convert 16-bit unsigned integer to array
+            byte[] buffer = new byte[2];
+            buffer[1] = (byte)(int16 >> 8);
+            buffer[0] = (byte)(int16);
+
+            return (short)(((buffer[0] << 8) | buffer[1]) & 0xFFFF);
+        }
+
+        /// <summary>Converts, if necessary, an 16-bit signed integer to little-endian.</summary>
+        /// <param name="int16">The 16-bit signed integer to be converted to little-endian.</param>
+        /// <returns>
+        ///   The 16-bit signed integer to be converted to little-endian.
+        /// </returns>
+        public static short ConvertSInt16_LE(short int16)
+        {
+            if (EndianUtils.IsLittleEndian)
+            {
+                return int16;
+            }
+
+            // Convert 16-bit unsigned integer to array
+            byte[] buffer = new byte[2];
+            buffer[1] = (byte)(int16 >> 8);
+            buffer[0] = (byte)(int16);
+
+            return (short)(((buffer[0] << 8) | buffer[1]) & 0xFFFF);
         }
     }
 }

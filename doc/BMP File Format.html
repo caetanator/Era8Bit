@@ -19,7 +19,7 @@
     <style>
       /* HTML BODY Tag Default Style */
       body {
-        width: 100%;
+        width: auto;
         height: auto;
         margin: 20px;
         border-width: 0;
@@ -28,7 +28,7 @@
         color: #000000;
         text-align: left;
         vertical-align: top;
-        font: normal 12pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        font: normal 10pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
         align-items: center;
         align-content: space-evenly;
         justify-content: space-evenly;
@@ -42,7 +42,7 @@
       h1 {
         color: #0C0CFF;
         font-family: Garamond, Georgia, "Times New Roman", Times, serif;
-        font-size: 26pt;
+        font-size: 20pt;
         font-weight: bold !important;
         text-align: center;
         text-decoration: underline;
@@ -50,8 +50,8 @@
       /* HTML H2 Tag Default Style */
       h2 {
         color: #0C0CFF;
-        font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-        font-size: 18pt;
+        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-size: 16pt;
         font-weight: bold;
       }
       /* HTML PRE Tag Default Style */
@@ -65,16 +65,17 @@
       /* HTML CODE Tag Default Style */
       code {
         font-family: "Lucida Console", Lucida, "Courier New", Courier, monospace;
-        font-size: 12pt;
+        font-size: 10pt;
         background-color: #C5EDC9;
       }
       /* HTML CAPTION Tag Default Style */
       caption {
         font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-size: 12pt !important;
       }
       /* HTML TABLE Tag Default Style */
       table {
-        border: 4px solid #000000;
+        border: none;
         border-collapse: collapse;
         margin-left: auto;
         margin-right: auto;
@@ -85,23 +86,45 @@
         background-color: #F0F0F0;
         border: 4px solid #000000;
         border-collapse: collapse;
+        padding: 4px;
         width: auto;
         height: auto;
         text-align: center;
         vertical-align: middle;
-        font: normal 14pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
         font-weight: bold;
+        hyphens: none;
       }
       /* HTML TD Tag Default Style */
       td {
         border: 4px solid #000000;
         border-collapse: collapse;
+        padding: 4px;
         width: auto;
         height: auto;
         text-align: center;
         vertical-align: middle;
-        font: normal 12pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        font: normal 10pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
         hyphens: auto;
+      }
+      td ul {
+        list-style-position: outside;
+        margin: 0;
+        border-width: 0;
+        padding: 0;
+      }
+      td ul li {
+        margin-left: 30px;
+        border-width: 0;
+        padding: 2px;
+      }
+      .classTdAsTh {
+        background-color: #F0F0F0;
+        text-align: left;
+        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font-weight: bold;
+        width: none;
+        hyphens: none;
       }
       /* CSS Class Style for no border on the bottom */
       .classNoBorderBottom {
@@ -111,11 +134,30 @@
       .classNoBorderTop {
         border-top: 4px none #FFFFFF !important;
       }
+      /* CSS Class Style for no border on the left */
+      .classNoBorderLeft {
+        border-left: 4px none #FFFFFF !important;
+      }
+      /* CSS Class Style for no background color */
+      .classNoBackgroundColor {
+        background-color: transparent; !important;
+      }
       /* CSS Class Style for text align left */
       .classTextAlingLeft {
         text-align: left !important;
       }
-       /* CSS Class Style for DIV CODE */
+      /* CSS Class Style for text align center */
+      .classTextAlingCenter {
+        text-align: center !important;
+      }
+      /* CSS Class Style for center table in table cell */
+      .classTableInTableCenter {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      /* CSS Class Style for DIV CODE */
       .divCode {
         background: repeating-linear-gradient( 180deg, #C5EDC9, #C5EDC9 20px, #FEFEFE 20px, #FEFEFE 40px);
         margin-top: 0;
@@ -133,12 +175,33 @@
       /* Override styles when printing */
       @media print {
         body {
-          margin: 0;
+          size: A4;
+          margin: 1.5cm;
+        }
+        h1 {
+          page-break-before: always;
+        }
+        h1, h2, h3, h4, h5 {
+          page-break-after: avoid;
+        }
+        table, figure {
+          page-break-inside: avoid;
         }
       }
+      /* Override styles when printing as a book */
       /* Target all pages */
       @page {
-        margin: 1cm;
+        size: A4;
+        margin: 1.5cm;
+        h1 {
+          page-break-before: always;
+        }
+        h1, h2, h3, h4, h5 {
+          page-break-after: avoid;
+        }
+        table, figure {
+          page-break-inside: avoid;
+        }
       }
     </style>
     <!-- * ECMA JavaScript v6.0/2015 * -->
@@ -168,7 +231,7 @@
       bitmap data that used it. When stored in memory, this collection of information is known as a Microsoft Device Independent
       Bitmap, or DIB. When this information is written out to a file, it is known as the Microsoft Bitmap Format, or BMP.
       When you hear references to the DIB file format, it is BMP that is being referred to.<br>
-      The DIB header v1 fields were optimazed for 16-bit (<code>WORD</code>) and uses the palette v1 (3 bytes per entry, BGR).
+      The DIB header v1 fields were optimized for 16-bit (<code>WORD</code>) and uses the palette v1 (3 bytes per entry, BGR).
     </p>
     <p>
       During the development of Windows 2.0, Microsoft shared responsibility with IBM for the development of early
@@ -176,36 +239,36 @@
       format, the Windows BMP v2 format was used. Thus, the Microsoft Windows BMP v2 and IBM OS/2 BMP v1 formats are identical.
     </p>
     <p>
-      By now, VGA and 256 colors palette was the norm. The BMP file format created for Microsoft Windows 3.0 and Windows NT 3.1 (Windows BMP v3) differs only slightly from the IBM OS/2 2.0 (OS/2 BMP v2),
+      By this time, a VGA graphics card and 256 colors palettes were the norm. The BMP file format created for Microsoft Windows 3.0 and Windows NT 3.1 (Windows BMP v3) differs only slightly from the IBM OS/2 2.0 (OS/2 BMP v2),
       that preceded it.<br>
-      The Windows DIB header v3 and OS/2 DIB header v1 fields were optimazed for 32-bit (<code>DWORD</code>) and uses the palette v2 (4 bytes per entry, BGRA = 1 <code>DWORD</code>).
-      It added better palette suport and possibility of compression for the DIB pixels.<br>
+      The Windows DIB header v3 and OS/2 DIB header v1 fields were optimized for 32-bit (<code>DWORD</code>) and uses the palette v2 (4 bytes per entry, BGRA = 1 <code>DWORD</code>).
+      It added better palette support and possibility of compression for the DIB pixels.<br>
       The IBM Presentation Manager v2.0 and above, supported 3 versions (<i>aka</i> sizes) of OS/2 BMP v2 file format:
       <ul>
-        <li>16 Bytes: Same as Windows BMP v2 and OS/2 v1, but with the fields optimazed for 32-bit (<code>DWORD</code>) and uses the palette v2 (4 bytes per entry, BGRA = 1 <code>DWORD</code>),<br>
+        <li>16 Bytes: Same as Windows BMP v2 and OS/2 v1, but with the fields optimized for 32-bit (<code>DWORD</code>) and uses the palette v2 (4 bytes per entry, BGRA = 1 <code>DWORD</code>),<br>
         except that 24-bit RLE compression is not supported by the Windows OS APIs;</li>
         <li>40 Bytes: Same as Windows BMP v3, except that 24-bit RLE compression is not supported by the Windows OS APIs and
-        16 and 32 bits‐per‐pixel color deeph aren't supported by OS/2 OS APIs;</li>
-        <li>64 Bytes: Supports all OS/2 BMP v2 funcionality like Huffman 1D compression.</li>
+        16 and 32 bits‐per‐pixel color deep aren't supported by OS/2 OS APIs;</li>
+        <li>64 Bytes: Supports all OS/2 BMP v2 functionality like Huffman 1D compression.</li>
       </ul>
     </p>
     <p>
-      For Microsoft NT 3.5, Microsoft changed the specification of Windows BMP v3, in order that 16 and 32 bits‐per‐pixel color deeph and RGB bitfields compression could be
-      added to the Windows NT OS familly, by adding 3 <code>DWORD</code> bitfields masks after the DIB header v3 and before the optional palette v2.
+      For Microsoft NT 3.5, Microsoft changed the specification of Windows BMP v3, in order that 16 and 32 bits‐per‐pixel color deep and RGB bitfields compression could be
+      added to the Windows NT OS family, by adding 3 <code>DWORD</code> bitfields masks after the DIB header v3 and before the optional palette v2.
     </p>
     <p>
       For Microsoft Windows CE 1.0, Microsoft changed the specification of Windows BMP v3, in order that RGB 2 bits‐per‐pixel bitmaps could be
-      supported [only] by Windows CE OS familly. This is the only color deeph suported by Windows CE 1.0x.<br>
+      supported [only] by Windows CE OS family. This is the only color deep supported by Windows CE 1.0x.<br>
       For Microsoft Windows CE 5 + .NET, Microsoft changed the specification of Windows BMP v3, in order that RGBA bitfields compression could be
-      added to the Windows CE OS familly, by adding 4 <code>DWORD</code> bitfields masks after the DIB header v3 and before the optional palette v2.
+      added to the Windows CE OS family, by adding 4 <code>DWORD</code> bitfields masks after the DIB header v3 and before the optional palette v2.
     </p>
     <p>
-      By this time SVGA and 16-bit color deeph was the norm. During the development of Windows 95, NT, 4.0 and CE 5.0, Microsoft created the Windows BMP v4 specification, on top of Windows BMP v3, by
-      adding 16 and 32 bits‐per‐pixel color deeph, RGBA bitfields and ICM color correction profiles.
+      By this time SVGA and 16-bit color deep was the norm. During the development of Windows 95, NT, 4.0 and CE 5.0, Microsoft created the Windows BMP v4 specification, on top of Windows BMP v3, by
+      adding 16 and 32 bits‐per‐pixel color deep, RGBA bitfields and ICM color correction profiles.
     </p>
     <p>
-      By now, 3D acelareted XGA resolution with 32-bit color deeph were the norm. For Windows 98 and 2000, Microsoft created the Windows BMP v5 specification, on top of Windows BMP v4, by adding more ICM color
-      correction profiles support by external or embebed ICM profiles files.
+      By now, 3D accelerated XGA resolution with 32-bit color deep were the norm. For Windows 98 and 2000, Microsoft created the Windows BMP v5 specification, on top of Windows BMP v4, by adding more ICM color
+      correction profiles support by external or embed ICM profiles files.
     </p>
     <p>
       The structure of BMP format files is closely tied to the API of both Windows and OS/2. In this regard, BMP was never meant
@@ -214,7 +277,7 @@
     </p>
     <p>
       All the BMP versions originated on Intel based machines and thus share a common little&hyphen;endian heritage. The current BMP
-      format is otherwise hardware&hyphen;independent and can accommodate images with up to 32&hyphen;bit color deeph (1, 2, 4, 8, 16, 24 and 32
+      format is otherwise hardware&hyphen;independent and can accommodate images with up to 32&hyphen;bit color deep (1, 2, 4, 8, 16, 24 and 32
       bit&hyphen;per&hyphen;color). Its basic design makes it a good general&hyphen;purpose format that can be used for color or black&hyphen;and&hyphen;white
       image storage if file size is not a factor. Its main virtues are its simplicity and widespread support
       in the PC marketplace.
@@ -225,60 +288,60 @@
     </p>
     <p>&nbsp;</p>
     <h2>BMP File Structure According It's Version</h2>
-    <table  id="TableBMP">
+    <table id="TableBMP">
       <thead>
         <tr>
           <th colspan="5" class="classNoBorderBottom">Microsoft Windows</th>
           <th colspan="2" class="classNoBorderBottom">IBM OS/2</th>
         </tr>
         <tr>
-          <th class="classNoBorderTop">1.01</th>
-          <th class="classNoBorderTop">2.01</th>
-          <th class="classNoBorderTop">3.0 / NT 3.1</th>
-          <th class="classNoBorderTop">95 / NT 4.0</th>
-          <th class="classNoBorderTop">98 / 2000</th>
-          <th class="classNoBorderTop">1.0</th>
-          <th class="classNoBorderTop">v2.0</th>
+          <th class="classNoBorderTop" style="font-size: 13pt;">1.01</th>
+          <th class="classNoBorderTop" style="font-size: 12pt;">2.01 / NT 3.1 / CE 2.0</th>
+          <th class="classNoBorderTop" style="font-size: 12pt;">3.0 / NT 3.1 / CE 1.0</th>
+          <th class="classNoBorderTop" style="font-size: 13pt;">95 / NT 4.0</th>
+          <th class="classNoBorderTop" style="font-size: 13pt;">98 / 2000</th>
+          <th class="classNoBorderTop" style="font-size: 13pt;">1.0</th>
+          <th class="classNoBorderTop" style="font-size: 13pt;">2.0</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="vertical-align: top;">
-            <table style="border: 1px solid #000000; margin: 4px;">
+          <td style="vertical-align: top; text-align: center; margin: auto;">
+            <table class="classTableInTableCenter" style="border: 1px solid #000000;">
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #C0C0FF;">
                     <p style="text-align: center;">
                       DDB File Header + <br>
-                      Windows DDB Header
+                      DDB Header
                     </p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #E0FFE0;">
-                    <p style="text-align: center;">Windows DDB Bitmap Pixels</p>
+                    <p style="text-align: center;">DDB Bitmap Pixels</p>
                   </td>
                 </tr>
               </tbody>
             </table>
           </td>
-          <td style="vertical-align: top;">
-            <table style="border: 1px solid #000000; margin: 4px;">
+          <td style="vertical-align: top; text-align: center; margin: auto;">
+            <table class="classTableInTableCenter" style="border: 1px solid #000000;">
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v1</p>
+                    <p style="text-align: center;">File Header v1</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #BAEFE0;">
-                    <p style="text-align: center;">Windows DIB Header v2</p>
+                    <p style="text-align: center;">DIB Header v2</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #F0F00F;">
                     <p style="text-align: center;">
-                      Windows Color Table v1<br>
+                      Color Table v1<br>
                       <span style="color: #ff0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
@@ -293,29 +356,29 @@
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #00FF00;">
-                    <p style="text-align: center;">Windows Bitmap Pixels</p>
+                    <p style="text-align: center;">Bitmap Pixels</p>
                   </td>
                 </tr>
               </tbody>
             </table>
           </td>
-          <td style="vertical-align: top;">
-            <table style="border: 1px solid #000000; margin: 4px;">
+          <td style="vertical-align: top; text-align: center; margin: auto;">
+            <table class="classTableInTableCenter" style="border: 1px solid #000000;">
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v1</p>
+                    <p style="text-align: center;">File Header v1</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
-                    <p style="text-align: center;">Windows DIB Header v3</p>
+                    <p style="text-align: center;">DIB Header v3</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #FFFF00;">
                     <p style="text-align: center;">
-                      Windows Color Table v2<br>
+                      Color Table v2<br>
                       <span style="color: #ff0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
@@ -330,29 +393,29 @@
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #00FF00;">
-                    <p style="text-align: center;">Windows Bitmap Pixels</p>
+                    <p style="text-align: center;">Bitmap Pixels</p>
                   </td>
                 </tr>
               </tbody>
             </table>
           </td>
-          <td style="vertical-align: top;">
-            <table style="border: 1px solid #000000; margin: 4px;">
+          <td style="vertical-align: top; text-align: center; margin: auto;">
+            <table class="classTableInTableCenter" style="border: 1px solid #000000;">
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v1</p>
+                    <p style="text-align: center;">File Header v1</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
-                    <p style="text-align: center;">Windows DIB Header v4</p>
+                    <p style="text-align: center;">DIB Header v4</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #FFFF00;">
                     <p style="text-align: center;">
-                      Windows Color Table v2<br>
+                      Color Table v2<br>
                       <span style="color: #FF0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
@@ -367,29 +430,29 @@
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #00FF00;">
-                    <p style="text-align: center;">Windows Bitmap Pixels</p>
+                    <p style="text-align: center;">Bitmap Pixels</p>
                   </td>
                 </tr>
               </tbody>
             </table>
           </td>
-          <td style="vertical-align: top;">
-            <table style="border: 1px solid #000000; margin: 4px;">
+          <td style="vertical-align: top; text-align: center; margin: auto;">
+            <table class="classTableInTableCenter" style="border: 1px solid #000000;">
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v1</p>
+                    <p style="text-align: center;">File Header v1</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
-                    <p style="text-align: center;">Windows DIB Header v5</p>
+                    <p style="text-align: center;">DIB Header v5</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #FFFF00;">
                     <p style="text-align: center;">
-                      Windows Color Table v2<br>
+                      Color Table v2<br>
                       <span style="color: #FF0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
@@ -404,7 +467,7 @@
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #00FF00;">
-                    <p style="text-align: center;">Windows Bitmap Pixels</p>
+                    <p style="text-align: center;">Bitmap Pixels</p>
                   </td>
                 </tr>
                 <tr>
@@ -426,23 +489,23 @@
               </tbody>
             </table>
           </td>
-          <td style="vertical-align: top;">
-            <table style="border: 1px solid #000000; margin: 4px;">
+          <td style="vertical-align: top; text-align: center; margin: auto;">
+            <table class="classTableInTableCenter" style="border: 1px solid #000000;">
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v1</p>
+                    <p style="text-align: center;">File Header v1</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #BAEFE0;">
-                    <p style="text-align: center;">OS/2 Bitmap Header v1</p>
+                    <p style="text-align: center;">Bitmap Header v1</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #F0F00F;">
                     <p style="text-align: center;">
-                      OS/2 Color Palette v1<br>
+                      Color Palette v1<br>
                       <span style="color: #FF0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
@@ -457,29 +520,29 @@
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #00FF00;">
-                    <p style="text-align: center;">OS/2 Bitmap Data</p>
+                    <p style="text-align: center;">Bitmap Data</p>
                   </td>
                 </tr>
               </tbody>
             </table>
           </td>
-          <td style="vertical-align: top;">
-            <table style="border: 1px solid #000000; margin: 4px;">
+          <td style="vertical-align: top; text-align: center; margin: auto;">
+            <table class="classTableInTableCenter" style="border: 1px solid #000000;">
               <tbody>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #0C0CFF;">
-                    <p style="text-align: center;">BMP File Header v1</p>
+                    <p style="text-align: center;">File Header v1</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
-                    <p style="text-align: center;">OS/2 Bitmap Header v2</p>
+                    <p style="text-align: center;">Bitmap Header v2</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #FFFF00;">
                     <p style="text-align: center;">
-                      OS/2 Color Palette v2<br>
+                      Color Palette v2<br>
                       <span style="color: #FF0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
@@ -494,7 +557,7 @@
                 </tr>
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #00FF00;">
-                    <p style="text-align: center;">OS/2 Bitmap Data</p>
+                    <p style="text-align: center;">Bitmap Data</p>
                   </td>
                 </tr>
               </tbody>
@@ -506,23 +569,23 @@
     <p>&nbsp;</p>
     <h2>BMP File Gap 1 and Gap 2</h2>
     <p>
-      The <i>Gap 1</i> and <i>Gap 2</i> on the bitmap file format, are optional and so, they can be 0 bytes.
+      The <b>Gap 1</b> and <b>Gap 2</b> on the bitmap file format, are optional and so, they can be 0 bytes.
       When both gaps are set to zero (0), the bitmap is called a <i>Packed DIB</i>.<br>
       On <i>packed DIBs</i> in memory, the <i>Windows Bitmap Pixels Array</i> and <i>OS/2 Bitmap Data</i>, must start at a memory address that is a multiple of 4 bytes.
       In some cases, it may be necessary to adjust the number of entries in the color table in order to force the memory address alignment.<br>
       The optional ICC color correction profile data, should immediately follow the pixel array data, if used.
     </p>
     <p>
-      <b>Note: </b><i>Packed DIBs</i> are required by Windows clipboard, patterned brush, resources APIs functions as well as others <i>Win 32</i> APIs.
+      <b>Note: </b><i>Packed DIBs</i> are required by Windows clipboard, patterned brush, resources APIs functions as well as others <b>Win32</b> APIs.
     </p>
     <p>
-      <i>Gap 1</i> is for aligning the <i>Windows Bitmap Pixels</i> / <i>OS/2 Bitmap Data</i> values and <i>Gap 2</i> the ICC (International Color Consortium) Color Correction
+      <b>Gap 1</b> is for aligning the <i>Windows Bitmap Pixels</i> / <i>OS/2 Bitmap Data</i> values and <b>Gap 2</b> the ICC (International Color Consortium) Color Correction
       Profile v1 data values, case it exists.
     </p>
     <p>
-      Their existence is for speeding the read and write operations to the file, by aligning the structures to a 16&hyphen;bit, 32&hyphen;bit or 64&hyphen;bit
+      Their existence is for speeding the read and write operations from/to the file, by aligning the structures to a 16&hyphen;bit, 32&hyphen;bit or 64&hyphen;bit
       word (unsigned integer), according the OS platform CPU word. Aligning to 32&hyphen;bit (a <code>DWORD</code> on <b>Win32</b>), should
-      produce the best results. For in-memory DIBs, is better to use <i>packed DIBs</i>, <i>aka</i> <i>Gap 1</i> and <i>Gap 2</i> equal to 0 bytes.
+      produce the best results. For in-memory DIBs, is better to use <i>packed DIBs</i>, <i>aka</i> <b>Gap 1</b> and <b>Gap 2</b> equal to 0 bytes.
     </p>
     <p>&nbsp;</p>
     <h2>BMP File Windows DDB Bitmap Pixels, Windows Bitmap Pixels and OS/2 Bitmap Data</h2>
@@ -538,7 +601,7 @@
     </p>
     <p>
       For <i>Windows Bitmap Pixels</i> and <i>OS/2 Bitmap Data</i>, the pixels values follow immediately after the
-      <i>Windows Color Table</i> or <i>OS/2 Color Palette</i> + <i>Gap 1</i> (the value pointed by
+      <i>Windows Color Table</i> or <i>OS/2 Color Palette</i> + <b>Gap 1</b> (the value pointed by
       <code>BITMAPFILEHEADER.BitmapOffset</code>).<br>
       It consists of <code>Height</code> scan lines, with the size, in bytes of <code>ByteWidth</code>. Must be aligned to 32&hyphen;bit:<br>
       &nbsp;&nbsp;&nbsp;&nbsp;<code>scanLineSize = 4 * (((BitmapHeader.Width * BitmapHeader.BitsPerPixel) + 31) / 32);</code><br>
@@ -570,9 +633,9 @@
     </p>
     <p>
       On the examples I found online <a href="https://www.charlespetzold.com/src/ProgWin1.zip" target="_blank">Charles Petzold Books - &quot;Programming Windows, 1st edition&quot; Source Code</a>, <br>
-      the stucture defined on <a href="#Table1">Table 1</a>, and also refered on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDD&quot;</a>, <br>
+      the structure defined on <a href="#Table1">Table 1</a>, and also referred on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDD&quot;</a>, <br>
       is preceded by:
-      <table style="border: 1px solid #000000;" id="Table0">
+      <table id="Table0">
         <thead>
           <tr>
             <th>Offset#</th>
@@ -592,10 +655,10 @@
               The following valid values are possible:
               <ul>
                 <li>
-                  <code><b>0002h</b> (RT_BITMAP)</code> - Resource Bitmap Non-Discardable;
+                  <b>0002h</b> (<code>RT_BITMAP</code>) - Resource Bitmap Non-Discardable;
                 </li>
                 <li>
-                  <code><b>0102h</b> (RT_BITMAP | 0x0100)</code> - Resource Bitmap Discardable.
+                  <b>0102h</b> (<code>RT_BITMAP | 0x0100</code>) - Resource Bitmap Discardable.
                 </li>
               </ul>
             </td>
@@ -604,18 +667,17 @@
       </table>
     </p>
     <p>
-      On <a href="#Table1">Table 1</a>, and also refered on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDB&quot;</a>, <br>
+      On <a href="#Table1">Table 1</a>, and also referred on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDB&quot;</a>, <br>
       the <code>BITMAP16</code> structure also have at the end a <code>DWORD</code> for <code>BITMAP16.bmBits</code> that serves as a memory pointer to the bitmap pixels.<br>
       In a file on disk, the <code>BITMAP16.bmBits</code> field is usually not used (it's not clear whether some formats omit it entirely). So is set to 0.
     </p>
     <p>&nbsp;</p>
-    <table style="border: 1px solid #000000;" id="Table1">
-      <caption>
-        Table 1 - Windows 1.x File and DDB Header BITMAP16 structure
-      </caption>
+    <table id="Table1">
+      <caption><b>Table 1:</b> Windows 1.x File and DDB Header BITMAP16 structure</caption>
       <thead>
         <tr>
-          <th>Offset#</th>
+          <th>Offset 1#</th>
+          <th>Offset 2#</th>
           <th>Size (Bytes)</th>
           <th>Type</th>
           <th>Field Name</th>
@@ -624,7 +686,8 @@
       </thead>
       <tbody>
         <tr style="color: #FF0000;">
-          <td>-0002h</td>
+          <td>0000h</td>
+          <td></td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
           <td>ResourceFileType</td>
@@ -632,15 +695,16 @@
             The following valid values are possible:
             <ul>
               <li>
-                <code><b>0002h</b> (RT_BITMAP)</code> - Resource Bitmap Non-Discardable;
+                <b>0002h</b> (<code>RT_BITMAP</code>) - Resource Bitmap Non-Discardable;
               </li>
               <li>
-                <code><b>0102h</b> (RT_BITMAP | 0x0100)</code> - Resource Bitmap Discardable.
+                <b>0102h</b> (<code>RT_BITMAP | 0x0100</code>) - Resource Bitmap Discardable.
               </li>
             </ul>
           </td>
         </tr>
         <tr>
+          <td>0002h</td>
           <td>0000h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
@@ -648,6 +712,7 @@
           <td class="classTextAlingLeft">The magic number used to identify the BMP file (always 0).</td>
         </tr>
         <tr>
+          <td>0004h</td>
           <td>0002h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
@@ -655,6 +720,7 @@
           <td class="classTextAlingLeft">The bitmap image width, in pixels (must be &gt; 0).</td>
         </tr>
         <tr>
+          <td>0006h</td>
           <td>0004h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
@@ -662,6 +728,7 @@
           <td class="classTextAlingLeft">The bitmap image height, in pixels (must be &gt; 0).</td>
         </tr>
         <tr>
+          <td>0008h</td>
           <td>0006h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
@@ -671,6 +738,7 @@
           </td>
         </tr>
         <tr>
+          <td>000Ah</td>
           <td>0008h</td>
           <td>1</td>
           <td>8&hyphen;bit unsigned</td>
@@ -678,7 +746,8 @@
           <td class="classTextAlingLeft">The number of color planes used to store the bitmap. This value is always 1.</td>
         </tr>
         <tr>
-          <td>000Ah</td>
+          <td>000Bh</td>
+          <td>0009h</td>
           <td>1</td>
           <td>8&hyphen;bit unsigned</td>
           <td>bmBitsPixel</td>
@@ -693,7 +762,8 @@
           </td>
         </tr>
         <tr style="color: #FF0000;">
-          <td>000Eh</td>
+          <td>000Ch</td>
+          <td></td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
           <td>bmBits</td>
@@ -707,7 +777,7 @@
     <p>&nbsp;</p>
     <h2>BMP File Header v1 <span style="color: #00FF00;">(14 Bytes)</span></h2>
     <p>
-      This header/structure has created for Microsoft Windows 2.01 and IBM OS/2 1.0 bitmaps and is supported until nowdays. All the integer values are stored
+      This header/structure has created for Microsoft Windows 2.01 and IBM OS/2 1.0 bitmaps and is supported until nowadays. All the integer values are stored
       in little&hyphen;endian format (<i>i.e.</i> least&hyphen;significant byte first). It has a total size of 14 bytes.
     </p>
     <p>This block of bytes is at the start of the file and is used to identify the file as an BMP file
@@ -716,10 +786,8 @@
     <p>The first two bytes of the BMP file format are normally the character &#39;B&#39; and then
       the character &#39;M&#39; in 1-byte ASCII encoding.
     </p>
-    <table style="border: 1px solid #000000;" id="Table2">
-      <caption>
-        Table 2 - Windows BITMAPFILEHEADER and OS/2 OS2BMPFILEHEADER structures
-      </caption>
+    <table id="Table2">
+      <caption><b>Table 2:</b> Windows BITMAPFILEHEADER and OS/2 OS2BMPFILEHEADER structures</caption>
       <thead>
         <tr>
           <th rowspan="2">Offset#</th>
@@ -742,30 +810,50 @@
           <td>16&hyphen;bit unsigned</td>
           <td>bfType</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>FileType</td>
+          <td>usType</td>
           <td class="classTextAlingLeft">
             The magic number (in ASCII) used to identify the BMP file.<br>
             The following valid values are possible:
-            <ul>
-              <li>
-                <code><b>BM</b> (4D42h)</code> - Windows or OS/2 Bitmap;
-              </li>
-              <li>
-                <code><b>BA</b> (4142h)</code> - OS/2 Bitmap Array;
-              </li>
-              <li>
-                <code><b>CI</b> (4943h)</code> - OS/2 Color Icon;
-              </li>
-              <li>
-                <code><b>CP</b> (5043h)</code> - OS/2 Color Pointer;
-              </li>
-              <li>
-                <code><b>IC</b> (4349h)</code> - OS/2 Icon;
-              </li>
-              <li>
-                <code><b>PT</b> (5450h)</code> - OS/2 Pointer.
-              </li>
-            </ul>
+            <table>
+              <tbody>
+                <tr>
+                  <th>Value</th>
+                  <th>ASCII</th>
+                  <th>OS/2 Macro</th>
+                  <th style="max-width: 460px;">Description</th>
+                </tr>
+                <tr>
+                  <td>4D42h</td>
+                  <td><b>BM</b></td>
+                  <td><code>BFT_BMAP</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Windows or OS/2 Bitmap.</td>
+                </tr>
+                <tr>
+                  <td>4142h</td>
+                  <td><b>BA</b></td>
+                  <td><code>BFT_BITMAPARRAY</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">OS/2 Bitmap Array.</td>
+                </tr>
+                <tr>
+                  <td>4943h</td>
+                  <td><b>CI</b></td>
+                  <td><code>BFT_COLORICON</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">OS/2 Color Icon.</td>
+                </tr>
+                <tr>
+                  <td>5043h</td>
+                  <td><b>CP</b></td>
+                  <td><code>BFT_COLORPOINTER</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">OS/2 Color Pointer.</td>
+                </tr>
+                <tr>
+                  <td>5450h</td>
+                  <td><b>PT</b></td>
+                  <td><code>BFT_POINTER</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;"> OS/2 Pointer.</td>
+                </tr>
+              </tbody>
+            </table>
           </td>
         </tr>
         <tr>
@@ -774,7 +862,7 @@
           <td>32&hyphen;bit unsigned</td>
           <td>bfSize</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>FileSize</td>
+          <td>cbSize</td>
           <td class="classTextAlingLeft">The total size of the BMP file, in bytes and should agree with the file size reported by the filesystem.<br>
             Is only useful when the bitmap data is compressed, and this value is usually zero in uncompressed BMP files.<br>
             This value is typically 0.
@@ -786,9 +874,9 @@
           <td>16&hyphen;bit unsigned</td>
           <td>bfReserved1</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>XHotSpot</td>
+          <td>xHotspot</td>
           <td class="classTextAlingLeft">
-            <b>Windows:</b>&nbsp;reserved (must be 0).<br>
+            <b>Windows:</b>&nbsp;Reserved (must be 0).<br>
             <b>OS/2:</b>&nbsp;X coordinate of the central point of the hotspot. Only valid for icons and pointers.<br>
             These coordinates are relative to the lower&hyphen;left corner of the bitmap.
           </td>
@@ -799,9 +887,9 @@
           <td>16&hyphen;bit unsigned</td>
           <td>bfReserved2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>YHotSpot</td>
+          <td>yHotspot</td>
           <td class="classTextAlingLeft">
-            <b>Windows:</b>&nbsp;reserved (must be 0).<br>
+            <b>Windows:</b>&nbsp;Reserved (must be 0).<br>
             <b>OS/2:</b>&nbsp;Y coordinate of the central point of the hotspot. Only valid for icons and pointers.<br>
             These coordinates are relative to the lower&hyphen;left corner of the bitmap.
           </td>
@@ -812,7 +900,7 @@
           <td>32&hyphen;bit unsigned</td>
           <td>bfOffBits</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>BitmapOffset</td>
+          <td>offBits</td>
           <td class="classTextAlingLeft">The offset, <i>i.e.</i> starting address, of the byte where the bitmap pixels/data can be found.</td>
         </tr>
       </tbody>
@@ -855,10 +943,8 @@
       RGBTRIPLE ColorPallet_RGB[] = loadColorPallet_RGB(NumberOfEntries);
     </code></pre></div>
 	  <p>&nbsp;</p>
-    <table style="border: 1px solid #000000;" id="Table3">
-      <caption>
-        Table 3 - Windows RGBTRIPLE and OS/2 OS21XPALETTEELEMENT structures
-      </caption>
+    <table id="Table3">
+      <caption><b>Table 3:</b> Windows RGBTRIPLE and OS/2 OS21XPALETTEELEMENT structures</caption>
       <thead>
         <tr>
           <th rowspan="2">Offset#</th>
@@ -881,7 +967,7 @@
           <td>8&hyphen;bit unsigned</td>
           <td>rgbtBlue</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Blue</td>
+          <td>bBlue</td>
           <td class="classTextAlingLeft">The blue component intensity value of the RGB color (must be between 0 and 255).</td>
         </tr>
         <tr>
@@ -890,7 +976,7 @@
           <td>8&hyphen;bit unsigned</td>
           <td>rgbtGreen</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Green</td>
+          <td>bGreen</td>
           <td class="classTextAlingLeft">The green component intensity value of the RGB color (must be between 0 and 255).</td>
         </tr>
         <tr>
@@ -899,7 +985,7 @@
           <td>8&hyphen;bit unsigned</td>
           <td>rgbtRed</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Red</td>
+          <td>bRed</td>
           <td class="classTextAlingLeft">The red component intensity value of the RGB color (must be between 0 and 255).</td>
         </tr>
       </tbody>
@@ -991,10 +1077,8 @@
       RGBQUAD ColorPallet_RGBA[] = loadColorPallet_RGBA(BitmapInfoHeader.biClrImportant);
     </code></pre></div>
 	  <p>&nbsp;</p>
-    <table style="border: 1px solid #000000;" id="Table4">
-      <caption>
-        Table 4 - Windows RGBQUAD and OS/2 OS22XPALETTEELEMENT structures
-      </caption>
+    <table id="Table4">
+      <caption><b>Table 4:</b> Windows RGBQUAD and OS/2 OS22XPALETTEELEMENT structures</caption>
       <thead>
         <tr>
           <th rowspan="2">Offset#</th>
@@ -1017,7 +1101,7 @@
           <td>8&hyphen;bit unsigned</td>
           <td>rgbBlue</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Blue</td>
+          <td>bBlue</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">The blue component intensity value of the RGB color
             (must be between 0 and 255).
           </td>
@@ -1028,7 +1112,7 @@
           <td>8&hyphen;bit unsigned</td>
           <td>rgbGreen</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Green</td>
+          <td>bGreen</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">The green component intensity value of the RGB color
             (must be between 0 and 255).
           </td>
@@ -1039,7 +1123,7 @@
           <td>8&hyphen;bit unsigned</td>
           <td>rgbRed</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Red</td>
+          <td>bRed</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">The red component intensity value of the RGB color
             (must be between 0 and 255).
           </td>
@@ -1050,7 +1134,7 @@
           <td>8&hyphen;bit unsigned</td>
           <td>rgbReserved</td>
           <td>8&hyphen;bit unsigned</td>
-          <td>Reserved</td>
+          <td>fcOptions</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">
             <b>Windows:</b>&nbsp;reserved (must be 0). Can be used as alpha component intensity for RGBA colors in 16 and 32
             bits per color bitfield bitmaps.<br>
@@ -1069,10 +1153,8 @@
       This is the second header in the file and follows immediately the File Header v2 (Windows <code>BITMAPFILEHEADER</code> or
       OS/2 <code>OS2BMPFILEHEADER</code> structures). Is used to describe the DIB: dimensions, bits&hyphen;per&hyphen;pixel, etc..
     </p>
-    <table style="border: 1px solid #000000;" id="Table5">
-      <caption>
-        Table 5 - Windows BITMAPCOREHEADER and OS/2 OS21XBITMAPHEADER structures
-      </caption>
+    <table id="Table5">
+      <caption><b>Table 5:</b> Windows BITMAPCOREHEADER and OS/2 OS21XBITMAPHEADER structures</caption>
       <thead>
         <tr>
           <th rowspan="2">Offset#</th>
@@ -1095,7 +1177,7 @@
           <td>32&hyphen;bit unsigned</td>
           <td>bcSize</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Size</td>
+          <td>cbFix</td>
           <td class="classTextAlingLeft">The size of this structure in bytes (must be 12).</td>
         </tr>
         <tr>
@@ -1104,7 +1186,7 @@
           <td>16&hyphen;bit unsigned</td>
           <td>bcWidth</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Width</td>
+          <td>cx</td>
           <td class="classTextAlingLeft">The bitmap image width, in pixels (must be &gt; 0).</td>
         </tr>
         <tr>
@@ -1113,7 +1195,7 @@
           <td>16&hyphen;bit unsigned</td>
           <td>bcHeight</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Height</td>
+          <td>cy</td>
           <td class="classTextAlingLeft">The bitmap image height, in pixels (must be &gt; 0).</td>
         </tr>
         <tr>
@@ -1122,7 +1204,7 @@
           <td>16&hyphen;bit unsigned</td>
           <td>bcPlanes</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>NumPlanes</td>
+          <td>cPlanes</td>
           <td class="classTextAlingLeft">The number of color planes (must be 1).</td>
         </tr>
         <tr>
@@ -1131,7 +1213,7 @@
           <td>16&hyphen;bit unsigned</td>
           <td>bcBitCount</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>BitsPerPixel</td>
+          <td>cBitCount</td>
           <td class="classTextAlingLeft">
             The number of bits&hyphen;per&hyphen;pixel.<br>
             The following valid values are possible:
@@ -1157,10 +1239,8 @@
       etc..
     </p>
     <p>The fields above 16 bytes and below 64 bytes, that aren't on the file, are assumed to be 0.</p>
-    <table style="border: 1px solid #000000;" id="Table6">
-      <caption>
-        Table 6 - OS/2 OS22XBITMAPHEADER structure
-      </caption>
+    <table id="Table6">
+      <caption><b>Table 6:</b> OS/2 OS22XBITMAPHEADER structure</caption>
       <thead>
         <tr>
           <th rowspan="2">Offset#</th>
@@ -1181,7 +1261,7 @@
           <td>0000h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Size</td>
+          <td>cbFix</td>
           <td>32&hyphen;bit unsigned</td>
           <td>biSize</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">The size of this structure in bytes (must be between 16 and 64).<br>
@@ -1192,7 +1272,7 @@
           <td>0004h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Width</td>
+          <td>cx</td>
           <td>32&hyphen;bit signed</td>
           <td>biWidth</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">The bitmap image width, in pixels (must be &gt; 0).</td>
@@ -1201,7 +1281,7 @@
           <td>0008h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Height</td>
+          <td>cy</td>
           <td>32&hyphen;bit signed</td>
           <td>biHeight</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">The bitmap image height, in pixels (must be &gt; 0).
@@ -1211,7 +1291,7 @@
           <td>000Ch</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>NumPlanes</td>
+          <td>cPlanes</td>
           <td>16&hyphen;bit unsigned</td>
           <td>biPlanes</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">The number of color planes (must be 1).</td>
@@ -1220,7 +1300,7 @@
           <td>000Eh</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>BitsPerPixel</td>
+          <td>cBitCount</td>
           <td>16&hyphen;bit unsigned</td>
           <td>biBitCount</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">
@@ -1238,13 +1318,13 @@
           <td>0010h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Compression</td>
+          <td>ulCompression</td>
           <td>32&hyphen;bit unsigned</td>
           <td>biCompression</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">
             The compression method used.<br>
             The following valid values are possible:
-            <table style="border: 1px solid #000000;">
+            <table>
               <tbody>
                 <tr>
                   <th>Value</th>
@@ -1254,31 +1334,31 @@
                 </tr>
                 <tr>
                   <td>0</td>
-                  <td><code>BI_RGB</code></td>
+                  <td><code>BCA_UNCOMP</code></td>
                   <td>None</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGB.</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGB. Same as <code>BI_RGB</code>.</td>
                 </tr>
                 <tr>
                   <td>1</td>
-                  <td><code>BI_RLE8</code></td>
+                  <td><code>BCA_RLE8</code></td>
                   <td>RLE 8&hyphen;bit/pixel</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Can only be used with 8&hyphen;bit/pixel bitmaps.</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Can only be used with 8&hyphen;bit/pixel bitmaps. Same as <code>BI_RLE8</code>.</td>
                 </tr>
                 <tr>
                   <td>2</td>
-                  <td><code>BI_RLE4</code></td>
+                  <td><code>BCA_RLE4</code></td>
                   <td>RLE 4-bit/pixel</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Can only be used with 4-bit/pixel bitmaps.</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Can only be used with 4-bit/pixel bitmaps. Same as <code>BI_RLE4</code>.</td>
                 </tr>
                 <tr>
                   <td>3</td>
-                  <td>BI_HUFFMAN1D</td>
+                  <td><code>BCA_HUFFMAN1D</code></td>
                   <td>Huffman 1D</td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">Can only be used with 1-bit/pixel bitmaps.</td>
                 </tr>
                 <tr>
                   <td>4</td>
-                  <td>BI_RLE24</td>
+                  <td><code>BCA_RLE24</code></td>
                   <td>RLE 24-bit/pixel</td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">Can only be used with 24-bit/pixel bitmaps.</td>
                 </tr>
@@ -1290,7 +1370,7 @@
           <td>0014h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>ImageDataSize</td>
+          <td>cbImage</td>
           <td>32&hyphen;bit unsigned</td>
           <td>biSizeImage</td>
           <td class="classTextAlingLeft">
@@ -1303,7 +1383,7 @@
           <td>0018h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>XResolution</td>
+          <td>cxResolution</td>
           <td>32&hyphen;bit signed</td>
           <td>biXPelsPerMeter</td>
           <td class="classTextAlingLeft">
@@ -1315,7 +1395,7 @@
           <td>001Ch</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>YResolution</td>
+          <td>cyResolution</td>
           <td>32&hyphen;bit signed</td>
           <td>biYPelsPerMeter</td>
           <td class="classTextAlingLeft">
@@ -1327,12 +1407,12 @@
           <td>0020h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>ColorsUsed</td>
+          <td>cclrUsed</td>
           <td>32&hyphen;bit unsigned</td>
           <td>biClrUsed</td>
           <td class="classTextAlingLeft">
             The number of colors present in the color palette/table.<br>
-            Can be set to 0, if <code>BitsPerPixel</code> is less or equal than 8 bits&hyphen;per&hyphen;pixel (&le; 8). In this case,
+            Can be set to 0, if <code>cBitCount</code> is less or equal than 8 bits&hyphen;per&hyphen;pixel (&le; 8). In this case,
             2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel) is used.<br>
             Can be calculated by the formula:<br>
             &nbsp;&nbsp;&nbsp;&nbsp;<code>ColorsUsed = 1 &lt;&lt; BitsPerPixel;</code>
@@ -1342,87 +1422,110 @@
           <td>0024h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>ColorsImportant</td>
+          <td>cclrImportant</td>
           <td>32&hyphen;bit unsigned</td>
           <td>biClrImportant</td>
           <td class="classTextAlingLeft">
             The number of significant colors present in the color palette/table.<br>
-            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>)
+            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>cclrImportant</code> = <code>cclrUsed</code>)
           </td>
         </tr>
         <tr>
           <td>0028h</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Units</td>
+          <td>usUnits</td>
           <td></td>
           <td></td>
           <td class="classTextAlingLeft">
-            The type of units used to measure resolution (<code>XResolution</code> and <code>YResolution</code> fields).<br>
+            The type of units used to measure resolution (<code>cxResolution</code> and <code>cyResolution</code> fields).<br>
             The following valid values are possible:
             <ul>
-              <li><b>0</b> - pixels per meter.</li>
+              <li><b>0</b> (<code>BRU_METRIC</code>) - pixels per meter.</li>
             </ul>
-            <b>Windows:</b>&nbsp;not used!
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
         <tr>
           <td>002Ah</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Reserved</td>
+          <td>usReserved</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
             Pad the structure to 4-byte boundary (must be 0).<br>
-            <b>Windows:</b>&nbsp;not used!
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
         <tr>
           <td>002Ch</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Recording</td>
+          <td>usRecording</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
             The type of the recording algorithm, <i>i.e.</i> how the bitmap scan lines are stored.<br>
             The following valid values are possible:
             <ul>
-              <li><b>0</b> - bottom&hyphen;up DIB.</li>
+              <li><b>0</b> (<code>BRA_BOTTOMUP</code>) - bottom&hyphen;up DIB.</li>
             </ul>
-            <b>Windows:</b>&nbsp;not used!
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
         <tr>
           <td>002Eh</td>
           <td>2</td>
           <td>16&hyphen;bit unsigned</td>
-          <td>Rendering</td>
+          <td>usRendering</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
             The type of the halftoning algorithm used on the bitmap data.<br>
             The following valid values are possible:
-            <ul>
-              <li><b>0</b> - no halftoning;</li>
-              <li><b>1</b> - error diffusion halftoning;</li>
-              <li><b>2</b> - Processing Algorithm for Noncoded Document Acquisition (PANDA);</li>
-              <li><b>3</b> - super-circle halftoning.</li>
-            </ul>
-            <b>Windows:</b>&nbsp;not used!
+            <table>
+              <tbody>
+                <tr>
+                  <th>Value</th>
+                  <th>Macro</th>
+                  <th style="max-width: 460px;">Description</th>
+                </tr>
+                <tr>
+                  <td>0</td>
+                  <td><code>BRH_NOTHALFTONED</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">No halftoning.</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td><code>BRH_ERRORDIFFUSION</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Error Diffusion halftoning.</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><code>BRH_PANDA</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Processing Algorithm for Noncoded Document Acquisition (PANDA) halftoning.</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><code>BRH_SUPERCIRCLE</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">Super-Circle halftoning.</td>
+                </tr>
+              </tbody>
+            </table>
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
         <tr>
           <td>0030h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Size1</td>
+          <td>cSize1</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
             Reserved for halftoning algorithm use on the bitmap data.<br>
-            <code>Rendering</code> =:
+            <code>usRendering</code> =:
             <ul>
               <li><b>0</b> - must be 0;</li>
               <li><b>1</b> - is the error damping as a percentage in the range 0 through 100.<br>
@@ -1431,55 +1534,56 @@
               <li><b>2</b> - X dimension, in pixels, of the halftoning pattern used;</li>
               <li><b>3</b> - X dimension, in pixels, of the halftoning pattern used.</li>
             </ul>
-            <b>Windows:</b>&nbsp;not used!
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
         <tr>
           <td>0034h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Size2</td>
+          <td>cSize2</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
             Reserved for halftoning algorithm use on the bitmap data.<br>
-            <code>Rendering</code> =:
+            <code>usRendering</code> =:
             <ul>
               <li><b>0</b> - must be 0;</li>
               <li><b>1</b> - must be 0;</li>
               <li><b>2</b> - Y dimension, in pixels, of the halftoning pattern used;</li>
               <li><b>3</b> - Y dimension, in pixels, of the halftoning pattern used.</li>
             </ul>
-            <b>Windows:</b>&nbsp;not used!
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
         <tr>
           <td>0038h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>ColorEncoding</td>
+          <td>ulColorEncoding</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
             Color model used to describe the bitmap data.<br>
             The following valid values are possible:
             <ul>
-              <li><b>0</b> - RGB encoding scheme.</li>
+              <li><b>0</b> (<code>BCE_RGB</code>) - RGB encoding scheme.</li>
+              <li><b>FFFFh</b> (<code>BCE_PALETTE</code>) - Palette encoding scheme. Not valid.</li>
             </ul>
-            <b>Windows:</b>&nbsp;not used!
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
         <tr>
           <td>003Ch</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>Identifier</td>
+          <td>ulIdentifier</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
             Reserved for application use and may contain an application-specific value.<br>
             Normally, is set to 0.<br>
-            <b>Windows:</b>&nbsp;not used!
+            <b>Windows:</b>&nbsp;not supported or implemented!
           </td>
         </tr>
       </tbody>
@@ -1491,9 +1595,10 @@
       (<i>i.e.</i> least&hyphen;significant byte first). The sizes values are as follow:
     </p>
     <ul>
+      <li><b> 16</b> - BITMAPV0INFOHEADER (OS/2 2.0 variant of BITMAPINFOHEADER only with BITMAPCOREHEADER fields);</li>
       <li><b> 40</b> - <code>BITMAPINFOHEADER</code>;</li>
-      <li><b> 52</b> - <code>BITMAPV2INFOHEADER</code>;</li>
-      <li><b> 56</b> - <code>BITMAPV3INFOHEADER</code>;</li>
+      <li><b> 52</b> - BITMAPV2INFOHEADER (Windows NT 3.5 variant of BITMAPINFOHEADER(BI_BITFIELDS) + RGB bitfields);</li>
+      <li><b> 56</b> - BITMAPV3INFOHEADER (Windows CE 5.0 variant of BITMAPINFOHEADER(BI_ALPHABITFIELDS) + RGBA bitfields);</li>
       <li><b>108</b> - <code>BITMAPV4HEADER</code>;</li>
       <li><b>124</b> - <code>BITMAPV5HEADER</code>.</li>
     </ul>
@@ -1502,10 +1607,8 @@
       structure). Is used to describe the DIB: dimensions, bits&hyphen;per&hyphen;pixel, pallet size, compression, bitfields masks, ICC profile,
       etc..
     </p>
-    <table style="border: 1px solid #000000;" id="Table7">
-      <caption>
-        Table 7 - Windows BITMAPINFOHEADER, BITMAPV4HEADER and BITMAPV5HEADER structures
-      </caption>
+    <table id="Table7">
+      <caption><b>Table 7:</b> Windows BITMAPINFOHEADER, BITMAPV4HEADER and BITMAPV5HEADER structures</caption>
       <thead>
         <tr>
           <th>Offset#</th>
@@ -1515,7 +1618,7 @@
           <th style="max-width: 500px;">Purpose</th>
         </tr>
         <tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPINFOHEADER <span style="color: #00FF00;">(40 Bytes)</span></td>
+          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV0INFOHEADER <span style="color: #00FF00;">(16 Bytes)</span></td>
         </tr>
       </thead>
       <tbody>
@@ -1527,9 +1630,10 @@
           <td class="classTextAlingLeft" style="max-width: 500px;">
             The size of this structure, in bytes, as follow:
             <ul>
+              <li><b> 16</b> - BITMAPV0INFOHEADER (OS/2 2.0 variant of BITMAPINFOHEADER only with BITMAPCOREHEADER fields);</li>
               <li><b> 40</b> - <code>BITMAPINFOHEADER</code>;</li>
-              <li><b> 52</b> - <code>BITMAPV2INFOHEADER</code>;</li>
-              <li><b> 56</b> - <code>BITMAPV3INFOHEADER</code>;</li>
+              <li><b> 52</b> - BITMAPV2INFOHEADER (Windows NT 3.5 variant of BITMAPINFOHEADER(BI_BITFIELDS) + RGB bitfields);</li>
+              <li><b> 56</b> - BITMAPV3INFOHEADER (Windows CE 5.0 variant of BITMAPINFOHEADER(BI_ALPHABITFIELDS) + RGBA bitfields);</li>
               <li><b>108</b> - <code>BITMAPV4HEADER</code>;</li>
               <li><b>124</b> - <code>BITMAPV5HEADER</code>.</li>
             </ul>
@@ -1591,8 +1695,11 @@
             </ul>
             <b>Notes:</b><br>
             &nbsp;&nbsp;Windows CE versions 1.0 and 1.01, only support 1 and 2 bits&hyphen;per&hyphen;pixel bitmaps.<br>
-            &nbsp;&nbsp;Only Windows 95, NT 3.1 and above, support 16 and 32 bits&hyphen;per&hyphen;pixel bitmaps.
+            &nbsp;&nbsp;Only Windows 95, NT 3.5 and above, support 16 and 32 bits&hyphen;per&hyphen;pixel bitmaps.
           </td>
+        </tr>
+        <tr>
+          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPINFOHEADER <span style="color: #00FF00;">(40 Bytes)</span></td>
         </tr>
         <tr>
           <td>0010h</td>
@@ -1602,7 +1709,7 @@
           <td class="classTextAlingLeft" style="max-width: 500px;">
             The compression method used.<br>
             The following valid values are possible:
-            <table style="border: 1px solid #000000;">
+            <table>
               <tbody>
                 <tr>
                   <th>Value</th>
@@ -1632,27 +1739,19 @@
                   <td>3</td>
                   <td><code>BI_BITFIELDS</code></td>
                   <td>Bitfields RGBA</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGBA bitfields masks. Only is valid when used with 16- and 32-bpp bitmaps.</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>BI_HUFFMAN1D</td>
-                  <td>Huffman 1D</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Only for OS/2 <code>OS22XBITMAPHEADER </code>. Can only be used with 1-bit/pixel bitmaps.</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    Uncompressed RGBA bitfields masks. Only is valid when used with 16- and 32-bpp bitmaps.<br>
+                    <b>OS/2:</b> <code>BCA_HUFFMAN1D</code>. Only for OS/2 <code>OS22XBITMAPHEADER</code>. Can only be used with 1-bit/pixel bitmaps.
+                  </td>
                 </tr>
                 <tr>
                   <td>4</td>
                   <td><code>BI_JPEG</code></td>
                   <td>JPEG</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">A JPEG encoded image for printing, follows this
-                    header. Only valid on <code>BITMAPV4IHEADER</code> or <code>BITMAPV5IHEADER</code>.
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    A JPEG encoded image for printing, follows this header. Only valid on <code>BITMAPV4IHEADER</code> or <code>BITMAPV5IHEADER</code>.<br>
+                    <b>OS/2:</b> <code>BCA_RLE24</code>. Only for OS/2 <code>OS22XBITMAPHEADER</code>. Can only be used with 24-bit/pixel bitmaps.
                   </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>BI_RLE24</td>
-                  <td>RLE 24-bit/pixel</td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">Only for OS/2 <code>OS22XBITMAPHEADER </code>. Can only be used with 24-bit/pixel bitmaps.</td>
                 </tr>
                 <tr>
                   <td>5</td>
@@ -1697,7 +1796,7 @@
               </tbody>
             </table>
             <b>Notes:</b><br>
-            &nbsp;&nbsp;For Windows CE Mobile 5.0 and later, this value can be <b>OR</b> with <code>BI_SRCPREROTATE</code> (8000h in hexadecimal)
+            &nbsp;&nbsp;For Windows CE Mobile 5.0 and later, this value can be <b>OR</b>ed with <code>BI_SRCPREROTATE</code> (8000h in hexadecimal)
             to specify that the source DIB section has the same rotation angle as the destination.
           </td>
         </tr>
@@ -1739,10 +1838,11 @@
           <td>biClrUsed</td>
           <td class="classTextAlingLeft">
             The number of colors present in the color palette/table.<br>
-            Can be set to 0, if <code>BitsPerPixel</code> is less or equal than 8 bits&hyphen;per&hyphen;pixel (&le; 8). In this case,
-            2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel) is used.<br>
-            Can be calculated by the formula:<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<code>ColorsUsed = 1 &lt;&lt; BitsPerPixel;</code>
+            Can be set to 0, if <code>biBitCount</code> is less or equal than 8 bits&hyphen;per&hyphen;pixel (&le; 8). In this case,
+            2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel) is used, calculated by the formula:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<code>ColorsUsed = 1 &lt;&lt; BitsPerPixel;</code><br>
+            For <code>biBitCount</code> bigger than 8 bits&hyphen;per&hyphen;pixel (&gt; 8), this is the number of colors entries on the optimized palette.
+            Or 0, for no palette present.
           </td>
         </tr>
         <tr>
@@ -1752,7 +1852,7 @@
           <td>biClrImportant</td>
           <td class="classTextAlingLeft">
             The number of significant colors present in the color palette/table.<br>
-            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>).
+            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>biClrImportant</code> = <code>biClrUsed</code>).
           </td>
         </tr>
         <tr>
@@ -1810,8 +1910,8 @@
           <td>32&hyphen;bit unsigned</td>
           <td>bV4CSType</td>
           <td class="classTextAlingLeft">
-            The color space of the DIB, <i>aka</i> the ICC color correction profile type. The following valid values are possible:
-            <table style="border: 1px solid #000000;">
+            The color space type of the DIB, <i>aka</i> the ICC color correction profile type. The following valid values are possible:
+            <table>
               <tbody>
                 <tr>
                   <th>Value</th>
@@ -1823,6 +1923,20 @@
                   <td><code>LCS_CALIBRATED_RGB</code></td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">
                     This value implies that endpoints and gamma values are given in the appropriate fields.
+                  </td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>1</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    Use destination device RGB. Ignores the endpoints and gamma values given in the appropriate fields.
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>2</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    Use destination device CMYK. Ignores the endpoints and gamma values given in the appropriate fields.
                   </td>
                 </tr>
                 <tr>
@@ -1869,50 +1983,155 @@
             </table>
           </td>
         </tr>
-		<tr>
-          <td>0024h</td>
-          <td>4</td>
-          <td>CIEXYZTRIPLE</td>
+		    <tr>
+          <td>003Ch</td>
+          <td>36</td>
+          <td>3 * 32&hyphen;bit unsigned</td>
           <td>bV4Endpoints</td>
           <td class="classTextAlingLeft">
             The RGB color calibrated endpoints. Calibrated RGB is defined by the 1931 CIE XYZ standard.<br>
-            <code>CIEXYZTRIPLE</code>.
+            <code>CIEXYZTRIPLE</code> contains the x,y, and z coordinates of the three colors components that are composed by <code>CIEXYZTRIPLE.ciexyzRed</code>, 
+			<code>CIEXYZTRIPLE.ciexyzGreen</code> and <code>CIEXYZTRIPLE.ciexyzBlue</code> endpoints.<br>
+        	Specified in fixed point 2.30 format. The upper 2 bits are the unsigned integer value. The lower 30 bits are the fractional part.
           </td>
         </tr>
-		<tr>
-          <td>0024h</td>
+		    <tr>
+          <td>0060h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
           <td>bV4GammaRed</td>
           <td class="classTextAlingLeft">
-            Tone response curve for red. This member is ignored unless <code>BITMAPV4HEADER.CIEXYZTRIPLE</code> values are calibrated RGB values and
-            <code>BITMAPV4HEADER.bV4CSType</code> is set to <code>LCS_CALIBRATED_RGB</code>.<br>
-            Uses fixed 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
-
+            Tone response curve for red color component. 
+			This member is ignored unless color values are calibrated RGB values and <code>bV4CSType</code> is set to 
+			<code>LCS_CALIBRATED_RGB</code>.<br>
+        	Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
+			The required <code>DWORD</code> bit format for the  <code>bV4GammaRed</code> is an 8.8 fixed point integer left-shifted
+		    by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+		    of the 32-bit DWORD is:<br>
+		    &nbsp;&nbsp;&nbsp;&nbsp;0x00000000nnnnnnnnffffffff00000000
           </td>
         </tr>
-		<tr>
-          <td>0024h</td>
+		    <tr>
+          <td>0064h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
           <td>bV4GammaGreen</td>
           <td class="classTextAlingLeft">
-            The number of significant colors present in the color palette/table.<br>
-            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>)
+            Tone response curve for green color component. 
+			This member is ignored unless color values are calibrated RGB values and <code>bV4CSType</code> is set to 
+			<code>LCS_CALIBRATED_RGB</code>.<br>
+        	Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
+			The required <code>DWORD</code> bit format for the  <code>bV4GammaGreen</code> is an 8.8 fixed point integer left-shifted
+		    by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+		    of the 32-bit DWORD is:<br>
+		    &nbsp;&nbsp;&nbsp;&nbsp;0x00000000nnnnnnnnffffffff00000000
           </td>
         </tr>
-		<tr>
-          <td>0024h</td>
+		    <tr>
+          <td>0068h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
           <td>bV4GammaBlue</td>
           <td class="classTextAlingLeft">
-            The number of significant colors present in the color palette/table.<br>
-            Can be set to 0, if all colors in the palette are important (<i>i.e.</i> <code>ColorsImportant</code> = <code>ColorsUsed</code>)
+            Tone response curve for blue color component. 
+			This member is ignored unless color values are calibrated RGB values and <code>bV4CSType</code> is set to 
+			<code>LCS_CALIBRATED_RGB</code>.<br>
+        	Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
+			The required <code>DWORD</code> bit format for the  <code>bV4GammaBlue</code> is an 8.8 fixed point integer left-shifted
+		    by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+		    of the 32-bit DWORD is:<br>
+		    &nbsp;&nbsp;&nbsp;&nbsp;0x00000000nnnnnnnnffffffff00000000
           </td>
         </tr>
-		<tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV5HEADER <span style="color: #00FF00;">(108 Bytes)</span></td>
+		    <tr>
+          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV5HEADER <span style="color: #00FF00;">(124 Bytes)</span></td>
+        </tr>
+        <tr>
+          <td>006Ch</td>
+          <td>4</td>
+          <td>32&hyphen;bit unsigned</td>
+          <td>bV5Intent</td>
+          <td class="classTextAlingLeft">
+            Rendering intent for bitmap. The following valid values are possible:
+            <table>
+              <tbody>
+                <tr>
+                  <th>Value</th>
+                  <th>Macro Name</th>
+                  <th>Intent</th>
+                  <th>ICC Name</th>
+                  <th style="max-width: 460px;">Description</th>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td><code>LCS_GM_BUSINESS</code></td>
+                  <td>Graphic</td>
+                  <td>Saturation</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    Maintains saturation. Used for business charts and other situations in which undithered colors are required.
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><code>LCS_GM_GRAPHICS</code></td>
+                  <td>Proof</td>
+                  <td>Relative Colorimetric</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    Maintains colorimetric match. Used for graphic designs and named colors.
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><code>LCS_GM_IMAGES</code></td>
+                  <td>Picture</td>
+                  <td>Perceptual</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    Maintains contrast. Used for photographs and natural images.
+                  </td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td><code>LCS_GM_ABS_COLORIMETRIC</code></td>
+                  <td>Match</td>
+                  <td>Absolute Colorimetric</td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">
+                    Maintains the white point. Matches the colors to their nearest color in the destination gamut.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>0070h</td>
+          <td>4</td>
+          <td>32‐bit unsigned</td>
+          <td>bV5ProfileData</td>
+          <td class="classTextAlingLeft">
+            The offset, in bytes, from the beginning of the <code>BITMAPV5HEADER</code> structure to the start of the ICM profile data.
+            If the profile is embedded, profile data is the actual profile, otherwise, it is a string with the name of the linked profile.
+            These profile members are ignored unless the <code>bV5CSType</code> member specifies <code>PROFILE_LINKED</code> or <code>PROFILE_EMBEDDED</code>.<br>
+            <b>Note:</b> The profile data string, for linked profiles, is the null-terminated file name of the profile and must be encoded on ASCII for the
+            Windows character set (code page 1252).
+          </td>
+        </tr>
+        <tr>
+          <td>0074h</td>
+          <td>4</td>
+          <td>32‐bit unsigned</td>
+          <td>bV5ProfileSize</td>
+          <td class="classTextAlingLeft">
+            Size, in bytes, of embedded profile data.
+          </td>
+        </tr>
+        <tr>
+          <td>0078h</td>
+          <td>4</td>
+          <td>32‐bit unsigned</td>
+          <td>bV5Reserved</td>
+          <td class="classTextAlingLeft">
+            Padding. Reserved for future use. Must be 0.
+          </td>
         </tr>
       </tbody>
     </table>

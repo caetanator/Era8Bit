@@ -28,21 +28,21 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     {
         /// <summary>
         /// The X coordinate (mix (a linear combination) of cone response curves chosen to be nonnegative).
-        /// <remarks>This value is a fixed-point values with a 2-bit integer part and a 30-bit fractional part.</remarks>
+        /// <remarks>Specified in fixed point 2.30 format. The upper 2 bits are the unsigned integer value. The lower 30 bits are the fractional part.</remarks>
         /// </summary>
         /// <seealso href="https://en.wikipedia.org/wiki/CIE_1931_color_space">See this Wikipedia link for more information.</seealso>
         public uint X;
 
         /// <summary>
         /// The Y coordinate (luminance).
-        /// <remarks>This value is a fixed-point values with a 2-bit integer part and a 30-bit fractional part.</remarks>
+        /// <remarks>Specified in fixed point 2.30 format. The upper 2 bits are the unsigned integer value. The lower 30 bits are the fractional part.</remarks>
         /// </summary>
         /// <seealso href="https://en.wikipedia.org/wiki/CIE_1931_color_space">See this Wikipedia link for more information.</seealso>
         public uint Y;
 
         /// <summary>
         /// The Z coordinate (quasi-equal to blue stimulation/S cone response).
-        /// <remarks>This value is a fixed-point values with a 2-bit integer part and a 30-bit fractional part.</remarks>
+        /// <remarks>Specified in fixed point 2.30 format. The upper 2 bits are the unsigned integer value. The lower 30 bits are the fractional part.</remarks>
         /// </summary>
         /// <seealso href="https://en.wikipedia.org/wiki/CIE_1931_color_space">See this Wikipedia link for more information.</seealso>
         public uint Z;
