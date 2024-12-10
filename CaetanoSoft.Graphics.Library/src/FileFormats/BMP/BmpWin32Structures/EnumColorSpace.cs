@@ -14,7 +14,8 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <summary>
         /// The endpoints and gamma values are given in the appropriate fields.
         /// <para>
-        /// Equals 0x00000000 (in hexadecimal).
+        /// Equals 0x00000000 (in hexadecimal). Same as <c>LCS_CALIBRATED_RGB</c> in 
+        /// Windows BMP v4 SDK.
         /// </para>
         /// </summary>
         Calibrated_RGB = 0x00000000,
@@ -38,7 +39,8 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <summary>
         /// The bitmap is in sRGB color space.
         /// <para>
-        /// Equals 'sRGB' (in ASCII) or 0x73524742 (in hexadecimal).
+        /// Equals 'sRGB' (in ASCII) or 0x73524742 (in hexadecimal). Same as <c>LCS_sRGB</c> in 
+        /// Windows BMP v4 SDK.
         /// </para>
         /// </summary>
         SRGB = 0x73524742,
@@ -46,7 +48,8 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <summary>
         /// The bitmap is in the system default color space: sRGB.
         /// <para>
-        /// Equals 'Win ' (in ASCII) or 0x57696E20 (in hexadecimal).
+        /// Equals 'Win ' (in ASCII) or 0x57696E20 (in hexadecimal). Same as <c>LCS_WINDOWS_COLOR_SPACE</c> in 
+        /// Windows BMP v4 SDK.
         /// </para>
         /// </summary>
         WindowsColorSpace = 0x57696E20,
@@ -56,7 +59,8 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <summary>
         /// This value indicates that <c>ProfileOffset</c> points to the ICC color space file name (in ASCII Code Page 1252) of the profile to use (gamma and endpoints values are ignored).
         /// <para>
-        /// Equals 'LINK' (in ASCII) or 0x4C494E4B (in hexadecimal).
+        /// Equals 'LINK' (in ASCII) or 0x4C494E4B (in hexadecimal). Same as <c>LCS_PROFILE_LINKED</c> in 
+        /// Windows BMP v5 SDK.
         /// </para>
         /// </summary>
         ProfileLinked = 0x4C494E4B,
@@ -64,7 +68,8 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <summary>
         /// Indicates that <c>ProfileOffset</c> points to a memory buffer that contains the profile to be used (gamma and endpoints values are ignored).
         /// <para>
-        /// Equals 'MBED' (in ASCII) or 0x4D424544 (in hexadecimal).
+        /// Equals 'MBED' (in ASCII) or 0x4D424544 (in hexadecimal). Same as <c>LCS_PROFILE_EMBEDDED</c> in 
+        /// Windows BMP v5 SDK.
         /// </para>
         /// </summary>
         ProfileEmbedded = 0x4D424544

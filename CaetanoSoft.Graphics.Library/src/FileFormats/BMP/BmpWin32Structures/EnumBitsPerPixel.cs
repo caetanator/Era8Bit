@@ -28,13 +28,14 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         MonoChrome = 1,
 
         /// <summary>
-        /// The bitmap has a maximum of 4 colors, and the palette contains up to 4 entries (4 colors palette).
+        /// The bitmap has a maximum of 4 colors/ grayscales, and the palette contains up to 4 entries (4 colors palette).
         /// <para>Each 2 bits in the bitmap array represents a pixel (the index for the palette). This palette represents 4 shades of gray.
         /// For example, if the first byte in the bitmap is 0x1F, the byte represents 4 pixels.
         /// The first pixel contains the color in the second table entry, the second pixel will be the color in
         /// the sixteenth table entry.</para>
-        /// <para>Supported by Windows CE 1.0x and later.</para>
-        /// <para>Implemented on Microsoft Windows BMP v3 for Windows CE.</para>
+        /// <para>Supported by Windows CE 1.0x and later for grayscale LCD screens. It's was the only color deep supported 
+        /// by Windows CE 1.0 devices.</para>
+        /// <para>Implemented on Microsoft Windows BMP v3 for Windows CE only.</para>
         /// </summary>
         Palette4 = 2,
 

@@ -12,26 +12,30 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         // ** Values for Microsoft Windows BMP v5
 
         /// <summary>
-        /// Saturation. Maintains saturation.
+        /// Saturation. Maintains saturation. Same as <c>LCS_GM_BUSINESS</c> in 
+        /// Windows BMP v5 SDK.
         /// Used for business charts and other situations in which undithered colors are required.
         /// </summary>
         Business = 1,
 
         /// <summary>
         /// Relative Colorimetric. Maintains colorimetric match.
-        /// Used for graphic designs and named colors.
+        /// Used for graphic designs and named colors. Same as <c>LCS_GM_GRAPHICS</c> in 
+        /// Windows BMP v5 SDK.
         /// </summary>
         Graphics = 2,
 
         /// <summary>
         /// Perceptual. Maintains contrast.
-        /// Used for photographs and natural images.
+        /// Used for photographs and natural images. Same as <c>LCS_GM_IMAGES</c> in 
+        /// Windows BMP v5 SDK.
         /// </summary>
         Images = 4,
 
         /// <summary>
         /// Absolute Colorimetric. Maintains the white point.
-        /// Matches the colors to their nearest color in the destination gamut.
+        /// Matches the colors to their nearest color in the destination gamut. 
+        /// Same as <c>LCS_GM_ABS_COLORIMETRIC</c> in Windows BMP v5 SDK.
         /// </summary>
         AbsoluteColoriMetric = 8
     }

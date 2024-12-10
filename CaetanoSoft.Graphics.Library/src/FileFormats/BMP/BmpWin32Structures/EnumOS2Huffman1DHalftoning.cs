@@ -12,22 +12,23 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     internal enum EnumOS2Huffman1DHalftoning : ushort
     {
         /// <summary>
-        /// No halftoning.
+        /// No halftoning. Same as <c>BRH_NOTHALFTONED</c> macro of the OS/2 2.0 and above SDK.
         /// </summary>
         NoHalftoning = 0,
 
         /// <summary>
-        /// Error-diffusion halftoning.
+        /// Error-diffusion halftoning. Same as <c>BRH_ERRORDIFFUSION</c> macro of the OS/2 2.0 and above SDK.
         /// </summary>
         ErrorDiffusion = 1,
 
         /// <summary>
-        /// Processing Algorithm for Noncoded Document Acquisition (PANDA) halftoning.
+        /// Processing Algorithm for Noncoded Document Acquisition (PANDA) halftoning. 
+        /// Same as <c>BRH_PANDA</c> macro of the OS/2 2.0 and aboveSDK.
         /// </summary>
         PANDA = 2,
 
         /// <summary>
-        /// Super-circle halftoning.
+        /// Super-circle halftoning. Same as <c>BRH_SUPERCIRCLE</c> macro of the OS/2 2.0 and above SDK.
         /// </summary>
         SuperCircle = 3
     }

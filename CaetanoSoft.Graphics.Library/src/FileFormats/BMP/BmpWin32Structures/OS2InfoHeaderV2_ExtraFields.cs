@@ -16,10 +16,11 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     /// of importance and must follow this structure.</para>
     /// <para>Each scan line must be zero-padded to end on a DWORD (4 bytes) boundary.</para>
     /// </remarks>
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 64)]
-    internal struct OS2InfoHeaderV2
+    //[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 64)]
+    //[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 24)]
+    internal struct OS2InfoHeaderV2_ExtraFields
     {
-        // ** Fields for Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB header
+        // ** Fields upgraded from Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB headers and compatible with Microsoft Windows BMP v3
 
         /// <summary>
         /// The size in bytes required to store this structure: Must be between 16 and 64 bytes.
@@ -28,22 +29,22 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// If the field is not present, 0 is assumed as it's value.
         /// </para>
         /// </summary>
-        public uint Size;
+        //public uint Size;
 
         /// <summary>
         /// The width of the bitmap, in pixels.
         /// </summary>
-        public uint Width;
+        //public uint Width;
 
         /// <summary>
         /// The height of the bitmap, in pixels.
         /// </summary>
-        public uint Height;
+        //public uint Height;
 
         /// <summary>
         /// The number of planes for the target device: Always 1.
         /// </summary>
-        public ushort Planes;
+        //public ushort Planes;
 
         /// <summary>
         /// The number of bits-per-pixel (bpp). This value must be one of: 1, 4, 8, or 24.
@@ -53,9 +54,9 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// The color table (if present) must follow the <c>OS2InfoHeaderV2</c> structure, and consist of
         /// <see cref="WinRgbQuadruple"/> structure vector (most important colors at top), up to the maximum palette size dictated by the bpp.
         /// </remarks>
-        public ushort BitsPerPixel;
+        //public ushort BitsPerPixel;
 
-        // ** Fields added for IBM OS/2 BMP v2 DIB header
+        // ** Fields added for IBM OS/2 BMP v2 DIB header and compatible with Microsoft Windows BMP v3
 
         /// <summary>
         /// Specifies the type of compression scheme used for compressing a bottom-up bitmap (top-down DIBs cannot be compressed).
@@ -90,12 +91,12 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </para>
         /// <see cref="BitsPerPixel"/>
         /// </summary>
-        public uint Compression;
+        //public uint Compression;
 
         /// <summary>
         /// Specifies the size, in bytes, of the image. This may be set to 0 for <see cref="BmpOS2Compression.RGB"/> bitmaps.
         /// </summary>
-        public uint ImageDataSize;
+        //public uint ImageDataSize;
 
         /// <summary>
         /// Specifies the horizontal resolution, in pixels-per-meter, of the target device for the bitmap.
@@ -104,7 +105,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </para>
         /// <see cref="Units"/>
         /// </summary>
-        public uint PixelsPerUnitX;
+        //public uint PixelsPerUnitX;
 
         /// <summary>
         /// Specifies the vertical resolution, in pixels-per-meter, of the target device for the bitmap.
@@ -113,7 +114,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </para>
         /// <see cref="Units"/>
         /// </summary>
-        public uint PixelsPerUnitY;
+        //public uint PixelsPerUnitY;
 
         /// <summary>
         /// Specifies the number of color indexes in the color palette used by the bitmap. Most important colors first.
@@ -136,15 +137,17 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </para>
         /// <see cref="PaletteImportant"/>
         /// </summary>
-        public uint PaletteSize;
+        //public uint PaletteSize;
 
         /// <summary>
         /// Specifies the number of important color indexes from the color palette for displaying the bitmap.
         /// <para>If this value is 0, all colors are required.</para>
         /// <see cref="PaletteSize"/>
         /// </summary>
-        public uint PaletteImportant;
+        //public uint PaletteImportant;
 
+        // ** Fields added exclusived for IBM OS/2 BMP v2 DIB header and not compatible with Microsoft Windows BMP v3
+        
         /// <summary>
         /// Indicates the type of units used to interpret the values of the <c>OS2InfoHeaderV2.PixelsPerUnitX</c> and
         /// <c>OS2InfoHeaderV2.PixelsPerUnitY</c> fields.
