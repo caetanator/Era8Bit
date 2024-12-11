@@ -1,65 +1,134 @@
+/**
+ * OS2InfoHeaderV2_ExtraFields.cs
+ *
+ * PURPOSE
+ *   This structure represents an IBM OS/2 BMP v2 DIB (Device Independent Bitmap) header structure (OS22XBITMAPHEADER) of a BMP bitmap.
+ *   
+ *   This structure range size is between 16 and 64 bytes. Common sizes are 16, 40 and 64.
+ *   
+ *   If a field is not present on the image file, all other fields that follow aren't present to, and 
+ *   their values are assumed to be zero (0).
+ *   
+ *   This structure, only implements the last extra 24 bytes of fields that aren't included and not supported on the Microsoft Windows API and BMP v3 
+ *   BITMAPINFOHEADER and newer, 40 bytes fields. So, the BITMAPINFOHEADER plus this structure makes the 64 bytes total of the OS22XBITMAPHEADER structure.
+ *   Introduced in IBM's OS/2 2.0.
+ *
+ * CONTACTS
+ *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
+ *      https://github.com/caetanator/Era8Bit
+ *
+ * COPYRIGHT
+ *  This file is distributed under the terms of the GNU General Public
+ *  License (GPL) v3. Copies of the GPL can be obtained from:
+ *      ftp://prep.ai.mit.edu/pub/gnu/GPL
+ *  Each contributing author retains all rights to their own work.
+ *
+ *  (C)2009-2024 José Caetano Silva
+ *
+ * HISTORY
+ *  2009-09-15: Created.
+ *  2017-04-13: Major rewrite.
+ *  2023-09-16: Renamed and updated.
+ *  2024-12-10: More documentation updates.
+ */
 
 using System.Runtime.InteropServices;
 
 namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
 {
     /// <summary>
-    /// This is the OS/2 2.x BMP v2 DIB (Device Independent Bitmap) information header: OS22XBITMAPHEADER.
-    /// <para>Supported since OS/2 2.0.</para>
-    /// <para>Implemented on IBM OS/2 BMP v2 format.</para>
+    /// This structure represents an IBM OS/2 BMP v2 DIB (Device Independent Bitmap) header structure (<c>OS22XBITMAPHEADER</c>) of a BMP bitmap.
+    /// <para>This structure range size is between 16 and 64 bytes. Common sizes are 16, 40 and 64.</para>
+    /// <para>If a field is not present on the image file, all other fields that follow aren't present to, and 
+    /// their values are assumed to be zero (0).</para>
+    /// <para>
+    /// This structure, only implements the last extra 24 bytes of fields that aren't included and not supported on the Microsoft Windows API and BMP v3 
+    /// <seealso cref="Win32RgbQuadruple"><c>BITMAPINFOHEADER</c></seealso> and newer, 40 bytes fields. So, the <c>BITMAPINFOHEADER</c> plus this 
+    /// structure makes the 64 bytes total of the <c>OS22XBITMAPHEADER</c> structure.
+    /// </para>
+    /// <para>Introduced in IBM's OS/2 2.0.</para>
+    /// <para>Supported by the OS/2 OS API since OS/2 2.0.</para>
     /// <seealso href="http://www.fileformat.info/format/os2bmp/egff.htm">See this FileFormat link for more information.</seealso>
     /// </summary>
     /// <remarks>
-    /// Make shore that <c>sizeof(OS2InfoHeaderV2)</c> returns the size of 64 bytes and is byte aligned.
+    /// The <c>sizeof(OS2InfoHeaderV2_ExtraFields)</c> returns 24 bytes and is sequential and byte aligned.
     /// All structure fields are stored little-endian on the file.
-    /// <para>The colors (<seealso cref="WinRgbQuadruple"/>) in the palette table should appear in order
-    /// of importance and must follow this structure.</para>
-    /// <para>Each scan line must be zero-padded to end on a DWORD (4 bytes) boundary.</para>
+    /// <para>The color table (if present) must immediately follow this structure and stored in an vector array of 
+    /// <seealso cref="Win32RgbQuadruple"/> with most important colors at top, up to the maximum palette size 
+    /// dictated by the <seealso cref="BitsPerPixel"/> field.</para>
+    /// <para>Each bitmap scan line of the pixels data, must be zero-padded to end on a DWORD (4 bytes) boundary.</para>
+    /// <para>
+    /// When the bitmap array immediately follows the <c>OS2InfoHeaderV2</c> structure plus the palette array (if needed), it is a packed bitmap.
+    /// Packed bitmaps are referenced by a single pointer.
+    /// Packed bitmaps require that the <seealso cref="PaletteSize"/> field must 
+    /// be either 0 or the actual size of the color table.
+    /// </para>
     /// </remarks>
     //[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 64)]
-    //[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 24)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 24)]
     internal struct OS2InfoHeaderV2_ExtraFields
     {
         // ** Fields upgraded from Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB headers and compatible with Microsoft Windows BMP v3
 
         /// <summary>
-        /// The size in bytes required to store this structure: Must be between 16 and 64 bytes.
+        /// The size required to store this structure, in bytes. Always 24.
         /// <para>
-        /// Applications should use this member to determine which bitmap information header structure fields are being used.
-        /// If the field is not present, 0 is assumed as it's value.
+        /// Also used to determine the version of the BMP DIB, as:
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Value</term>
+        /// <description>Version</description>
+        /// </listheader>
+        /// <item>
+        /// <term>12</term>
+        /// <description>OS/2 BMP DIB v1 (<seealso cref="Win32CoreHeader"><c>OS21XBITMAPHEADER</c></seealso>) or Windows BMP DIB v2 (<seealso cref="Win32CoreHeader"><c>BITMAPCOREHEADER</c></seealso>)</description>
+        /// </item>
+        /// <item>
+        /// <term>16 to 40</term>
+        /// <description>OS/2 BMP DIB v2 [compatible with Windows DIB v3] (<seealso cref="Win32InfoHeaderV5"><c>BITMAPINFOHEADER</c></seealso>)</description>
+        /// </item>
+        /// <item>
+        /// <term>42 to 64</term>
+        /// <description>OS/2 BMP DIB v2 [not compatible with Windows DIBs] (<seealso cref="OS2InfoHeaderV2_ExtraFields"><c>OS22XBITMAPHEADER</c></seealso>)</description>
+        /// </item>
+        /// </list>
         /// </para>
         /// </summary>
-        //public uint Size;
+        public uint Size;
 
         /// <summary>
-        /// The width of the bitmap, in pixels.
-        /// </summary>
-        //public uint Width;
-
-        /// <summary>
-        /// The height of the bitmap, in pixels.
-        /// </summary>
-        //public uint Height;
-
-        /// <summary>
-        /// The number of planes for the target device: Always 1.
-        /// </summary>
-        //public ushort Planes;
-
-        /// <summary>
-        /// The number of bits-per-pixel (bpp). This value must be one of: 1, 4, 8, or 24.
-        /// <see cref="Compression"/>
+        /// Specifies the width of the bitmap image, in pixels.
+        /// <para>Must be bigger that zero (<c>Width &gt; 0</c>).</para>
         /// </summary>
         /// <remarks>
-        /// The color table (if present) must follow the <c>OS2InfoHeaderV2</c> structure, and consist of
-        /// <see cref="WinRgbQuadruple"/> structure vector (most important colors at top), up to the maximum palette size dictated by the bpp.
+        /// On Windows BMP v3 and above: This field is a signed 32-bits integer.
         /// </remarks>
-        //public ushort BitsPerPixel;
-
-        // ** Fields added for IBM OS/2 BMP v2 DIB header and compatible with Microsoft Windows BMP v3
+        public uint Width;
 
         /// <summary>
-        /// Specifies the type of compression scheme used for compressing a bottom-up bitmap (top-down DIBs cannot be compressed).
+        /// Specifies the height of the bitmap image, in pixels.
+        /// <para>Must be bigger that zero (<c>Height &gt; 0</c>).</para>
+        /// </summary>
+        /// <remarks>
+        /// On Windows BMP v3 and above: This field is a signed 32-bits integer.
+        /// </remarks>
+        public uint Height;
+
+        /// <summary>
+        /// The number of color planes for the target device: Always 1.
+        /// </summary>
+        public ushort ColorPlanes;
+
+        /// <summary>
+        /// The number of bits-per-pixel (bpp) for each pixel in the image data. This value must be one of: 1, 4, 8 or 24.
+        /// See <seealso cref="EnumBitsPerPixel"/> and <see cref="Compression"/> for more information.
+        /// </summary>
+        public ushort BitsPerPixel;
+
+        // ** Optional fields added for IBM OS/2 BMP v2 DIB header and compatible with Microsoft Windows BMP v3
+
+        /// <summary>
+        /// Specifies the type of compression scheme used for compressing a bottom-up bitmap image data/pixels (top-down DIBs cannot be compressed).
         /// <para>
         /// This value must be one of:
         /// <list type="table">
@@ -68,99 +137,125 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <description>Compression Scheme</description>
         /// </listheader>
         /// <item>
-        /// <term>0 - <see cref="BmpOS2Compression.RGB"/></term>
-        /// <description>Uncompressed</description>
+        /// <term>0 - <see cref="EnumCompression.RGB"/></term>
+        /// <description>Uncompressed, uses RGB</description>
         /// </item>
         /// <item>
-        /// <term>1 - <see cref="BmpOS2Compression.RLE8"/></term>
-        /// <description>8-bit RLE (only valid for 8 bpp)</description>
+        /// <term>1 - <see cref="EnumCompression.RLE8"/></term>
+        /// <description>8-bit RLE (only valid for 8-bpp)</description>
         /// </item>
         /// <item>
-        /// <term>2 - <see cref="BmpOS2Compression.RLE4"/></term>
-        /// <description>4-bit RLE (only valid for 4 bpp)</description>
+        /// <term>2 - <see cref="EnumCompression.RLE4"/></term>
+        /// <description>4-bit RLE (only valid for 4-bpp)</description>
         /// </item>
         /// <item>
-        /// <term>3 - <see cref="BmpOS2Compression.Huffman1D"/></term>
-        /// <description>1-bit Huffman 1D (only valid for 1 bpp)</description>
+        /// <term>3 - <see cref="EnumCompression.Huffman1D"/></term>
+        /// <description>1-bit Huffman 1D Halftoning (only valid for 1-bpp images)</description>
         /// </item>
         /// <item>
-        /// <term>4 - <see cref="BmpOS2Compression.RLE24"/></term>
+        /// <term>4 - <see cref="EnumCompression.RLE24"/></term>
         /// <description>24-bit RLE (only valid for 24 bpp)</description>
         /// </item>
         /// </list>
         /// </para>
-        /// <see cref="BitsPerPixel"/>
+        /// See <seealso cref="BitsPerPixel"/>.
         /// </summary>
-        //public uint Compression;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint Compression;
 
         /// <summary>
-        /// Specifies the size, in bytes, of the image. This may be set to 0 for <see cref="BmpOS2Compression.RGB"/> bitmaps.
+        /// Specifies the size of the image data/pixels (including the zero-pads, if needed), in bytes.
+        /// <para>This may be set to 0 for <seealso cref="EnumCompression.RGB"/> bitmaps.</para>
         /// </summary>
-        //public uint ImageDataSize;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint ImageDataSize;
 
         /// <summary>
-        /// Specifies the horizontal resolution, in pixels-per-meter, of the target device for the bitmap.
+        /// Specifies the horizontal resolution, in pixels-per-meter (ppm), of the destination device for the bitmap image.
         /// <para>
-        /// An application can use this value to select a bitmap from a resource group that best matches the characteristics of the current device.
+        /// If this field is 0, the target device ppm is used.
         /// </para>
-        /// <see cref="Units"/>
+        /// <para>
+        /// An application can use this value to select a bitmap from a resource group that best matches the characteristics of the current output device.
+        /// </para>
+        /// See also <seealso cref="ResolutionUnit"/>.
         /// </summary>
-        //public uint PixelsPerUnitX;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint PixelsPerMeterX;
 
         /// <summary>
-        /// Specifies the vertical resolution, in pixels-per-meter, of the target device for the bitmap.
+        /// Specifies the vertical resolution, in pixels-per-meter (ppm), of the destination device for the bitmap image.
         /// <para>
-        /// An application can use this value to select a bitmap from a resource group that best matches the characteristics of the current device.
+        /// If this field is 0, the target device ppm is used.
         /// </para>
-        /// <see cref="Units"/>
+        /// <para>
+        /// An application can use this value to select a bitmap from a resource group that best matches the characteristics of the current output device.
+        /// </para>
+        /// See also <seealso cref="ResolutionUnit"/>.
         /// </summary>
-        //public uint PixelsPerUnitY;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint PixelsPerMeterY;
 
         /// <summary>
-        /// Specifies the number of color indexes in the color palette used by the bitmap. Most important colors first.
+        /// Specifies the number of color indexes in the color palette (the palette size) used by the bitmap image. Most important colors must be at the top.
         /// <para>
-        /// If this value is 0, the bitmap uses the maximum number of colors corresponding to the value of the <c>OS2InfoHeaderV2.BitsPerPixel</c>
-        /// member for the compression mode specified by <c>OS2InfoHeaderV2.Compression</c>.
+        /// If this value is 0 (<c>PaletteSize == 0</c>) and the <see cref="BitsPerPixel"/> field is less than or equal to 8 (<c>BitsPerPixel &lt;= 8</c>), 
+        /// the maximum number of colors corresponding to the value of <see cref="BitsPerPixel"/> is used.
         /// </para>
         /// <para>
-        /// If is nonzero and the <c>OS2InfoHeaderV2.BitsPerPixel</c> member is less or equal to 8, the <c>OS2InfoHeaderV2.PaletteSize</c> member
-        /// specifies the actual number of colors the graphics engine or device driver accesses.
+        /// 24-bpp, by default, don't have a palette, but if one is provided for optimizing the system palette of the paletted devices, 
+        /// this field can't be 0 and must be set to the total number of the palette color items.
         /// </para>
-        /// <para>
-        /// If <c>OS2InfoHeaderV2.BitsPerPixel</c> is 24, the <c>OS2InfoHeaderV2.PaletteSize</c> member specifies the size of the
-        /// color table used to optimize performance of the system color palettes.
-        /// </para>
-        /// <para>
-        /// When the bitmap array immediately follows the <c>OS2InfoHeaderV2</c> structure, it is a packed bitmap.
-        /// Packed bitmaps are referenced by a single pointer.
-        /// Packed bitmaps require that the <c>OS2InfoHeaderV2.PaletteSize</c> member must be either 0 or the actual size of the color table.
-        /// </para>
-        /// <see cref="PaletteImportant"/>
+        /// See <seealso cref="PaletteImportant"/>, for more information.
         /// </summary>
-        //public uint PaletteSize;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint PaletteSize;
 
         /// <summary>
-        /// Specifies the number of important color indexes from the color palette for displaying the bitmap.
-        /// <para>If this value is 0, all colors are required.</para>
-        /// <see cref="PaletteSize"/>
+        /// Specifies the number of important color indexes from the color palette for displaying the bitmap image.
+        /// <para>If this field is 0 (<c>PaletteSize == 0</c>), all colors are required to display the bitmap image correctly.</para>
+        /// <para>If this field bigger than <seealso cref="PaletteSize"/> 0 (<c>PaletteImportant > PaletteSize</c>), 
+        /// <seealso cref="PaletteSize"/> value is used.</para>
+        /// <para>If the bitmap image doesn't contains a pallet, this value is ignored.</para>
+        /// See <seealso cref="PaletteSize"/>, for more information.
         /// </summary>
-        //public uint PaletteImportant;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint PaletteImportant;
 
-        // ** Fields added exclusived for IBM OS/2 BMP v2 DIB header and not compatible with Microsoft Windows BMP v3
-        
+        // ** Optional fields added exclusive for IBM OS/2 BMP v2 DIB header and not compatible with any Microsoft Windows BMP
+
         /// <summary>
-        /// Indicates the type of units used to interpret the values of the <c>OS2InfoHeaderV2.PixelsPerUnitX</c> and
-        /// <c>OS2InfoHeaderV2.PixelsPerUnitY</c> fields.
+        /// Indicates the type of units used in the resolution of the image to interpret the values of the <c>OS2InfoHeaderV2.PixelsPerMeterX</c> and
+        /// <c>OS2InfoHeaderV2.PixelsPerMeterY</c> fields.
         /// <para>The only valid value is 0, indicating pixels-per-meter.</para>
-        /// <see cref="PixelsPerUnitX"/>
-        /// <see cref="PixelsPerUnitY"/>
+        /// See <see cref="PixelsPerMeterX"/>,
+        /// <see cref="PixelsPerMeterY"/> and 
+        /// <see cref="EnumOS2EnumOS2ResolutionUnits.PPM"/>.
         /// </summary>
-        public ushort Units;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public ushort ResolutionUnit;
 
         /// <summary>
         /// Reserved for future use. Must be set to 0.
         /// <para>Pad structure to 4-byte boundary.</para>
         /// </summary>
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
         public ushort Reserved;
 
         /// <summary>
@@ -168,8 +263,12 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <para>The only valid value for this field is 0,
         /// indicating that the bitmap is stored from left to right and from the bottom up,
         /// with the origin being in the lower-left corner of the display.</para>
+        /// See <see cref="EnumOS2EnumOS2RecordingAlgorithm.BottomUp"/>.
         /// </summary>
-        public ushort Recording;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public ushort RecordingDirection;
 
         /// <summary>
         /// Specifies the halftoning algorithm used when compressing the bitmap data.
@@ -181,51 +280,70 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <description>Halftoning Algorithm</description>
         /// </listheader>
         /// <item>
-        /// <term>0 - <see cref="BmpOS2CompressionHalftoning.NoHalftoning"/></term>
+        /// <term>0 - <see cref="EnumOS2Huffman1DHalftoning.NoHalftoning"/></term>
         /// <description>No halftoning algorithm was used</description>
         /// </item>
         /// <item>
-        /// <term>1 - <see cref="BmpOS2CompressionHalftoning.ErrorDiffusion"/></term>
+        /// <term>1 - <see cref="EnumOS2Huffman1DHalftoning.ErrorDiffusion"/></term>
         /// <description>Error Diffusion</description>
         /// </item>
         /// <item>
-        /// <term>2 - <see cref="BmpOS2CompressionHalftoning.Panda"/></term>
-        /// <description>Processing Algorithm for Noncoded Document Acquisition (PANDA)</description>
+        /// <term>2 - <see cref="EnumOS2Huffman1DHalftoning.PANDA"/></term>
+        /// <description>Processing Algorithm for Non-coded Document Acquisition (PANDA)</description>
         /// </item>
         /// <item>
-        /// <term>3 - <see cref="BmpOS2CompressionHalftoning.SuperCircle"/></term>
+        /// <term>3 - <see cref="EnumOS2Huffman1DHalftoning.SuperCircle"/></term>
         /// <description>Super-Circle</description>
         /// </item>
         /// </list>
         /// </para>
         /// </summary>
-        public ushort Rendering;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public ushort HalftoningMethod;
 
         /// <summary>
         /// Reserved field used only by the halftoning algorithm.
         /// <para>If Error Diffusion halftoning is used, this is the error damping as a percentage in the range 0 through 100.
         /// A value of 100% indicates no damping, and a value of 0% indicates that any errors are not diffused.</para>
         /// <para>If PANDA or Super-Circle halftoning is specified, this is the X dimension of the pattern used in pixels.</para>
+        /// See <see cref="HalftoningMethod"/>.
         /// </summary>
-        public uint Size1;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint HalftoningParameter1;
 
         /// <summary>
         /// Reserved field used only by the halftoning algorithm.
         /// <para>If Error Diffusion halftoning is used, this field is not used by error diffusion halftoning.</para>
         /// <para>If PANDA or Super-Circle halftoning is specified, this is the Y dimension of the pattern used in pixels.</para>
+        /// See <see cref="HalftoningMethod"/>.
         /// </summary>
-        public uint Size2;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint HalftoningParameter2;
 
         /// <summary>
         /// Color model used to describe the bitmap data.
-        /// <para>The only valid value is 0, indicating the RGB encoding scheme.</para>
+        /// <para>The only valid value is 0, indicating the RGB encoding scheme,  
+        /// but 0xFFFFh was reserved for Paletted encoding</para>
+        /// See <see cref="EnumOS2EnumOS2ColorEncoding.RGB"/>.
         /// </summary>
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
         public uint ColorEncoding;
 
         /// <summary>
         /// Reserved for application use and may contain an application-specific value.
         /// <para>Normally is set to 0.</para>
         /// </summary>
-        public uint Identifier;
+        /// <remarks>
+        /// If this field is not present on the BMP file, 0 is assumed as its value.
+        /// </remarks>
+        public uint ApplicationIdentifier;
     }
 }

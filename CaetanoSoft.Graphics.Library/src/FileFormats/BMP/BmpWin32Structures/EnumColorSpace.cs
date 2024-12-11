@@ -31,7 +31,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <summary>
         /// Use destination device CMYK. The endpoints and gamma values fields, are ignored.
         /// <para>
-        /// Equals 0x00000001 (in hexadecimal).
+        /// Equals 0x00000002 (in hexadecimal).
         /// </para>
         /// </summary>
         Device_CMYK = 0x00000002,

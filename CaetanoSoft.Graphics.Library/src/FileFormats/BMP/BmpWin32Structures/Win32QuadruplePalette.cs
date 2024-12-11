@@ -29,7 +29,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
 {
     /// <summary>
     /// This represents a BGRA (Blue, Green, Blue and Alpha) color entry on a table/palette of a Microsoft Windows BMP v3
-    /// (RGBQUAD structure) and IBM OS/2 BMP v2 (OS22XPALETTEELEMENT structure) bitmap.
+    /// (RGBQUAD structure) and IBM OS/2 BMP v2 (OS22XPALETTEELEMENT structure) bitmap.<c>RGBQUAD</c>
     /// <para>Supported since Windows 3.0, Windows NT 3.1, Windows CE 1.0 and OS/2 2.0.</para>
     /// <para>Implemented on Microsoft Windows BMP v3 and IBM OS/2 BMP v2 format.</para>
     /// </summary>

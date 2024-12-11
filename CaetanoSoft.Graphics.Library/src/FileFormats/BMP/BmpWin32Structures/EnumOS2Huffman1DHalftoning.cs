@@ -4,7 +4,8 @@ using System.Runtime.InteropServices;
 namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
 {
     /// <summary>
-    /// This is the IBM OS/2 BMP v2 (and above) halftoning type used.
+    /// This is the IBM OS/2 2.x (and above) BMP v2 Huffman 1D HalftoningMethod Halftoning used to compress the stored 1-bpp bitmap data (pixels).
+    /// For use in <c>OS22XBITMAPHEADER.usRendering</c> field..
     /// <para>Supported since IBM OS/2 2.0.</para>
     /// <seealso href="http://www.fileformat.info/format/os2bmp/egff.htm">See this FileFormat link for more information.</seealso>
     /// <seealso href="https://en.wikipedia.org/wiki/BMP_file_format">See this Wikipedia link for more information.</seealso>
@@ -22,7 +23,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         ErrorDiffusion = 1,
 
         /// <summary>
-        /// Processing Algorithm for Noncoded Document Acquisition (PANDA) halftoning. 
+        /// Processing Algorithm for Non-coded Document Acquisition (PANDA) halftoning. 
         /// Same as <c>BRH_PANDA</c> macro of the OS/2 2.0 and aboveSDK.
         /// </summary>
         PANDA = 2,

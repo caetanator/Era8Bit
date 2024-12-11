@@ -59,7 +59,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <para>Supported by Windows 2.0 and OS/2 2.0 and later.</para>
         /// <para>Implemented on Microsoft Windows BMP v2 and IBM OS/2 BMP v1 format.</para>
         /// </summary>
-        RLE_4 = 2,
+        RLE4 = 2,
 
         /// <summary>
         /// Uncompressed format. Uses bitfields masks. Same as <c>BI_BITFIELDS</c> macro of the Windows NT 3.5 
@@ -85,7 +85,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <para>Supported only by OS/2 v2.0 and later.</para>
         /// <para>Implemented on IBM OS/2 BMP v2.</para>
         /// </summary>
-        Huffman_1D = 3,
+        Huffman1D = 3,
 
         /// <summary>
         /// The bitmap contains a JPG compressed image. Same as <c>BI_JPEG</c> macro of the 
@@ -108,7 +108,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <para>Supported only by OS/2 v2.0 and later.</para>
         /// <para>Implemented on IBM OS/2 BMP v2.</para>
         /// </summary>
-        RLE_24 = 4,
+        RLE24 = 4,
 
         /// <summary>
         /// The bitmap contains a PNG compressed image. Same as <c>BI_PNG</c> macro of the 
