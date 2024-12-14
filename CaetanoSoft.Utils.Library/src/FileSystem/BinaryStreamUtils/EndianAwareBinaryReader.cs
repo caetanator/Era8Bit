@@ -20,6 +20,7 @@
  *  2006-02-01: Created.
  *  2017-01-30: Major rewrite.
  *  2021-04-16: Renamed and updated.
+ *  2024-12-13: Added method "public void SeekRelativePosition(int pos)".
  */
 
 using System;
@@ -39,17 +40,20 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
     /// </summary>
     public class EndianAwareBinaryReader : BinaryReader
     {
+        // ** Variables
+
         /// <summary>Controls if the bytes must be swap because of unmatched endian.</summary>
         private bool swapBytesEndian = false;
 
+        // ** Constructors
 
         /// <summary>Initializes a new instance of the <see cref="EndianAwareBinaryReader" /> class.</summary>
-        /// <param name="input">The input stream to read data from.</param>
+        /// <param name="input">The streamIn stream to read data from.</param>
         /// <param name="encoding">The strings code-page encoding on the stream.</param>
 		/// <param name="leaveOpen">if set to <c>true</c> [leave the stream open after the BinaryReader object is disposed]. 
         /// if set to <c>false</c> [closes the stream when the BinaryReader object is disposed].</param>
         /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian]. if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryReader(Stream input, Encoding encoding, bool leaveOpen, bool isLittleEndian) : base(input, encoding, leaveOpen)
+        public EndianAwareBinaryReader(Stream streamIn, Encoding encoding, bool leaveOpen, bool isLittleEndian) : base(streamIn, encoding, leaveOpen)
         {
             // If the system endian is equal to the stream endian, no byte swap is needed, otherwise, if 
             // one is big-endian and the other little-endian, then the bytes order must be swapped
@@ -60,41 +64,14 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         ///   <br />
         /// Strings on the stream are assumed to the UTF-8 code-page encoding.
         /// </summary>
-        /// <param name="input">The input stream to read data from.</param>
+        /// <param name="streamIn">The streamIn stream to read data from.</param>
         /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian]. if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryReader(Stream input, bool isLittleEndian) : this(input, Encoding.UTF8, false, isLittleEndian)
+        public EndianAwareBinaryReader(Stream streamIn, bool isLittleEndian) : this(streamIn, Encoding.UTF8, false, isLittleEndian)
         {
             // Do nothing
         }
 
-        private void ReadToBuffer(ref byte[] buffer)
-        {
-            int offset = 0;
-            int num_read = 0;
-
-            if (buffer.Length == 1)
-            {
-                num_read = base.ReadByte();
-                if (num_read == -1)
-                {
-                    throw new EndOfStreamException("Attempted to read past the end of the stream.");
-                }
-                buffer[0] = (byte)num_read;
-            }
-            else
-            {
-                do
-                {
-                    num_read = base.Read(buffer, offset, buffer.Length - offset);
-                    if (num_read == 0)
-                    {
-                        throw new EndOfStreamException("Attempted to read past the end of the stream.");
-                    }
-                    offset += num_read;
-                }
-                while (offset < num_read);
-            }
-        }
+        // Override methods of BinaryReader
 
         public override ushort ReadUInt16()
         {
@@ -136,10 +113,6 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 // Converts back to 16-bit signed integer
                 value = BitConverter.ToInt16(buffer, 0);
             }
-            //else
-            //{
-
-            //}
 
             return value;
         }
@@ -173,10 +146,6 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 // Converts back to 32-bit unsigned integer
                 value = BitConverter.ToUInt32(buffer, 0);
             }
-            //else
-            //{
-
-            //}
 
             return value;
         }
@@ -210,10 +179,6 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 // Converts back to 32-bit signed integer
                 value = BitConverter.ToInt16(buffer, 0);
             }
-            //else
-            //{
-
-            //}
 
             return value;
         }
@@ -256,10 +221,6 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 // Converts back to 64-bit unsigned integer
                 value = BitConverter.ToUInt64(buffer, 0);
             }
-            //else
-            //{
-
-            //}
 
             return value;
         }
@@ -302,10 +263,6 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 // Converts back to 32-bit signed integer
                 value = BitConverter.ToInt16(buffer, 0);
             }
-            //else
-            //{
-
-            //}
 
             return value;
         }
@@ -340,10 +297,6 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
 
                 // Converts back to 32-bit floating-point
                 value = BitConverter.ToSingle(buffer, 0);
-            }
-            //else
-            {
-                value = base.ReadSingle();
             }
 
             return value;
@@ -380,12 +333,46 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 // Converts back to 64-bit floating-point
                 value = BitConverter.ToDouble(buffer, 0);
             }
-            //else
+            else
             {
                 value = base.ReadDouble();
             }
 
             return value;
+        }
+
+        // ** Methods
+
+        /// <summary>Reads to buffer.</summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <exception cref="System.IO.EndOfStreamException">Attempted to read past the end of the stream.</exception>
+        private void ReadToBuffer(ref byte[] buffer)
+        {
+            int offset = 0;
+            int num_read = 0;
+
+            if (buffer.Length == 1)
+            {
+                num_read = base.ReadByte();
+                if (num_read == -1)
+                {
+                    throw new EndOfStreamException("Attempted to read past the end of the stream.");
+                }
+                buffer[0] = (byte)num_read;
+            }
+            else
+            {
+                do
+                {
+                    num_read = base.Read(buffer, offset, buffer.Length - offset);
+                    if (num_read == 0)
+                    {
+                        throw new EndOfStreamException("Attempted to read past the end of the stream.");
+                    }
+                    offset += num_read;
+                }
+                while (offset < num_read);
+            }
         }
 
         /*
@@ -398,7 +385,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
                 throw new System.ArgumentException("Invalid string size to read!");
             }
 
-            // Validates the input stream
+            // Validates the streamIn stream
             if (stream == null)
             {
                 // Error: Invalid stream o read from
@@ -408,7 +395,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             if ((stream.Length - stream.Position) < size)
             {
                 // Error: Not enough bytes to read from stream
-                throw new System.IO.IOException("Not enough bytes on the input stream!");
+                throw new System.IO.IOException("Not enough bytes on the streamIn stream!");
             }
 
             // Validates the string encoding
@@ -446,10 +433,8 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             return StrUTF8;
         }
          */
-		 
-		/// https://stackoverflow.com/questions/2480116/marshalling-a-big-endian-byte-collection-into-a-struct-in-order-to-pull-out-value
-		
-		private static void SwapStructFieldsEndianness(Type type, byte[] data, bool swapBytesEndian, int startOffset = 0)
+
+        private static void SwapStructFieldsEndianness(Type type, byte[] data, bool swapBytesEndian, int startOffset = 0)
 		{
 			// Swap big-endian/little-endian
 			if (swapBytesEndian)
@@ -523,6 +508,16 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             {
                 handle.Free();
             }
+        }
+
+        /// <summary>Seeks the relative position.</summary>
+        /// <param name="pos">The position.</param>
+        public void SeekRelativePosition(int pos)
+        {
+            if (this.BaseStream.CanSeek)
+                this.BaseStream.Seek(pos, SeekOrigin.Current);
+            else
+                throw new EndOfStreamException("Can't seek stream.");
         }
     }
 }

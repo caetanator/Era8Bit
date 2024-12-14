@@ -22,7 +22,8 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 14)]
     internal struct Win32FileHeader
     {
-        // ** Fields for Microsoft Windows BMP v2 and IBM OS/2 BMP v1 file header
+        // ** Fields - Added for Microsoft Windows BMP v2 and IBM OS/2 BMP v1 file header
+
         /// <summary>
         /// Specifies the BMP file type "Magic ID", must be "BM" in ASCII or 4D42h in hexadecimal.
         /// <para>
@@ -94,5 +95,20 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </para>
         /// </summary>
         public uint PixelsOffset;
+
+        // ** Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Win32FileHeader"/> struct 
+        /// with the default values in all the structure fields.
+        /// </summary>
+        /// <param name="initialize">If set to <c>true</c> the structure is initialized.</param>
+        public Win32FileHeader(bool initialize = true) : this()
+        {
+            if (initialize)
+            {
+                this.FileSize = (uint)Marshal.SizeOf(this);
+            }
+        }
     }
 }

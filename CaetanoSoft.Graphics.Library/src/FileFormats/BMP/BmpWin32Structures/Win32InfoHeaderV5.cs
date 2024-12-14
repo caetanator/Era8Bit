@@ -2,8 +2,8 @@
  * Win32InfoHeaderV5.cs
  *
  * PURPOSE
- *   This structure represents a Microsoft Windows BMP v5 DIB (Device Independent Bitmap) header structure (BITMAPV5HEADER) of a BMP bitmap.
- *   Introduced in Microsoft's Windows 98 and Windows 2000.
+ *  This structure represents a Microsoft Windows BMP v5 DIB (Device Independent Bitmap) header structure (BITMAPV5HEADER) of a BMP bitmap.
+ *  Introduced in Microsoft's Windows 98 and Windows 2000.
  *
  * CONTACTS
  *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
@@ -51,7 +51,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 124)]
     internal struct Win32InfoHeaderV5
     {
-        // ** Fields upgraded from Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB headers
+        // ** Fields - Upgraded from Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB headers
 
         /// <summary>
         /// The size required to store this structure, in bytes. Always 124.
@@ -134,7 +134,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </summary>
         public ushort BitsPerPixel;
 
-        // ** Fields added for Microsoft Windows BMP v3 DIB header and compatible with IBM OS/2 BMP v2 DIB header
+        // ** Fields - Added for Microsoft Windows BMP v3 DIB header and compatible with IBM OS/2 BMP v2 DIB header
 
         /// <summary>
         /// Specifies the type of compression scheme used for compressing a bottom-up bitmap image data/pixels (top-down DIBs cannot be compressed).
@@ -256,9 +256,9 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </summary>
         public uint PaletteImportant;
 
-        // ** Fields added for Microsoft Windows BMP v4 DIB header
-        // ** Fields added for Microsoft Windows BMP v3.3 DIB header - Optional Fields Start
-        // ** Fields added for Microsoft Windows BMP v3.2 DIB header - Optional Fields Start
+        // ** Fields - Added for Microsoft Windows BMP v4 DIB header
+        // ** Fields - Added for Microsoft Windows BMP v3.3 DIB header - Start
+        // ** Fields - Added for Microsoft Windows BMP v3.2 DIB header - Start
 
         /// <summary>
         /// Specifies the bitfields color mask for the red component of each pixel in bitmap image data.
@@ -281,7 +281,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </summary>
         public uint BlueMask;
 
-        // ** Fields added for Microsoft Windows BMP v3.2 DIB header - Optional Fields End
+        // ** Fields - Added for Microsoft Windows BMP v3.2 DIB header - End
 
         /// <summary>
         /// Specifies the bitfields color mask for the alpha/transparency component of each pixel in bitmap image data.
@@ -290,7 +290,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </summary>
         public uint AlphaMask;
 
-        // ** Fields added for Microsoft Windows BMP v3.3 DIB header - Optional Fields End
+        // ** Fields - Added for Microsoft Windows BMP v3.3 DIB header - End
 
         /// <summary>
         /// Specifies the color space of the ICC (International Color Consortium) color profile
@@ -351,7 +351,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </para>
         /// See also <seealso cref="EnumColorSpace"/>.
         /// </summary>
-        public uint ColorSpaceType;
+        public uint ColorSpace;
 
         /// <summary>
         /// A structure that specifies the x, y and z coordinates of the three colors that correspond to the
@@ -414,7 +414,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </summary>
         public uint GammaBlue;
 
-        // ** Fields added for Microsoft Windows BMP v5 DIB header
+        // ** Fields - Added for Microsoft Windows BMP v5 DIB header
 
         /// <summary>
         /// Rendering intent for the bitmap image data/pixels.
@@ -449,11 +449,11 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </list>
         /// </para>
         /// </summary>
-        public uint Intent;
+        public uint ColorSpaceIntent;
 
         /// <summary>
         /// The offset, in bytes, from the beginning of the <c>Win32InfoHeaderV5</c> structure to the start of the profile data.
-        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <see cref="EnumColorSpace.ProfileLinked"/> or
+        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpace</c> is set to <see cref="EnumColorSpace.ProfileLinked"/> or
         /// <see cref="EnumColorSpace.ProfileEmbedded"/>.
         /// <para>If the profile is embedded, profile data is the actual ICM 2.0 profile.</para>
         /// <para>If the profile is linked,  profile data is the null-terminated file name of the ICM 2.0 profile or
@@ -464,7 +464,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
 
         /// <summary>
         /// Size, in bytes, of embedded profile data.
-        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpaceType</c> is set to <see cref="EnumColorSpace.ProfileLinked"/> or
+        /// This member is ignored unless <c>Win32InfoHeaderV5.ColorSpace</c> is set to <see cref="EnumColorSpace.ProfileLinked"/> or
         /// <see cref="EnumColorSpace.ProfileEmbedded"/>.
         /// <para>The profile data (if present) should follow the color table.</para>
         /// <para>For packed DIBs, the profile data should follow the bitmap bits similar to the file format.</para>
@@ -475,5 +475,24 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// This member has been reserved for future use. Its value must be set to 0.
         /// </summary>
         public uint Reserved;
+
+        // ** Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Win32InfoHeaderV5"/> struct 
+        /// with the default values in all the structure fields.
+        /// </summary>
+        /// <param name="initialize">If set to <c>true</c> the structure is initialized.</param>
+        public Win32InfoHeaderV5(bool initialize = true) : this()
+        {
+            if (initialize)
+            {
+                this.Size = (uint)Marshal.SizeOf(this);
+                this.ColorPlanes = 1;
+                this.Compression = (uint)EnumCompression.RGB;
+                this.ColorSpace = (uint)EnumColorSpace.SRGB;
+                this.ColorSpaceIntent = (uint)EnumColorSpaceIntent.Graphics;
+            }
+        }
     }
 }

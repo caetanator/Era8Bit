@@ -6,7 +6,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
     /// <summary>
     /// This enumeration contains the sizes of the several native structures used by the BMP file format.
     /// </summary>
-    internal enum BmpNativeStructuresSizes
+    internal enum EnumBmpNativeStructuresSizes : uint
     {
         // IBM OS/2 BMP palette element
 

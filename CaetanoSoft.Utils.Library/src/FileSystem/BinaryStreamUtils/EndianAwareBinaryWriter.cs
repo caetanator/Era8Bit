@@ -37,17 +37,21 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
     /// </summary>
     public class EndianAwareBinaryWriter : BinaryWriter
     {
+        // ** Variables
+
         /// <summary>Controls if the bytes must be swap because of unmatched endian.</summary>
         private bool swapBytesEndian = false;
 
+        // ** Constructors
+
         /// <summary>Initializes a new instance of the <see cref="EndianAwareBinaryWriter" /> class.</summary>
-        /// <param name="output">The output stream to write data to.</param>
+        /// <param name="output">The streamOut stream to write data to.</param>
         /// <param name="encoding">The strings code-page encoding on the stream.</param>
 		/// <param name="leaveOpen">if set to <c>true</c> [leave the stream open after the BinaryWriter object is disposed].
         /// if set to <c>false</c> [closes the stream when the BinaryWriter object is disposed].</param>
         /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian].
         /// if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryWriter(Stream output, Encoding encoding, bool leaveOpen, bool isLittleEndian) : base(output, encoding, leaveOpen)
+        public EndianAwareBinaryWriter(Stream streamOut, Encoding encoding, bool leaveOpen, bool isLittleEndian) : base(streamOut, encoding, leaveOpen)
         {
             // If the system endian is equal to the stream endian, no byte swap is needed, otherwise,
             // if one is big-endian and the other little-endian, then the bytes order must be swapped
@@ -57,13 +61,15 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         /// <summary>Initializes a new instance of the <see cref="EndianAwareBinaryWriter" /> class.
         /// <para>Strings on the stream are assumed to the UTF-8 code-page encoding.</para>
         /// </summary>
-        /// <param name="output">The output stream to write data to.</param>
+        /// <param name="output">The streamOut stream to write data to.</param>
         /// <param name="isLittleEndian">if set to <c>true</c> [the stream is little-endian].
         /// if set to <c>false</c> [is big-endian].</param>
-        public EndianAwareBinaryWriter(Stream output, bool isLittleEndian) : this(output, Encoding.UTF8, false, isLittleEndian)
+        public EndianAwareBinaryWriter(Stream streamOut, bool isLittleEndian) : this(streamOut, Encoding.UTF8, false, isLittleEndian)
         {
             // Do nothing
         }
+
+        // Override methods of BinaryWriter
 
         /// <summary>Writes a two-byte unsigned integer to the current stream and advances the stream position by
         /// two bytes.</summary>
@@ -192,7 +198,6 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             }
         }
 
-
         /// <summary>Writes an eight-byte signed integer to the current stream and advances the stream position by
         /// eight bytes.</summary>
         /// <param name="value">The eight-byte signed integer to write.</param>
@@ -279,6 +284,8 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
             }
         }
 
+        // ** Methods
+
         /*
         /// <summary>Writes the string.</summary>
         /// <param name="str">The string.</param>
@@ -324,9 +331,7 @@ namespace CaetanoSoft.Utils.FileSystem.BinaryStreamUtils
         }
         */
 
-		/// https://stackoverflow.com/questions/2480116/marshalling-a-big-endian-byte-collection-into-a-struct-in-order-to-pull-out-value
-
-		private static void SwapStructFieldsEndianness(Type type, byte[] data, bool swapBytesEndian, int startOffset = 0)
+        private static void SwapStructFieldsEndianness(Type type, byte[] data, bool swapBytesEndian, int startOffset = 0)
 		{
 			// Swap big-endian/little-endian
 			if (swapBytesEndian)

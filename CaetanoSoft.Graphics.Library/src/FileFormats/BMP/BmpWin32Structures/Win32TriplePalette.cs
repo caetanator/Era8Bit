@@ -2,8 +2,8 @@
  * Win32TriplePalette.cs
  *
  * PURPOSE
- *   This represents a BGR (Blue, Green and Blue) color entry on a color table/palette of a Microsoft Windows BMP v2
- *   (RGBTRIPLE structure) and IBM OS/2 BMP v1 (OS21XPALETTEELEMENT structure) bitmap.
+ *  This represents a BGR (Blue, Green and Blue) color entry on a color table/palette of a Microsoft Windows BMP v2
+ *  (RGBTRIPLE structure) and IBM OS/2 BMP v1 (OS21XPALETTEELEMENT structure) bitmap.
  *
  * CONTACTS
  *  E-mail regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:

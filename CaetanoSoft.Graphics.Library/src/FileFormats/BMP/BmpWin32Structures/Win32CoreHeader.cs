@@ -2,8 +2,8 @@
  * Win32CoreHeader.cs
  *
  * PURPOSE
- *   This structure represents a Microsoft Windows BMP v2 DIB (Device Independent Bitmap) header structure (<c>BITMAPCOREHEADER</c>) of a BMP bitmap.
- *   Introduced in Microsoft's Windows 2.0, Windows NT 3.1, Windows CE 2.0 and OS/2 1.0.
+ *  This structure represents a Microsoft Windows BMP v2 DIB (Device Independent Bitmap) header structure (<c>BITMAPCOREHEADER</c>) of a BMP bitmap.
+ *  Introduced in Microsoft's Windows 2.0, Windows NT 3.1, Windows CE 2.0 and OS/2 1.0.
  *
  * CONTACTS
  *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
@@ -52,7 +52,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
     internal struct Win32CoreHeader
     {
-        // ** Fields added for Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB header or upgraded from Microsoft Windows BMP v1
+        // ** Fields - Added for Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB header or upgraded from Microsoft Windows BMP v1
 
         /// <summary>
         /// The size required to store this structure, in bytes. Always 124.
@@ -117,5 +117,21 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// The number of bits-per-pixel (bpp) for each pixel in the image data. This value must be one of: 1, 4, 8 or 24.
         /// </summary>
         public ushort BitsPerPixel;
+
+        // ** Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Win32CoreHeader"/> struct 
+        /// with the default values in all the structure fields.
+        /// </summary>
+        /// <param name="initialize">If set to <c>true</c> the structure is initialized.</param>
+        public Win32CoreHeader(bool initialize = true) : this()
+        {
+            if (initialize)
+            {
+                this.Size = (uint)Marshal.SizeOf(this);
+                this.ColorPlanes = 1;
+            }
+        }
     }
 }

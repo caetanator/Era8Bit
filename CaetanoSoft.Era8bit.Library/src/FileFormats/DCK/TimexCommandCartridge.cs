@@ -132,9 +132,9 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                     TCCBank.Read(cartridgeFile);
                     this.TCCBanks.Add(TCCBank);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw ex;
+                    throw;
                 }
             }
         }
@@ -146,55 +146,62 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
 
         public override void Load(String fileName)
         {
+            // Validate parameters
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(fileName));
             }
 
-            try
+            // Parameters OK
+            this.FileName = fileName;
+            using (var cartridgeFile = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                FileStream cartridgeFile = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                this.FileName = fileName;
-                this.FileSize = cartridgeFile.Length;
-                this.Read(cartridgeFile);
-                long fileSize = this.FileSize - cartridgeFile.Position;
-                if (fileSize != 0)
+                try
                 {
-                    throw new Exception("Bad file size");
+                    this.FileSize = cartridgeFile.Length;
+                    this.Read(cartridgeFile);
+                    long fileSize = this.FileSize - cartridgeFile.Position;
+                    if (fileSize != 0)
+                    {
+                        throw new Exception("Bad file size");
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                catch
+                {
+                    throw;
+                }
             }
         }
 
         public override void Save(String fileName, uint fileVersion = 0)
         {
+            // Validate parameters
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(fileName));
             }
 
-            try
+            using (var cartridgeFile = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                FileStream cartridgeFile = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
-                this.Write(cartridgeFile);
-                long fileSize = cartridgeFile.Length;
-                if (fileSize >= 9)
+                try
                 {
-                    this.FileName = fileName;
-                    this.FileSize = fileSize;
-                    this.DataChanged = false;
+                    this.Write(cartridgeFile);
+                    long fileSize = cartridgeFile.Length;
+                    if (fileSize >= 9)
+                    {
+                        this.FileName = fileName;
+                        this.FileSize = fileSize;
+                        this.DataChanged = false;
+                    }
+                    else
+                    {
+                        throw new Exception("Bad file size");
+                    }
                 }
-                else
+                catch
                 {
-                    throw new Exception("Bad file size");
+                    throw;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
         }
 
@@ -210,9 +217,9 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
                 {
                     retList.AddRange(TCCBank.GetInfo());
                 }
-                catch (Exception ex)
+                catch
                 {
-                    throw ex;
+                    throw;
                 }
             }
 

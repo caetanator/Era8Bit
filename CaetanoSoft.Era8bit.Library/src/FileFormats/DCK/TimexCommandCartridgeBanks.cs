@@ -294,7 +294,7 @@ namespace CaetanoSoft.Era8bit.FileFormats.DCK
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
             return listRet;

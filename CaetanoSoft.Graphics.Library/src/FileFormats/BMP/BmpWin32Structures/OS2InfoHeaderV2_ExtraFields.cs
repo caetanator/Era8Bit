@@ -2,16 +2,16 @@
  * OS2InfoHeaderV2_ExtraFields.cs
  *
  * PURPOSE
- *   This structure represents an IBM OS/2 BMP v2 DIB (Device Independent Bitmap) header structure (OS22XBITMAPHEADER) of a BMP bitmap.
+ *  This structure represents an IBM OS/2 BMP v2 DIB (Device Independent Bitmap) header structure (OS22XBITMAPHEADER) of a BMP bitmap.
  *   
- *   This structure range size is between 16 and 64 bytes. Common sizes are 16, 40 and 64.
+ *  This structure range size is between 16 and 64 bytes. Common sizes are 16, 40 and 64.
  *   
- *   If a field is not present on the image file, all other fields that follow aren't present to, and 
- *   their values are assumed to be zero (0).
+ *  If a field is not present on the image file, all other fields that follow aren't present to, and 
+ *  their values are assumed to be zero (0).
  *   
- *   This structure, only implements the last extra 24 bytes of fields that aren't included and not supported on the Microsoft Windows API and BMP v3 
- *   BITMAPINFOHEADER and newer, 40 bytes fields. So, the BITMAPINFOHEADER plus this structure makes the 64 bytes total of the OS22XBITMAPHEADER structure.
- *   Introduced in IBM's OS/2 2.0.
+ *  This structure, only implements the last extra 24 bytes of fields that aren't included and not supported on the Microsoft Windows API and BMP v3 
+ *  BITMAPINFOHEADER and newer, 40 bytes fields. So, the BITMAPINFOHEADER plus this structure makes the 64 bytes total of the OS22XBITMAPHEADER structure.
+ *  Introduced in IBM's OS/2 2.0.
  *
  * CONTACTS
  *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
@@ -68,7 +68,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 24)]
     internal struct OS2InfoHeaderV2_ExtraFields
     {
-        // ** Fields upgraded from Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB headers and compatible with Microsoft Windows BMP v3
+        // ** Fields - Upgraded from Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB headers and compatible with Microsoft Windows BMP v3
 
         /// <summary>
         /// The size required to store this structure, in bytes. Always 24.
@@ -94,7 +94,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </list>
         /// </para>
         /// </summary>
-        public uint Size;
+        //public uint Size;
 
         /// <summary>
         /// Specifies the width of the bitmap image, in pixels.
@@ -103,7 +103,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// On Windows BMP v3 and above: This field is a signed 32-bits integer.
         /// </remarks>
-        public uint Width;
+        //public uint Width;
 
         /// <summary>
         /// Specifies the height of the bitmap image, in pixels.
@@ -112,20 +112,20 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// On Windows BMP v3 and above: This field is a signed 32-bits integer.
         /// </remarks>
-        public uint Height;
+        //public uint Height;
 
         /// <summary>
         /// The number of color planes for the target device: Always 1.
         /// </summary>
-        public ushort ColorPlanes;
+        //public ushort ColorPlanes;
 
         /// <summary>
         /// The number of bits-per-pixel (bpp) for each pixel in the image data. This value must be one of: 1, 4, 8 or 24.
         /// See <seealso cref="EnumBitsPerPixel"/> and <see cref="Compression"/> for more information.
         /// </summary>
-        public ushort BitsPerPixel;
+        //public ushort BitsPerPixel;
 
-        // ** Optional fields added for IBM OS/2 BMP v2 DIB header and compatible with Microsoft Windows BMP v3
+        // **  Fields - Optional - Added for IBM OS/2 BMP v2 DIB header and compatible with Microsoft Windows BMP v3
 
         /// <summary>
         /// Specifies the type of compression scheme used for compressing a bottom-up bitmap image data/pixels (top-down DIBs cannot be compressed).
@@ -163,7 +163,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// If this field is not present on the BMP file, 0 is assumed as its value.
         /// </remarks>
-        public uint Compression;
+        //public uint Compression;
 
         /// <summary>
         /// Specifies the size of the image data/pixels (including the zero-pads, if needed), in bytes.
@@ -172,7 +172,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// If this field is not present on the BMP file, 0 is assumed as its value.
         /// </remarks>
-        public uint ImageDataSize;
+        //public uint ImageDataSize;
 
         /// <summary>
         /// Specifies the horizontal resolution, in pixels-per-meter (ppm), of the destination device for the bitmap image.
@@ -187,7 +187,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// If this field is not present on the BMP file, 0 is assumed as its value.
         /// </remarks>
-        public uint PixelsPerMeterX;
+        //public uint PixelsPerMeterX;
 
         /// <summary>
         /// Specifies the vertical resolution, in pixels-per-meter (ppm), of the destination device for the bitmap image.
@@ -202,7 +202,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// If this field is not present on the BMP file, 0 is assumed as its value.
         /// </remarks>
-        public uint PixelsPerMeterY;
+        //public uint PixelsPerMeterY;
 
         /// <summary>
         /// Specifies the number of color indexes in the color palette (the palette size) used by the bitmap image. Most important colors must be at the top.
@@ -219,7 +219,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// If this field is not present on the BMP file, 0 is assumed as its value.
         /// </remarks>
-        public uint PaletteSize;
+        //public uint PaletteSize;
 
         /// <summary>
         /// Specifies the number of important color indexes from the color palette for displaying the bitmap image.
@@ -232,9 +232,9 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <remarks>
         /// If this field is not present on the BMP file, 0 is assumed as its value.
         /// </remarks>
-        public uint PaletteImportant;
+        //public uint PaletteImportant;
 
-        // ** Optional fields added exclusive for IBM OS/2 BMP v2 DIB header and not compatible with any Microsoft Windows BMP
+        // ** Fields - Optional - Added exclusive for IBM OS/2 BMP v2 DIB header and not compatible with any Microsoft Windows BMP
 
         /// <summary>
         /// Indicates the type of units used in the resolution of the image to interpret the values of the <c>OS2InfoHeaderV2.PixelsPerMeterX</c> and
@@ -345,5 +345,26 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// If this field is not present on the BMP file, 0 is assumed as its value.
         /// </remarks>
         public uint ApplicationIdentifier;
+
+        // ** Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OS2InfoHeaderV2_ExtraFields"/> struct 
+        /// with the default values in all the structure fields.
+        /// </summary>
+        /// <param name="initialize">If set to <c>true</c> the structure is initialized.</param>
+        public OS2InfoHeaderV2_ExtraFields(bool initialize=true) : this()
+        {
+            if (initialize)
+            {
+                //this.Size = (uint)Marshal.SizeOf(this);
+                //this.ColorPlanes = 1;
+                //this.Compression = (uint)EnumCompression.RGB;
+                this.ResolutionUnit = (ushort)EnumOS2EnumOS2ResolutionUnits.PPM;
+                this.RecordingDirection = (ushort)EnumOS2EnumOS2RecordingAlgorithm.BottomUp;
+                this.HalftoningMethod = (ushort)EnumOS2Huffman1DHalftoning.NoHalftoning;
+                this.ColorEncoding = (uint)EnumOS2EnumOS2ColorEncoding.RGB;
+            }
+        }
     }
 }
