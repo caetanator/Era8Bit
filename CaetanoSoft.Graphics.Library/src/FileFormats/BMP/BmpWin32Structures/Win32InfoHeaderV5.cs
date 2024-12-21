@@ -15,7 +15,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2009-2024 José Caetano Silva
+ *  (C)2009-2024 Josï¿½ Caetano Silva
  *
  * HISTORY
  *  2009-09-15: Created.
@@ -362,6 +362,11 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// <para>
         /// <b>Note:</b> A color space is a model for representing color numerically in terms of three or more coordinates.
         /// For example, the RGB color space represents colors in terms of the red, green and blue coordinates.
+        /// </para>
+        <para>
+		/// The required <c>DWORD</c> bit format for each of the <c>Endpoints</c> coordinates is an 2.30 fixed point integer.
+		/// This means 2 integer bits are followed by 30 fraction bits. The required format of the 32-bit DWORD is:
+		///        0xnnffffffffffffffffffffffffffffffff
         /// </para>
         /// </summary>
         public Win32CieXyzTriple Endpoints;

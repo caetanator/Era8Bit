@@ -8,6 +8,12 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
     /// </summary>
     internal enum EnumBmpNativeStructuresSizes : uint
     {
+        // Basic Win32 integer numbers types
+        BYTE = 1,
+        WORD = 2,
+        DWORD = 4,
+        QWORD = 8,
+
         // IBM OS/2 BMP palette element
 
         /// <summary>
@@ -163,6 +169,9 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
         /// </para>
         /// <seealso href="https://msdn.microsoft.com/en-us/library/dd183381(v=vs.85).aspx">See this MSDN link for more information.</seealso>
         /// </summary>
-        BITMAPV5HEADER = 124
+        BITMAPV5HEADER = 124,
+
+        CIEXYZ = 12,
+        CIEXYZTRIPLE = 36
     }
 }

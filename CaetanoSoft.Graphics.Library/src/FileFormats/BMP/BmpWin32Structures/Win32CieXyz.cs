@@ -8,7 +8,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     /// specified color space (CIE XYZ 1931). This is the Microsoft CIEXYZ implementation.
     /// <para>
     /// X, Y and Z are extrapolations of RGB created mathematically to avoid negative numbers
-    /// (In 1931 there weren�t any computers) and are called Tristimulus values.
+    /// (In 1931 there weren't any computers) and are called Tristimulus values.
     /// Y means luminance, Z is somewhat equal to blue, and X is a mix of cone response curves
     /// chosen to be orthogonal to luminance and non-negative.
     /// <seealso href="http://wolfcrow.com/blog/what-is-the-difference-between-cie-lab-cie-rgb-cie-xyy-and-cie-xyz">See this Wolfcrow link for more information.</seealso>
