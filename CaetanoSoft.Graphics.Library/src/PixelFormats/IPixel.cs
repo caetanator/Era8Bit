@@ -3,13 +3,14 @@
  *
  * PURPOSE
  *  This interface encapsulates the properties and methods needed to represents a generic pixel color type packed 
- *  in 24-bit (3 bytes) or 32-bit (4 bytes), with the range of each pixel RGBA color component ranging from byte: 0 to 255.
+ *  in 24-bit (3 unsigned bytes) or 32-bit (4 unsigned bytes), with the range of each pixel RGBA color component 
+ *  ranging from [unsigned byte]: 0 to 255.
  *  
  *  It also can handle the unpacked individual pixel RGBA color components in a normalized Vector4, with each component 
- *  ranging from float: 0.0 to 1.0.
+ *  ranging from [float]: 0.0 to 1.0.
  *
  * CONTACTS
- *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
+ *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.PixelFormats" project:
  *      https://github.com/caetanator/Era8Bit
  *
  * COPYRIGHT
@@ -32,9 +33,10 @@ namespace CaetanoSoft.Graphics.PixelFormats
 {
     /// <summary>
     /// This interface encapsulates the properties and methods needed to represents a generic pixel color type packed 
-    /// in 24-bit (3 bytes) or 32-bit (4 bytes), with the range of each pixel RGBA color component ranging from <b>byte</b>: 0 to 255.
-    /// <para>It also can handle the unpacked individual pixel RGBA color components in a normalized <see cref="Vector4"/>, with each component  
-    /// ranging from <c>float</c>: 0.0 to 1.0.</para>
+    /// in 24-bit (3 bytes) or 32-bit (4 bytes), with the range of each pixel RGBA color component ranging from 
+    /// <c>[unsigned byte]</c>: 0 to 255.
+    /// <para>It also can handle the unpacked individual pixel RGBA color components in a normalized 
+    /// <see cref="Vector4"/>, with each component ranging from <c>[float]</c>: 0.0 to 1.0.</para>
     /// </summary>
     /// <typeparam name="TSelf">The type of the self.</typeparam>
     public interface IPixel<TSelf> : IEquatable<TSelf> where TSelf : struct, IPixel<TSelf>
@@ -95,7 +97,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         /// where each RGB component ranges from 0.0 to 1.0.
         /// <para>The vector components are unpacked in least to greatest significance byte order (aka. {R, G, B}).</para>
         /// </summary>
-        /// <returns>The normalized <see cref="Vector4"/> representation of the <see cref="RGBA32"/> packed value.</returns>
+        /// <returns>The normalized <see cref="Vector3"/> representation of the <see cref="RGB24"/> packed value.</returns>
         Vector3 ToVector3();
 
         /// <summary>
@@ -107,7 +109,8 @@ namespace CaetanoSoft.Graphics.PixelFormats
         Vector4 ToVector4();
 
         /// <summary>
-        /// Gets the packed pixel color type <see cref="RGBA32"/> packed value as a hexadecimal string representation.
+        /// Gets the packed pixel color type <see cref="RGBA32"/> packed value as a hexadecimal string representation, 
+        /// Compatible with CSS (Cascading Style Sheets).
         /// <para>The value components are expanded in the #RRGGBBAA form.</para>
         /// </summary>
         /// <returns>A hexadecimal string representation of the <see cref="RGBA32"/> packed value.</returns>

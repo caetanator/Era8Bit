@@ -2,11 +2,13 @@
  * BGRA32.cs
  *
  * PURPOSE
- *  This interface encapsulates the properties and methods needed to represents an image format, 
- *  by its ID, file extensions and MIME types.
+ *  This structure encapsulates the properties and methods needed to represents a packed 32-bit (4 unsigned bytes) pixel 
+ *  with four individual 8-bit (1 unsigned byte) values ranging from 0 to 255.
+ *  
+ *  The color components are stored in Blue, Green, Red, Alpha order.
  *
  * CONTACTS
- *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
+ *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.PixelFormats" project:
  *      https://github.com/caetanator/Era8Bit
  *
  * COPYRIGHT
@@ -29,12 +31,16 @@ using System.Runtime.InteropServices;
 namespace CaetanoSoft.Graphics.PixelFormats
 {
     /// <summary>
-    /// Packed pixel type containing four 8-bit unsigned normalized values ranging from 0 to 255.
-    /// The color components are stored in blue, green, red, and alpha order.
+    /// This structure encapsulates the properties and methods needed to represents a packed 32-bit (4 unsigned bytes) pixel with  
+    /// three individual 8-bit (1 unsigned byte) values ranging from 0 to 255.
+    /// <para>The color components are stored in BGRA (Red, Green, Blue, Alpha) order.</para>
+    /// <para>When possible, it uses the <c>Unsafe</c> class to optimize the methods for speed and low memory usage.</para>
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 16)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 4)]
     public struct BGRA32 : IPixel<BGRA32>
     {
+        // ** Properties
+
         /// <summary>
         /// Gets or sets the blue component.
         /// </summary>
@@ -54,6 +60,8 @@ namespace CaetanoSoft.Graphics.PixelFormats
         /// Gets or sets the alpha component.
         /// </summary>
         public byte A;
+
+        // ** Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BGRA32"/> struct.
@@ -80,9 +88,9 @@ namespace CaetanoSoft.Graphics.PixelFormats
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BGRA32(byte r, byte g, byte b, byte a)
         {
-            this.R = r;
-            this.G = g;
             this.B = b;
+            this.G = g;
+            this.R = r;
             this.A = a;
         }
 

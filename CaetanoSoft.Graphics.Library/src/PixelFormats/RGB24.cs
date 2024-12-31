@@ -2,13 +2,13 @@
  * RGB24.cs
  *
  * PURPOSE
- *  This structure encapsulates the properties and methods needed to represents a packed 24-bit (3 unsigned bytes) pixel with 
- *  three individual 8-bit (1 unsigned byte) values ranging from 0 to 255.
+ *  This structure encapsulates the properties and methods needed to represents a packed 24-bit (3 unsigned bytes) 
+ *  pixel with three individual 8-bit (1 unsigned byte) values ranging from 0 to 255.
  *  
  *  The color components are stored in Red, Green, Blue order.
  *
  * CONTACTS
- *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
+ *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.PixelFormats" project:
  *      https://github.com/caetanator/Era8Bit
  *
  * COPYRIGHT
@@ -31,11 +31,12 @@ using System.Runtime.InteropServices;
 namespace CaetanoSoft.Graphics.PixelFormats
 {
     /// <summary>
-    /// This structure encapsulates the properties and methods needed to represents a packed 24-bit (3 unsigned bytes) pixel with 
-    /// three individual 8-bit(1 unsigned byte) values ranging from 0 to 255.
+    /// This structure encapsulates the properties and methods needed to represents a packed 24-bit (3 unsigned bytes) 
+    /// pixel with three individual 8-bit(1 unsigned byte) values ranging from 0 to 255.
     /// <para>The color components are stored in RGB (Red, Green, Blue) order.</para>
+    /// <para>When possible, it uses the <c>Unsafe</c> class to optimize the methods for speed and low memory usage.</para>
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 12)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 3)]
     public struct RGB24 : IPixel<RGB24>
     {
         // ** Properties
@@ -55,7 +56,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         /// </summary>
         public byte B;
 
-        // ** Variables
+        // ** Fields
 
         /// <summary>
         /// A <see cref="Vector3"/> with the maximum integer value that a <see cref="byte"/> can contain (aka. 255), 
@@ -87,18 +88,25 @@ namespace CaetanoSoft.Graphics.PixelFormats
 
         // ** Override methods of Object
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets a string representation of the packed vector.
+        /// <para>The output RGB format is: <c>(n.ff, n.ff, n.ff)</c>, where <c>n</c> is in the interval [0, 1] and 
+        /// <c>ff</c> is in the interval [00, 99].</para>
+        /// </summary>
+        /// <returns>A string representation of the packed vector.</returns>
         public override string ToString()
         {
             return this.ToVector3().ToString();
         }
 
-        /// <inheritdoc/>
+        /// <summary>Generates a hash code for this instance, from the RGB color components, to insure that 2 RGB24 
+        /// objects that represent the same color are report <c>true</c> by <c>IEquatable&lt;RGB24&gt;.Equals(object)</c>.
+        /// </summary>
+        /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures 
+        /// like a hash table.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
-            // Generates the hash code from the RGB color components, to insure that 2 RGB24 objects 
-            // that represent the same color are report true by IEquatable<BGR24>.Equals(object)
             unchecked
             {
                 int hashCode = this.R;
@@ -237,5 +245,16 @@ namespace CaetanoSoft.Graphics.PixelFormats
             return "#" + hex.ToString("X6");
         }
 
+        // ** Methods
+
+        /// <summary>
+        /// Gets the value of this struct as <see cref="BGR24"/>.
+        /// </summary>
+        /// <returns>A <see cref="BGR24"/> value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public BGR24 ToBgr24()
+        {
+            return new BGR24(this.R, this.G, this.B);
+        }
     }
 }

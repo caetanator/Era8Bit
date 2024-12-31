@@ -32,7 +32,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
     /// This structure encapsulates the properties and methods needed to represents a packed 32-bit (4 unsigned bytes) pixel with 
     /// four individual 8-bit(1 unsigned byte) values ranging from 0 to 255.
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 16)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 4)]
     public struct ARGB32 : IPixel<ARGB32>
     {
         /// <summary>

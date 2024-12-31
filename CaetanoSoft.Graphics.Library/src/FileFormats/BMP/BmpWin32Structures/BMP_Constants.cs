@@ -9,18 +9,21 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
     // ** Constants
 
     /// <summary>
-    /// For Windows CE version 5.0 + .NET 4 and later, you can AND <c>BITMAPINFOHEADER.biCompression</c>, <c>BITMAPV4HEADER.bV4Compression</c> or 
-    /// <c>BITMAPV5HEADER.bV5Compression</c> with this flag value to specify that the source (camera) DIB section has a different orientation (Portrait/Landscape) 
-    /// angle of the destination (screen). This flag is used internally by Windows CE devices, and shouldn't be saved on the BMP file, so can be ignored if present.
-    /// 
+    /// This flag as the same value as <c>BI_SRCPREROTATE</c> in the Windows CE/Mobile SDKs. You can use it on 
+    /// Windows CE/Mobile version 5.0 + .NET 4 and later, to check if the source (camera) DIB section has a 
+    /// different orientation angle (Portrait/Landscape) of the destination (screen).
+    /// <para>
     /// If this flag is AND'ed, <c>if (((BMP_DIB_HeaderV3.biCompression & BMP_Constants.SourceIsPreRotatedMask) != 0) && 
-    /// ((BMP_DIB_HeaderV3.biCompression & !BMP_Constants.SourceIsPreRotatedMask) <= BI_ALPHABITFIELDS))</c>, the BMP image can be rotated 90 degrees 
-    /// anti-clockwise for best view
-    /// 
-    /// This is the same value as BI_SRCPREROTATE in the Windows CE/Mobile SDKs.
-    /// 
-    /// BITMAPV5HEADER.bV3Compression (or equivalent) must be either BI_RGB, BI_ALPHABITFIELDS or BI_BITFIELDS. Pre-rotated DIBs cannot be compressed.
-    /// https://msdn.microsoft.com/en-us/library/aa452495.aspx
+    /// ((BMP_DIB_HeaderV3.biCompression & !BMP_Constants.SourceIsPreRotatedMask) <= BI_ALPHABITFIELDS))</c>, is <c>true</c>
+    /// the BMP image have the same orientation than the destination device, otherwise it should be rotated 90 degrees 
+    /// anti-clockwise for best view.
+    /// </para>
+    /// <para>This flag is used internally by Windows CE devices (specially by camera and display drivers), and 
+    /// shouldn't be saved on the BMP file, so can be ignored if present.</para>
+    /// <para>BITMAPINFOHEADER.biCompression must be either BI_RGB, BI_ALPHABITFIELDS or BI_BITFIELDS. 
+    /// Pre-rotated DIBs cannot be compressed.</para>
+    /// See this <seealso cref="https://msdn.microsoft.com/en-us/library/aa452495.aspx">MSDN</seealso> article, for
+    /// more information.
     /// </summary>
     public const uint SourceIsPreRotatedMask = 0x8000;
 

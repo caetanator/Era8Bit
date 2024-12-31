@@ -238,7 +238,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
                                 this.dibHeader.Size = binaryReader.ReadUInt32();
                                 if ((pos + this.dibHeader.Size) <= this.fileHeader.FileSize)
                                 {
-                                    pos += 4;
+                                    pos += (long)EnumBmpNativeStructuresSizes.DWORD;
                                     switch (this.dibHeader.Size)
                                     {
                                         case (uint)EnumBmpNativeStructuresSizes.BITMAPCOREHEADER:
@@ -266,7 +266,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
                                                 (this.dibHeader.Size < (uint)EnumBmpNativeStructuresSizes.BITMAPINFOHEADER))
                                             {
                                                 // OK to read OS22XBITMAPHEADER > 16 Bytes && < 40 Bytes
-                                                this.ReadDibHeaderV5(ref binaryReader, ref pos, this.dibHeader.Size, this.dibHeader.Size);
+                                                this.ReadDibHeaderV5(ref binaryReader, ref pos, this.dibHeader.Size);
                                             }
                                             else if ((this.dibHeader.Size > (uint)EnumBmpNativeStructuresSizes.BITMAPINFOHEADER) &&
                                                 (this.dibHeader.Size <= (uint)EnumBmpNativeStructuresSizes.OS22XBITMAPHEADER_MAX))
@@ -282,7 +282,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
                                             }
                                     }
                                     if (!ValidateDibHeaderV5())
-                                        throw new Exception(String.Format("BMP 'BM' DIB Header size { 0 } invalid format!", this.dibHeader.Size));
+                                        throw new Exception(String.Format("BMP 'BM' DIB Header size {0} invalid format!", this.dibHeader.Size));
                                 }
                                 else
                                 {
@@ -329,15 +329,15 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
             this.isWin_v1 = true;
 
             this.dibHeader.Width = (int)binaryReader.ReadUInt16();
-            pos += 2;
+            pos += (long)EnumBmpNativeStructuresSizes.WORD;
             this.dibHeader.Height = (int)binaryReader.ReadUInt16();
-            pos += 2;
+            pos += (long)EnumBmpNativeStructuresSizes.WORD;
             scanLineSize = (uint)binaryReader.ReadUInt16();
-            pos += 2;
+            pos += (long)EnumBmpNativeStructuresSizes.WORD;
             this.dibHeader.ColorPlanes = (ushort)binaryReader.ReadByte();
-            pos += 1;
+            pos += (long)EnumBmpNativeStructuresSizes.BYTE;
             this.dibHeader.BitsPerPixel = (ushort)binaryReader.ReadByte();
-            pos += 1;
+            pos += (long)EnumBmpNativeStructuresSizes.BYTE;
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
         {
             long posStop = pos + size;
             posStop = Math.Min(posStop, this.fileHeader.FileSize);
-            if (pos + EnumBmpNativeStructuresSizes.BITMAPFILEHEADER <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.BITMAPFILEHEADER <= posStop)
             {
                 this.fileHeader = (Win32FileHeader)binaryReader.ReadStructure<Win32FileHeader>();
                 pos += Marshal.SizeOf(this.fileHeader);
@@ -385,73 +385,73 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
             posStop = Math.Min(posStop, this.fileHeader.FileSize);
             this.isOS2_v2 = true;
             this.dibHeader_OS2 = new OS2InfoHeaderV2_ExtraFields(true);
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader_OS2.ResolutionUnit = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader_OS2.Reserved = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader_OS2.RecordingDirection = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader_OS2.HalftoningMethod = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader_OS2.HalftoningParameter1 = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader_OS2.HalftoningParameter2 = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader_OS2.ColorEncoding = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader_OS2.ApplicationIdentifier = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
         }
 
@@ -459,37 +459,37 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
         {
             long posStop = pos + size;
             posStop = Math.Min(posStop, this.fileHeader.FileSize);
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader.Width = (int)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader.Height = (int)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader.ColorPlanes = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader.BitsPerPixel = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
         }
 
@@ -497,151 +497,151 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
         {
             long posStop = pos + size;
             posStop = Math.Min(posStop, this.fileHeader.FileSize);
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.Width = (int)binaryReader.ReadInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.Height = (int)binaryReader.ReadInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader.ColorPlanes = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.WORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.WORD <= posStop)
             {
                 this.dibHeader.BitsPerPixel = (ushort)binaryReader.ReadUInt16();
-                pos += EnumBmpNativeStructuresSizes.WORD;
+                pos += (long)EnumBmpNativeStructuresSizes.WORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.Compression = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.ImageDataSize = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.PixelsPerMeterX = (int)binaryReader.ReadInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.PixelsPerMeterY = (int)binaryReader.ReadInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.PaletteSize = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.PaletteImportant = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.RedMask = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.GreenMask = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.BlueMask = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.AlphaMask = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.ColorSpace = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.CIEXYZ <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.CIEXYZ <= posStop)
             {
-                this.dibHeader.Endpoints.Read = (Win32CieXyz)binaryReader.ReadStructure<Win32CieXyz>();
-                pos += Marshal.SizeOf(this.dibHeader.Endpoints.Read);
+                this.dibHeader.Endpoints.Red = (Win32CieXyz)binaryReader.ReadStructure<Win32CieXyz>();
+                pos += Marshal.SizeOf(this.dibHeader.Endpoints.Red);
             }
             else
             {
                 return;
             }
-             if (pos + EnumBmpNativeStructuresSizes.CIEXYZ <= posStop)
+             if (pos + (long)EnumBmpNativeStructuresSizes.CIEXYZ <= posStop)
             {
                 this.dibHeader.Endpoints.Green = (Win32CieXyz)binaryReader.ReadStructure<Win32CieXyz>();
                 pos += Marshal.SizeOf(this.dibHeader.Endpoints.Green);
@@ -650,7 +650,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
             {
                 return;
             }
-             if (pos + EnumBmpNativeStructuresSizes.CIEXYZ <= posStop)
+             if (pos + (long)EnumBmpNativeStructuresSizes.CIEXYZ <= posStop)
             {
                 this.dibHeader.Endpoints.Blue = (Win32CieXyz)binaryReader.ReadStructure<Win32CieXyz>();
                 pos += Marshal.SizeOf(this.dibHeader.Endpoints.Blue);
@@ -659,55 +659,55 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.GammaRed = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.GammaGreen = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.GammaBlue = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.ProfileDataOffset = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.ProfileSize = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
             else
             {
                 return;
             }
-            if (pos + EnumBmpNativeStructuresSizes.DWORD <= posStop)
+            if (pos + (long)EnumBmpNativeStructuresSizes.DWORD <= posStop)
             {
                 this.dibHeader.Reserved = (uint)binaryReader.ReadUInt32();
-                pos += EnumBmpNativeStructuresSizes.DWORD;
+                pos += (long)EnumBmpNativeStructuresSizes.DWORD;
             }
         }
 
@@ -737,7 +737,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
             }
             else
             {
-                scanLineSize = (uint)this.dibHeader.ImageDataSize / (uint)this.dibHeader.Height);
+                scanLineSize = (uint)this.dibHeader.ImageDataSize / (uint)this.dibHeader.Height;
             }
             if (this.dibHeader.BitsPerPixel <= (uint)EnumBitsPerPixel.Palette256)
             {

@@ -2,11 +2,13 @@
  * RGBA32.cs
  *
  * PURPOSE
- *  This structure encapsulates the properties and methods needed to represents a packed 32-bit (4 unsigned bytes) pixel with 
- *  four individual 8-bit (1 unsigned byte) values ranging from 0 to 255.
+ *  This structure encapsulates the properties and methods needed to represents a packed 32-bit (4 unsigned bytes) pixel 
+ *  with four individual 8-bit (1 unsigned byte) values ranging from 0 to 255.
+ *  
+ *  The color components are stored in Red, Green, Blue, Alpha order.
  *
  * CONTACTS
- *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
+ *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.PixelFormats" project:
  *      https://github.com/caetanator/Era8Bit
  *
  * COPYRIGHT
@@ -29,11 +31,12 @@ using System.Runtime.InteropServices;
 namespace CaetanoSoft.Graphics.PixelFormats
 {
     /// <summary>
-    /// This structure encapsulates the properties and methods needed to represents a packed 32-bit (4 unsigned bytes) pixel with 
-    /// four individual 8-bit(1 unsigned byte) values ranging from 0 to 255.
+    /// This structure encapsulates the properties and methods needed to represents a packed 32-bit (4 unsigned bytes) pixel with  
+    /// three individual 8-bit (1 unsigned byte) values ranging from 0 to 255.
     /// <para>The color components are stored in RGBA (Red, Green, Blue, Alpha) order.</para>
+    /// <para>When possible, it uses the <c>Unsafe</c> class to optimize the methods for speed and low memory usage.</para>
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 16)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 4)]
     public struct RGBA32 : IPixel<RGBA32>
     {
         // ** Properties
@@ -57,6 +60,8 @@ namespace CaetanoSoft.Graphics.PixelFormats
         /// The alpha component property.
         /// </summary>
         public byte A;
+
+        // ** Fields
 
         /// <summary>
         /// A <see cref="Vector4"/> with the maximum integer value that a <see cref="byte"/> can contain (aka. 255), 
@@ -89,6 +94,8 @@ namespace CaetanoSoft.Graphics.PixelFormats
         /// The shift count for the alpha component
         /// </summary>
         private const int AlphaShift = 24;
+
+        // ** Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RGBA32"/> struct.
@@ -155,7 +162,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RGBA32(Vector4 vector) : this()
         {
-            this = PackNew(ref vector);
+            this = RGBA32.PackToRGBA32(vector);
         }
 
         /// <summary>
@@ -226,44 +233,66 @@ namespace CaetanoSoft.Graphics.PixelFormats
             }
         }
 
-        /// <inheritdoc/>
-        public uint PackedValue
-        {
-            get => this.Rgba;
-            set => this.Rgba = value;
-        }
+        // ** Override methods of Object
 
         /// <summary>
-        /// Compares two <see cref="RGBA32"/> objects for equality.
+        /// Gets a string representation of the packed vector.
+        /// <para>The output RGBA format is: <c>(n.ff, n.ff, n.ff, n.ff)</c>, where <c>n</c> is in the interval [0, 1] and 
+        /// <c>ff</c> is in the interval [00, 99].</para>
         /// </summary>
-        /// <param name="left">
-        /// The <see cref="RGBA32"/> on the left side of the operand.
-        /// </param>
-        /// <param name="right">
-        /// The <see cref="RGBA32"/> on the right side of the operand.
-        /// </param>
-        /// <returns>
-        /// True if the <paramref name="left"/> parameter is equal to the <paramref name="right"/> parameter; otherwise, false.
-        /// </returns>
+        /// <returns>A string representation of the packed vector.</returns>
+        public override string ToString()
+        {
+            return this.ToVector4().ToString();
+        }
+
+        /// <summary>Generates a hash code for this instance, from the RGBA color components, to insure that 2 RGBA32 
+        /// objects that represent the same color are report <c>true</c> by <c>IEquatable&lt;RGBA32&gt;.Equals(object)</c>.
+        /// </summary>
+        /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures 
+        /// like a hash table.</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = this.R;
+                hashCode = (hashCode * 397) ^ this.G;
+                hashCode = (hashCode * 397) ^ this.B;
+                hashCode = (hashCode * 397) ^ this.A;
+                return hashCode;
+            }
+        }
+
+        /// <inheritdoc/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(RGBA32 left, RGBA32 right)
         {
             return left.Rgba == right.Rgba;
         }
 
-        /// <summary>
-        /// Compares two <see cref="RGBA32"/> objects for equality.
-        /// </summary>
-        /// <param name="left">The <see cref="RGBA32"/> on the left side of the operand.</param>
-        /// <param name="right">The <see cref="RGBA32"/> on the right side of the operand.</param>
-        /// <returns>
-        /// True if the <paramref name="left"/> parameter is not equal to the <paramref name="right"/> parameter; otherwise, false.
-        /// </returns>
+        /// <inheritdoc/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(RGBA32 left, RGBA32 right)
         {
             return left.Rgba != right.Rgba;
         }
+
+        // ** Override methods of IEquatable<RGBA32>
+
+        /// <inheritdoc/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(RGBA32 other)
+        {
+            return this.Rgba == other.Rgba;
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            return obj?.GetType() == typeof(RGBA32) && this.Equals((RGBA32)obj);
+        }
+
+        // ** Override methods of IPixel<RGBA32>
 
         /// <inheritdoc/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -272,14 +301,18 @@ namespace CaetanoSoft.Graphics.PixelFormats
             this = source;
         }
 
-        /// <summary>
-        /// Converts the value of this instance to a hexadecimal string.
-        /// </summary>
-        /// <returns>A hexadecimal string representation of the value.</returns>
-        public string ToHex()
+        /// <inheritdoc/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void PackFromVector3(Vector3 vector)
         {
-            uint hexOrder = Pack(this.A, this.B, this.G, this.R);
-            return hexOrder.ToString("X8");
+            this.Pack(ref vector);
+        }
+
+        /// <inheritdoc/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void PackFromVector4(Vector4 vector)
+        {
+            this.Pack(ref vector);
         }
 
         /// <inheritdoc />
@@ -287,13 +320,6 @@ namespace CaetanoSoft.Graphics.PixelFormats
         public void ToRgb24(ref RGB24 dest)
         {
             dest = Unsafe.As<RGBA32, RGB24>(ref this);
-        }
-
-        /// <inheritdoc />
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ToRgba32(ref RGBA32 dest)
-        {
-            dest = this;
         }
 
         /// <inheritdoc />
@@ -307,19 +333,36 @@ namespace CaetanoSoft.Graphics.PixelFormats
 
         /// <inheritdoc />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ToRgba32(ref RGBA32 dest)
+        {
+            dest = this;
+        }
+
+        /// <inheritdoc />
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ToBgra32(ref BGRA32 dest)
         {
-            dest.R = this.R;
-            dest.G = this.G;
             dest.B = this.B;
+            dest.G = this.G;
+            dest.R = this.R;
             dest.A = this.A;
         }
 
         /// <inheritdoc/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void PackFromVector4(Vector4 vector)
+        public void ToArgb32(ref ARGB32 dest)
         {
-            this.Pack(ref vector);
+            dest.A = this.A;
+            dest.R = this.R;
+            dest.G = this.G;
+            dest.B = this.B;
+        }
+
+        /// <inheritdoc/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3 ToVector3()
+        {
+            return new RGB24(this.R, this.G, this.B).ToVector3();
         }
 
         /// <inheritdoc/>
@@ -331,9 +374,17 @@ namespace CaetanoSoft.Graphics.PixelFormats
             return new Vector4(this.R, this.G, this.B, this.A) / vector4MaxByteValue;
         }
 
+        /// <inheritdoc/>
+        public string ToHex()
+        {
+            uint hexOrder = PackToUInt(this.A, this.B, this.G, this.R);
+            return hexOrder.ToString("X8");
+        }
+
+        // ** Methods
+
         /// <summary>
         /// Gets the value of this struct as <see cref="BGRA32"/>.
-        /// Useful for changing the component order.
         /// </summary>
         /// <returns>A <see cref="BGRA32"/> value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -342,87 +393,24 @@ namespace CaetanoSoft.Graphics.PixelFormats
             return new BGRA32(this.R, this.G, this.B, this.A);
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(object obj)
-        {
-            return (obj is RGBA32) && this.Equals((RGBA32)obj);
-        }
-
-        /// <inheritdoc/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(RGBA32 other)
-        {
-            return this.Rgba == other.Rgba;
-        }
-
         /// <summary>
-        /// Gets a string representation of the packed vector.
+        /// Gets the <see cref="Vector4"/> representation without normalizing to 
+        /// the interval [0.00, 1.00].
         /// </summary>
-        /// <returns>A string representation of the packed vector.</returns>
-        public override string ToString()
-        {
-            return this.ToVector4().ToString();
-        }
-
-        /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = this.R;
-                hashCode = (hashCode * 397) ^ this.G;
-                hashCode = (hashCode * 397) ^ this.B;
-                hashCode = (hashCode * 397) ^ this.A;
-                return hashCode;
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="Vector4"/> representation without normalizing to [0, 1]
-        /// </summary>
-        /// <returns>A <see cref="Vector4"/> of values in [0, 255] </returns>
+        /// <returns>A <see cref="Vector4"/> of values in the interval [0, 255].</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal Vector4 ToUnscaledVector4()
         {
-            return new Vector4(this.R, this.G, this.B, this.A);
+            return new Vector4((float)this.R, (float)this.G, (float)this.B, (float)this.A);
         }
 
         /// <summary>
-        /// Packs the four floats into a <see cref="uint"/>.
+        /// Packs four normalized floats ([0.00, 1.00]) into this instance.
         /// </summary>
-        /// <param name="x">The x-component</param>
-        /// <param name="y">The y-component</param>
-        /// <param name="z">The z-component</param>
-        /// <param name="w">The w-component</param>
-        /// <returns>The <see cref="uint"/></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static uint Pack(byte x, byte y, byte z, byte w)
-        {
-            return (uint)(x << RedShift | y << GreenShift | z << BlueShift | w << AlphaShift);
-        }
-
-        /// <summary>
-        /// Packs a <see cref="Vector4"/> into a color returning a new instance as a result.
-        /// </summary>
-        /// <param name="vector">The vector containing the values to pack.</param>
-        /// <returns>The <see cref="RGBA32"/></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static RGBA32 PackNew(ref Vector4 vector)
-        {
-            vector *= vector4MaxByteValue;
-            vector += vector4DeltaError;
-            vector = Vector4.Clamp(vector, Vector4.Zero, vector4MaxByteValue);
-
-            return new RGBA32((byte)vector.X, (byte)vector.Y, (byte)vector.Z, (byte)vector.W);
-        }
-
-        /// <summary>
-        /// Packs the four floats into a color.
-        /// </summary>
-        /// <param name="x">The x-component</param>
-        /// <param name="y">The y-component</param>
-        /// <param name="z">The z-component</param>
-        /// <param name="w">The w-component</param>
+        /// <param name="x">The x-component.</param>
+        /// <param name="y">The y-component.</param>
+        /// <param name="z">The z-component.</param>
+        /// <param name="w">The w-component.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Pack(float x, float y, float z, float w)
         {
@@ -431,18 +419,18 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Packs a <see cref="Vector3"/> into a uint.
+        /// Packs a normalized ([0.00, 1.00]) <see cref="Vector3"/> into this instance.
         /// </summary>
         /// <param name="vector">The vector containing the values to pack.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Pack(ref Vector3 vector)
         {
-            var value = new Vector4(vector, 1);
+            var value = new Vector4(vector, 1.0f);
             this.Pack(ref value);
         }
 
         /// <summary>
-        /// Packs a <see cref="Vector4"/> into a color.
+        /// Packs a normalized ([0.00, 1.00]) <see cref="Vector4"/> into this instance.
         /// </summary>
         /// <param name="vector">The vector containing the values to pack.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -456,6 +444,35 @@ namespace CaetanoSoft.Graphics.PixelFormats
             this.G = (byte)vector.Y;
             this.B = (byte)vector.Z;
             this.A = (byte)vector.W;
+        }
+
+        /// <summary>
+        /// Packs four bytes ([0, 255]) into a new instance of <c>uint</c>.
+        /// </summary>
+        /// <param name="x">The x-component.</param>
+        /// <param name="y">The y-component.</param>
+        /// <param name="z">The z-component.</param>
+        /// <param name="w">The w-component.</param>
+        /// <returns>The packet color value in an <see cref="uint"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static uint PackToUInt(byte x, byte y, byte z, byte w)
+        {
+            return (uint)(x << RedShift | y << GreenShift | z << BlueShift | w << AlphaShift);
+        }
+
+        /// <summary>
+        /// Packs a normalized ([0.00, 1.00]) <see cref="Vector4"/> into a new instance of <c>RGBA32</c>.
+        /// </summary>
+        /// <param name="vector">The vector containing the values to pack.</param>
+        /// <returns>The <see cref="RGBA32"/></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static RGBA32 PackToRGBA32(Vector4 vector)
+        {
+            vector *= vector4MaxByteValue;
+            vector += vector4DeltaError;
+            vector = Vector4.Clamp(vector, Vector4.Zero, vector4MaxByteValue);
+
+            return new RGBA32((byte)vector.X, (byte)vector.Y, (byte)vector.Z, (byte)vector.W);
         }
     }
 }
