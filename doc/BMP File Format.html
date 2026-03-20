@@ -152,9 +152,9 @@
       .classNoBorderLeft {
         border-left: 4px none #FFFFFF !important;
       }
-      /* CSS Class Style for no background color */
+      /* CSS Class Style for no background colour */
       .classNoBackgroundColor {
-        background-color: transparent; !important;
+        background-color: transparent !important;
       }
       /* CSS Class Style for text align left */
       .classTextAlingLeft {
@@ -270,7 +270,7 @@
       <ul>
         <li><b>IBM Monochrome Display Adapter (MDA)</b><sup><a href="#cite_note-3">[3]</a></sup>: 4 grayscale monochrome colours (of the 2-bit colour deep [B/F+I] palette). 
         <span style="color: #FF0000;">Text only! No graphics capabilities</span>;</li>
-        <li><b>IBM Color Graphics Adapter (CGA)</b><sup><a href="#cite_note-4">[4]</a></sup>: 4 bpp = maximum of 16 colours (of the possible 16 colours/4-bit colour deep 
+        <li><b>IBM colour Graphics Adapter (CGA)</b><sup><a href="#cite_note-4">[4]</a></sup>: 4 bpp = maximum of 16 colours (of the possible 16 colours/4-bit colour deep 
         [R+G+B+I] palette);</li>
         <li><b>IBM Enhanced Graphics Adapter (EGA)</b><sup><a href="#cite_note-5">[5]</a></sup>: 4 bpp = maximum of 16 colours (of the possible 64 colours/6-bit colour deep [R<sub>2</sub>+G<sub>2</sub>+B<sub>2</sub>] palette);</li>
         <li><b>Hercules Graphics Card (HGC/Hercules)</b><sup><a href="#cite_note-6">[6]</a></sup>: 1 bpp = 2 monochrome colours (of the 1-bit colour deep [B/F] palette).</li>
@@ -283,7 +283,7 @@
       This defunct and short&hyphen;lived format is now often referred to as the original Windows <i>Device&hyphen;Dependent Bitmap</i> (DDB).
     </p>
     <p>
-      On monochrome displays, the colour palette is given by the CRT (Cathode-Ray Tube) monitor's phosphor screen used
+      On monochrome displays, the Color Palette is given by the CRT (Cathode-Ray Tube) monitor's phosphor screen used
       <sup><a href="#cite_note-10">[10]</a></sup><sup><a href="#cite_note-11">[11]</a></sup>:
       <ul>
         <li><b>White (P4)</b>: Black &amp; White;</li>
@@ -297,7 +297,7 @@
     <p>
       As Windows 2.0 (released on 1987<sup><a href="#cite_note-1">[1]</a></sup>) was being developed, EGA<sup><a href="#cite_note-5">[5]</a></sup> ruled the graphics cards and 
       VGA<sup><a href="#cite_note-7">[7]</a></sup> (8 bpp = maximum of 256 colours (of the possible 262,144 colours/18-bit colour deep 
-      [R<sub>6</sub>+G<sub>6</sub>+B<sub>6</sub>] output gamut) started to replace it by 1987. So, support for a programmable colour palette for 1 bpp, 4 bpp and 8 bpp 
+      [R<sub>6</sub>+G<sub>6</sub>+B<sub>6</sub>] output gamut) started to replace it by 1987. So, support for a programmable Color Palette for 1 bpp, 4 bpp and 8 bpp 
       was added to Windows OS and the BMP file format, allowing user&hyphen;definable colour data to be stored along with the bitmap data that used it. Also was added support for 
       24 bpp bitmaps with no palette. No compression was supported.
     </p>
@@ -315,7 +315,7 @@
     </p>
     <p>
       The Windows <i>BMP File Format</i> v2 as the following structure: <br>
-      <b>File Header v1 + DIB Header v2 + Color Palette v2 + Bitmap Pixels</b>.
+      <b>File Header v1 + DIB Header v2 + Color Palette v1 + Bitmap Pixels</b>.
     </p>
     <h3>IBM OS/2 1.x BMP v1</h3>
     <p>
@@ -331,15 +331,15 @@
     <p>
       When Microsoft Windows 3.0 (released on 1990<sup><a href="#cite_note-1">[1]</a></sup>) hit the market, VGA<sup><a href="#cite_note-7">[7]</a></sup>, 
       SVGA<sup><a href="#cite_note-8">[8]</a></sup> (Super VGA) and XGA<sup><a href="#cite_note-9">[9]</a></sup> graphics cards with 256 colours palettes were the norm, with 
-      2D acceleration, High Color (15/16-bit)<sup><a href="#cite_note-12">[12]</a></sup> and True Color (24-bit)<sup><a href="#cite_note-13">[13]</a></sup> becoming the standard.
+      2D acceleration, High Colour (15/16-bit)<sup><a href="#cite_note-12">[12]</a></sup> and True Colour (24-bit)<sup><a href="#cite_note-13">[13]</a></sup> becoming the standard.
     </p>
     <p>
-      So, the DIB Header structure was expanded by adding Run-Length Encoding (RLE)<sup><a href="#cite_note-14">[14]</a></sup> compression for 4 bpp and 8 bpp bitmaps, was optimized for 32-bit (<code>DWORD</code>), uses the new <i>Color Palette</i> v2 (4 bytes per entry = 1 <code>DWORD</code>, BGRA) with better colour palette detection 
+      So, the DIB Header structure was expanded by adding Run-Length Encoding (RLE)<sup><a href="#cite_note-14">[14]</a></sup> compression for 4 bpp and 8 bpp bitmaps, was optimized for 32-bit (<code>DWORD</code>), uses the new <i>Color Palette</i> v2 (4 bytes per entry = 1 <code>DWORD</code>, BGRA) with better Color Palette detection 
       support and optional image resolution in pixels&hyphen;per&hyphen;meter (ppm).
     </p>
     <p>
       The Windows <i>BMP File Format</i> v3 as the following structure: <br>
-      &nbsp;&nbsp;&nbsp;&nbsp;<b>File Header v1 + DIB Header v3 + Palette v2 + Bitmap Pixels</b>.
+      &nbsp;&nbsp;&nbsp;&nbsp;<b>File Header v1 + DIB Header v3 + ColorPalette v2 + Bitmap Pixels</b>.
     </p>
     <h3>IBM OS/2 2.0 BMP v2</h3>
     <p> 
@@ -377,7 +377,7 @@
     <p>
       For Microsoft Windows CE 5 + .NET (released on 2004 <sup><a href="#cite_note-1">[1]</a></sup>), Microsoft extended the specification of Windows CE BMP v3, in order that 
       16 bpp and 32 bpp bitmaps support could be added to the Windows CE OS family, by adding 4 <code>DWORD</code> bitfields masks after the DIB header v3 and before the 
-      optional colour palette v2 for 15/16 bpp and 32 bpp image (similar to Windows NT BMP v3).
+      optional Color Palette v2 for 15/16 bpp and 32 bpp image (similar to Windows NT BMP v3).
     </p>
     <h3>Microsoft Windows 95 &amp; NT 4 BMP v4</h3>
     <p>
@@ -623,7 +623,7 @@
                 <tr>
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #F0F50F;">
                     <p style="text-align: center;">
-                      Colour Palette v1<br>
+                      Color Palette v1<br>
                       <span style="color: #FF0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
@@ -690,14 +690,14 @@
       The <b>Gap 1</b> and <b>Gap 2</b> on the bitmap file format, are optional and so, they can be 0 bytes.
       When both gaps are set to zero (0), the bitmap is called a <i>Packed DIB</i>.<br>
       On <i>packed DIBs</i> in memory, the <i>Windows Bitmap Pixels Array</i> and <i>OS/2 Bitmap Data</i>, must start at a memory address that is a multiple of 4 bytes.
-      In some cases, it may be necessary to adjust the number of entries in the colour table in order to force the memory address alignment.<br>
+      In some cases, it may be necessary to adjust the number of entries in the Color Table in order to force the memory address alignment.<br>
       The optional ICC colour correction profile data, should immediately follow the pixel array data, if used.
     </p>
     <p>
       <b>Note: </b><i>Packed DIBs</i> are required by Windows clipboard, patterned brush, resources APIs functions as well as others <b>Win32</b> APIs.
     </p>
     <p>
-      <b>Gap 1</b> is for aligning the <i>Windows Bitmap Pixels</i> / <i>OS/2 Bitmap Data</i> values and <b>Gap 2</b> the ICC (International Color Consortium) Color Correction
+      <b>Gap 1</b> is for aligning the <i>Windows Bitmap Pixels</i> / <i>OS/2 Bitmap Data</i> values and <b>Gap 2</b> the ICC (International colour Consortium) colour Correction
       Profile v1 data values, case it exists.
     </p>
     <p>
@@ -961,14 +961,14 @@
                 <tr>
                   <td>4943h</td>
                   <td><b>CI</b></td>
-                  <td><code>BFT_COLORICON</code></td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">OS/2 Color Icon.</td>
+                  <td><code>BFT_colourICON</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">OS/2 colour Icon.</td>
                 </tr>
                 <tr>
                   <td>5043h</td>
                   <td><b>CP</b></td>
-                  <td><code>BFT_COLORPOINTER</code></td>
-                  <td class="classTextAlingLeft" style="max-width: 460px;">OS/2 Color Pointer.</td>
+                  <td><code>BFT_colourPOINTER</code></td>
+                  <td class="classTextAlingLeft" style="max-width: 460px;">OS/2 colour Pointer.</td>
                 </tr>
                 <tr>
                   <td>5450h</td>
@@ -1044,12 +1044,12 @@
     <p>This header/structure is mandatory for bitmaps with less or equal than 8 bits&hyphen;per&hyphen;pixel
       (1, 4 and 8). It's optional for bitmaps with more than 8 bits&hyphen;per&hyphen;pixel (24)
     </p>
-    <p>The Colour Palette/Table should be order by importance, <i>i.e.</i>, most used colours first.</p>
+    <p>The Color Palette/Table should be order by importance, <i>i.e.</i>, most used colours first.</p>
     <p>
-      The maximum number of entries on the colour Palette/Table 2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel),
+      The maximum number of entries on the Color Palette/Table 2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel),
       can be calculated by the formula:<br>
       &nbsp;&nbsp;&nbsp;&nbsp;<code>MaxNumberOfEntries = 1 &lt;&lt; BitsPerPixel;</code><br>
-      To detect the presence of a colour palette in a BMP file, use this formula:
+      To detect the presence of a Color Palette in a BMP file, use this formula:
     </p>
     <div class="divCode"><pre><code>
 RGBTRIPLE ColorPalette_RGB[];
@@ -1072,7 +1072,7 @@ if ((BitmapCoreHeader.bcBitCount == 8) || (BitmapCoreHeader.bcBitCount == 4) || 
 }
 else {
 &nbsp;&nbsp;if (BitmapCoreHeader.bcBitCount == 24) {
-&nbsp;&nbsp;&nbsp;&nbsp;/* OK: 24 bpp bitmaps have no Color palette */
+&nbsp;&nbsp;&nbsp;&nbsp;/* OK: 24 bpp bitmaps have no Color Palette */
 &nbsp;&nbsp;&nbsp;&nbsp;NumberOfEntries = 0;
 &nbsp;&nbsp;}
 &nbsp;&nbsp;else {
@@ -1148,7 +1148,7 @@ else {
       The maximum number of entries on the Color Palette/Table 2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel),
       can be calculated by the formula:<br>
       &nbsp;&nbsp;&nbsp;&nbsp;<code>MaxNumberOfEntries = 1 &lt;&lt; BitsPerPixel;</code><br>
-      To detect the presence of a colour palette in a BMP file, use this formula:
+      To detect the presence of a Color Palette in a BMP file, use this formula:
     </p>
     <div class="divCode"><pre><code>
 int StartOfPalBytes = 0;
@@ -1194,7 +1194,7 @@ if (BitmapFileHeader.bfOffBits &lt; StartOfPalBytes) {
 }
 NumberOfEntries = (BitmapFileHeader.bfOffBits - StartOfPalBytes) / sizeof(RGBQUAD);
 if (NumberOfEntries &lt; 0) {
-&nbsp;&nbsp;&nbsp;&nbsp;/* ERROR: No Color palette */
+&nbsp;&nbsp;&nbsp;&nbsp;/* ERROR: No Color Palette */
 &nbsp;&nbsp;&nbsp;&nbsp;NumberOfEntries = 0;
 }
 if ((BitmapInfoHeader.biClrUsed &gt; MaxNumberOfEntries) || 
@@ -1216,7 +1216,7 @@ else {
 &nbsp;&nbsp;&nbsp;&nbsp;BitmapInfoHeader.biClrImportant = (BitmapInfoHeader.biClrUsed == 0) ?  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NumberOfEntries : BitmapInfoHeader.biClrUsed;
 }
-RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImportant);
+RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImportant);
     </code></pre></div>
 	  <p>&nbsp;</p>
     <table id="Table4">
@@ -1279,7 +1279,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <td>fcOptions</td>
           <td class="classTextAlingLeft" style="max-width: 500px;">
             <b>Windows:</b>&nbsp;reserved (must be 0). Can be used as alpha component intensity for RGBA colours in 16 and 32
-            bits per color bitfield bitmaps.<br>
+            bits per colour bitfield bitmaps.<br>
             <b>OS/2:</b>&nbsp;reserved for padding (must be 0).
           </td>
         </tr>
@@ -1553,7 +1553,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <td>32&hyphen;bit unsigned</td>
           <td>biClrUsed</td>
           <td class="classTextAlingLeft">
-            The number of colours present in the colour palette/table.<br>
+            The number of colours present in the Color Palette/Table.<br>
             Can be set to 0, if <code>cBitCount</code> is less or equal than 8 bits&hyphen;per&hyphen;pixel (&le; 8). In this case,
             2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel) is used.<br>
             Can be calculated by the formula:<br>
@@ -1568,7 +1568,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <td>32&hyphen;bit unsigned</td>
           <td>biClrImportant</td>
           <td class="classTextAlingLeft">
-            The number of significant colours present in the colour palette/table.<br>
+            The number of significant colours present in the Color Palette/Table.<br>
             Can be set to 0, if all colours in the palette are important (<i>i.e.</i> <code>cclrImportant</code> = <code>cclrUsed</code>)
           </td>
         </tr>
@@ -1702,7 +1702,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <td>0038h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
-          <td>ulColorEncoding</td>
+          <td>ulcolourEncoding</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td class="classTextAlingLeft">
@@ -1760,7 +1760,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <th style="max-width: 500px;">Purpose</th>
         </tr>
         <tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV0INFOHEADER <span style="color: #00FF00;">(16 Bytes)</span></td>
+          <td colspan="5" style="background: #000000; colour: #FFFFFF">Windows BITMAPV0INFOHEADER <span style="color: #00FF00;">(16 Bytes)</span></td>
         </tr>
       </thead>
       <tbody>
@@ -1841,7 +1841,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           </td>
         </tr>
         <tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPINFOHEADER <span style="color: #00FF00;">(40 Bytes)</span></td>
+          <td colspan="5" style="background: #000000; colour: #FFFFFF">Windows BITMAPINFOHEADER <span style="color: #00FF00;">(40 Bytes)</span></td>
         </tr>
         <tr>
           <td>0010h</td>
@@ -1979,7 +1979,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <td>32&hyphen;bit unsigned</td>
           <td>biClrUsed</td>
           <td class="classTextAlingLeft">
-            The number of colours present in the colour palette/table.<br>
+            The number of colours present in the Color Palette/Table.<br>
             Can be set to 0, if <code>biBitCount</code> is less or equal than 8 bits&hyphen;per&hyphen;pixel (&le; 8). In this case,
             2<sup><i>n</i></sup> (where <i>n</i> is the number of bits&hyphen;per&hyphen;pixel) is used, calculated by the formula:<br>
             &nbsp;&nbsp;&nbsp;&nbsp;<code>ColorsUsed = 1 &lt;&lt; BitsPerPixel;</code><br>
@@ -1993,12 +1993,12 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <td>32&hyphen;bit unsigned</td>
           <td>biClrImportant</td>
           <td class="classTextAlingLeft">
-            The number of significant colours present in the colour palette/table.<br>
+            The number of significant colours present in the Color Palette/Table.<br>
             Can be set to 0, if all colours in the palette are important (<i>i.e.</i> <code>biClrImportant</code> = <code>biClrUsed</code>).
           </td>
         </tr>
         <tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV2INFOHEADER <span style="color: #00FF00;">(52 Bytes)</span></td>
+          <td colspan="5" style="background: #000000; colour: #FFFFFF">Windows BITMAPV2INFOHEADER <span style="color: #00FF00;">(52 Bytes)</span></td>
         </tr>
         <tr>
           <td>0028h</td>
@@ -2031,7 +2031,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           </td>
         </tr>
         <tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV3INFOHEADER <span style="color: #00FF00;">(56 Bytes)</span></td>
+          <td colspan="5" style="background: #000000; colour: #FFFFFF">Windows BITMAPV3INFOHEADER <span style="color: #00FF00;">(56 Bytes)</span></td>
         </tr>
         <tr>
           <td>0034h</td>
@@ -2044,7 +2044,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           </td>
         </tr>
         <tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV4HEADER <span style="color: #00FF00;">(108 Bytes)</span></td>
+          <td colspan="5" style="background: #000000; colour: #FFFFFF">Windows BITMAPV4HEADER <span style="color: #00FF00;">(108 Bytes)</span></td>
         </tr>
         <tr>
           <td>0038h</td>
@@ -2052,7 +2052,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           <td>32&hyphen;bit unsigned</td>
           <td>bV4CSType</td>
           <td class="classTextAlingLeft">
-            The colour space type of the DIB, <i>aka</i> the ICC color correction profile type. The following valid values are possible:
+            The colour space type of the DIB, <i>aka</i> the ICC colour correction profile type. The following valid values are possible:
             <table>
               <tbody>
                 <tr>
@@ -2085,9 +2085,9 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
                   <td>73524742h</td>
                   <td><code>LCS_sRGB</code></td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">
-                    Specifies that the bitmap is in sRGB color space.<br>
+                    Specifies that the bitmap is in sRGB colour space.<br>
                     <code>bV4Endpoints</code>, <code>bV4GammaRed</code>, <code>bV4GammaGreen</code> and <code>bV4GammaBlue</code> members are ignored.<br>
-                    The ICC sRGB color space values are used instead.<br>
+                    The ICC sRGB colour space values are used instead.<br>
                     In ASCII, equals 'sRGB'.
                   </td>
                 </tr>
@@ -2186,7 +2186,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
           </td>
         </tr>
 		    <tr>
-          <td colspan="5" style="background: #000000; color: #FFFFFF">Windows BITMAPV5HEADER <span style="color: #00FF00;">(124 Bytes)</span></td>
+          <td colspan="5" style="background: #000000; colour: #FFFFFF">Windows BITMAPV5HEADER <span style="color: #00FF00;">(124 Bytes)</span></td>
         </tr>
         <tr>
           <td>006Ch</td>
@@ -2217,9 +2217,9 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
                   <td>2</td>
                   <td><code>LCS_GM_GRAPHICS</code></td>
                   <td>Proof</td>
-                  <td>Relative Colorimetric</td>
+                  <td>Relative colourimetric</td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">
-                    Maintains colorimetric match. Used for graphic designs and named colours.
+                    Maintains colourimetric match. Used for graphic designs and named colours.
                   </td>
                 </tr>
                 <tr>
@@ -2235,7 +2235,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
                   <td>8</td>
                   <td><code>LCS_GM_ABS_COLORIMETRIC</code></td>
                   <td>Match</td>
-                  <td>Absolute Colorimetric</td>
+                  <td>Absolute colourimetric</td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">
                     Maintains the white point. Matches the colours to their nearest colour in the destination gamut.
                   </td>
@@ -2286,7 +2286,7 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
       </li>
       <li id="cite_note-2">
         &nbsp;
-        <cite><a href="https://en.wikipedia.org/wiki/OS/2" hreflang="en" rel="nofollow" target="_blank">OS/2</a></cite>. Last edited on 2024-11-20.
+        <cite><a href="https://en.wikipedia.org/wiki/OS/2#Summary_of_releases" hreflang="en" rel="nofollow" target="_blank">OS/2 - Summary of releases</a></cite>. Last edited on 2024-11-20.
       </li>
       <li id="cite_note-3">
         &nbsp;
@@ -2326,11 +2326,11 @@ RGBQUAD Colorpalette_RGBA[] = loadColorpalette_RGBA(BitmapInfoHeader.biClrImport
       </li>
       <li id="cite_note-12">
         &nbsp;
-        <cite><a href="https://en.wikipedia.org/wiki/Color_depth#High_color_(15/16-bit)" hreflang="en" rel="nofollow" target="_blank">Color depth - High color (15/16-bit)</a></cite>. Last edited on 2024-09-24.
+        <cite><a href="https://en.wikipedia.org/wiki/colour_depth#High_color_(15/16-bit)" hreflang="en" rel="nofollow" target="_blank">Color depth - High colour (15/16-bit)</a></cite>. Last edited on 2024-09-24.
       </li>
       <li id="cite_note-13">
         &nbsp;
-        <cite><a href="https://en.wikipedia.org/wiki/Color_depth#True_color_(24-bit)" hreflang="en" rel="nofollow" target="_blank">Color depth - True color (24-bit)</a></cite>. Last edited on 2024-09-24.
+        <cite><a href="https://en.wikipedia.org/wiki/colour_depth#True_color_(24-bit)" hreflang="en" rel="nofollow" target="_blank">Color depth - True colour (24-bit)</a></cite>. Last edited on 2024-09-24.
       </li>
       <li id="cite_note-14">
         &nbsp;
