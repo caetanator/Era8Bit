@@ -1,28 +1,43 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>DCK_InfoViewer</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>DCK_InfoViewer</PackageId>
-    <RuntimeIdentifiers>win7-x64;win10-x64;osx.10.10-x64</RuntimeIdentifiers>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;linux-x86;osx-x64</RuntimeIdentifiers>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>CaetanoSof.Era8Bit.Programs.DCK_InfoViewer</RootNamespace>
-
     <Authors>José Caetano Silva</Authors>
     <Company>CaetanoSoft</Company>
-    <Copyright>(c) 2016-2023 by José Caetano Silva</Copyright>
+    <Copyright>(c) 2016-2025 by José Caetano Silva</Copyright>
     <PackageLicenseFile>GPL.txt</PackageLicenseFile>
     <Description>View Timex Sinclair 2068 (TS2068), Timex Computer (TC2068) and Unipolbrit Komputer 2086 (UK2086), Timex Command Cartridges (TCC) .DCK files information and content.</Description>
     <StartupObject>CaetanoSof.Era8Bit.Programs.DCK_InfoViewer.DCK_InfoViewer</StartupObject>
+    <Version>1.1.0</Version>
+    <RepositoryUrl>https://github.com/caetanator/Era8Bit</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>.dck, Timex Computer 2068, Timex Sinclair 2068, TC2068, TS2068, Cartridge</PackageTags>
+    <PackageProjectUrl>https://github.com/caetanator/Era8Bit</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="src\GPL.txt" />
+    <None Include="src\GPL.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CaetanoSoft.Era8bit.Library\CaetanoSoft.Era8bit.Library.csproj" />

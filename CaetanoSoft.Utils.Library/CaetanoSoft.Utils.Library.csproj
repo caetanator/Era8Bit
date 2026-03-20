@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>CaetanoSoft.Utils</RootNamespace>
     <Company>CaetanoSoft</Company>
     <Authors>José Caetano Silva</Authors>
-    <Copyright>(c) 2006-2021 by José Caetano Silva</Copyright>
+    <Copyright>(c) 2006-2025 by José Caetano Silva</Copyright>
     <PackageLicenseFile>GPL.txt</PackageLicenseFile>
-    <Description>This class library contains objects to help applications to handle CPU endianness files and memory allocation.</Description>
+    <Description>This library contains objects to help applications to handle CPU endianness aware files and memory allocation.</Description>
+    <Version>1.1.0</Version>
+    <PackageProjectUrl>https://github.com/caetanator/Era8Bit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/caetanator/Era8Bit</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

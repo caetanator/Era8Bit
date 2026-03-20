@@ -17,7 +17,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2019-2024 José Caetano Silva
+ *  (C)2019-2024 JosÃ© Caetano Silva
  *
  * HISTORY
  *  2019-09-16: Created.
@@ -73,7 +73,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         // ** Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RGB24"/> struct.
+        /// Initializes a new instance of the <see cref="RGB24"/> structure.
         /// </summary>
         /// <param name="r">The red component.</param>
         /// <param name="g">The green component.</param>
@@ -248,7 +248,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         // ** Methods
 
         /// <summary>
-        /// Gets the value of this struct as <see cref="BGR24"/>.
+        /// Gets the value of this structure as <see cref="BGR24"/>.
         /// </summary>
         /// <returns>A <see cref="BGR24"/> value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

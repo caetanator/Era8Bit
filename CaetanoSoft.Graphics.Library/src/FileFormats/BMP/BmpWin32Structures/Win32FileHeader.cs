@@ -1,3 +1,28 @@
+/**
+ * Win32FileHeader.cs
+ *
+ * PURPOSE
+ *  This structure represents a Microsoft Windows BMP v2 and IBM OS/2 BMP v1 (and later) file header.
+ *  Introduced in Microsoft Windows 2.0 and IBM OS/2 1.0.
+ *
+ * CONTACTS
+ *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
+ *      https://github.com/caetanator/Era8Bit
+ *
+ * COPYRIGHT
+ *  This file is distributed under the terms of the GNU General Public
+ *  License (GPL) v3. Copies of the GPL can be obtained from:
+ *      ftp://prep.ai.mit.edu/pub/gnu/GPL
+ *  Each contributing author retains all rights to their own work.
+ *
+ *  (C)2009-2024 José Caetano Silva
+ *
+ * HISTORY
+ *  2009-09-15: Created.
+ *  2017-04-13: Major rewrite.
+ *  2023-09-16: Renamed and updated.
+ *  2024-12-10: More documentation updates.
+ */
 
 using System.Runtime.InteropServices;
 

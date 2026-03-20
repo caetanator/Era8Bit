@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>CaetanoSoft.Era8bit</RootNamespace>
     <Authors>José Caetano Silva</Authors>
     <Company>CaetanoSoft</Company>
-    <Copyright>(c) 2016-2023 by José Caetano Silva</Copyright>
+    <Copyright>(c) 2016-2025 by José Caetano Silva</Copyright>
     <PackageLicenseFile>GPL.txt</PackageLicenseFile>
-    <Description>This class library contains objects to help applications that emulate 8-bit era computers, like the Sinclair ZX Spectrum, Timex Computer 2068 and Commodore 64.</Description>
+    <Description>This library contains objects to help applications that emulate 8-bit era computers, like the Sinclair ZX Spectrum, Timex Computer 2068 and Commodore 64.</Description>
+    <Version>1.1.0</Version>
+    <RepositoryUrl>https://github.com/caetanator/Era8Bit</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>.dck, Timex Computer 2068, Timex Sinclair 2068, TC2068, TS2068, Cartridge</PackageTags>
+    <PackageProjectUrl>https://github.com/caetanator/Era8Bit</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.4" />
   </ItemGroup>
 
   <ItemGroup>

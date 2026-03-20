@@ -17,7 +17,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2019-2024 José Caetano Silva
+ *  (C)2019-2024 JosÃ© Caetano Silva
  *
  * HISTORY
  *  2019-09-16: Created.
@@ -98,7 +98,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         // ** Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RGBA32"/> struct.
+        /// Initializes a new instance of the <see cref="RGBA32"/> structure.
         /// </summary>
         /// <param name="r">The red component.</param>
         /// <param name="g">The green component.</param>
@@ -113,7 +113,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RGBA32"/> struct.
+        /// Initializes a new instance of the <see cref="RGBA32"/> structure.
         /// </summary>
         /// <param name="r">The red component.</param>
         /// <param name="g">The green component.</param>
@@ -129,7 +129,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RGBA32"/> struct.
+        /// Initializes a new instance of the <see cref="RGBA32"/> structure.
         /// </summary>
         /// <param name="r">The red component.</param>
         /// <param name="g">The green component.</param>
@@ -142,7 +142,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RGBA32"/> struct.
+        /// Initializes a new instance of the <see cref="RGBA32"/> structure.
         /// </summary>
         /// <param name="vector">
         /// The vector containing the components for the packed vector.
@@ -154,7 +154,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RGBA32"/> struct.
+        /// Initializes a new instance of the <see cref="RGBA32"/> structure.
         /// </summary>
         /// <param name="vector">
         /// The vector containing the components for the packed vector.
@@ -166,7 +166,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RGBA32"/> struct.
+        /// Initializes a new instance of the <see cref="RGBA32"/> structure.
         /// </summary>
         /// <param name="packed">
         /// The packed value.
@@ -178,7 +178,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Gets or sets the packed representation of the RGBA32 struct.
+        /// Gets or sets the packed representation of the RGBA32 structure.
         /// </summary>
         public uint Rgba
         {
@@ -196,7 +196,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Gets or sets the RGB components of this struct as <see cref="RGB24"/>
+        /// Gets or sets the RGB components of this structure as <see cref="RGB24"/>
         /// </summary>
         public RGB24 Rgb
         {
@@ -214,7 +214,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Gets or sets the RGB components of this struct as <see cref="BGR24"/> reverting the component order.
+        /// Gets or sets the RGB components of this structure as <see cref="BGR24"/> reverting the component order.
         /// </summary>
         public BGR24 Bgr
         {

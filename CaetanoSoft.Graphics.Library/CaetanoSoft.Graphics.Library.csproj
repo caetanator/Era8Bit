@@ -1,14 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>CaetanoSoft.Graphics</RootNamespace>
     <Company>CaetanoSoft</Company>
     <Authors>José Caetano Silva</Authors>
+    <Version>1.1.0</Version>
+    <PackageProjectUrl>https://github.com/caetanator/Era8Bit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/caetanator/Era8Bit</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>.bmp, Bitmap, Windows Bitmap, OS/2 Bitmap</PackageTags>
+    <PackageLicenseFile>GPL.txt</PackageLicenseFile>
+    <Copyright>(c) 2006-2025 by José Caetano Silva</Copyright>
+    <Description>This library contains objects to help applications to handle bitmap files like .BMP.</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CaetanoSoft.Utils.Library\CaetanoSoft.Utils.Library.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="src\GPL.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -147,7 +147,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
 
             // Parameters OK
             this.bmpStreamSize = Math.Max(stream.Length, this.bmpStreamSize);
-            Image<RGBA32> image this.Decode<RGBA32>(stream, null);
+            Image<RGBA32> image = this.Decode<RGBA32>(stream, null);
         }
 
         // ** Override methods of IImageDecoder

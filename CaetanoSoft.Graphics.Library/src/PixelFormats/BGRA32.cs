@@ -17,7 +17,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2019-2024 José Caetano Silva
+ *  (C)2019-2024 JosÃ© Caetano Silva
  *
  * HISTORY
  *  2019-09-16: Created.
@@ -64,7 +64,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         // ** Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BGRA32"/> struct.
+        /// Initializes a new instance of the <see cref="BGRA32"/> structure.
         /// </summary>
         /// <param name="r">The red component.</param>
         /// <param name="g">The green component.</param>
@@ -79,7 +79,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BGRA32"/> struct.
+        /// Initializes a new instance of the <see cref="BGRA32"/> structure.
         /// </summary>
         /// <param name="r">The red component.</param>
         /// <param name="g">The green component.</param>
@@ -95,7 +95,7 @@ namespace CaetanoSoft.Graphics.PixelFormats
         }
 
         /// <summary>
-        /// Gets or sets the packed representation of the BGRA32 struct.
+        /// Gets or sets the packed representation of the BGRA32 structure.
         /// </summary>
         public uint Bgra
         {

@@ -1,4 +1,29 @@
-﻿
+﻿/**
+ * EnumColorSpace.cs
+ *
+ * PURPOSE
+ *  This enumeration contains all possible Color Space values for Microsoft Windows BMP v4 and v5 bitmaps.
+ *  Introduced in Microsoft's Windows 98 and Windows 2000.
+ *
+ * CONTACTS
+ *  For any question or bug report, regarding any portion of the "CaetanoSoft.Graphics.FileFormats.BMP.BmpWin32Structures" project:
+ *      https://github.com/caetanator/Era8Bit
+ *
+ * COPYRIGHT
+ *  This file is distributed under the terms of the GNU General Public
+ *  License (GPL) v3. Copies of the GPL can be obtained from:
+ *      ftp://prep.ai.mit.edu/pub/gnu/GPL
+ *  Each contributing author retains all rights to their own work.
+ *
+ *  (C)2009-2024 José Caetano Silva
+ *
+ * HISTORY
+ *  2009-09-15: Created.
+ *  2017-04-13: Major rewrite.
+ *  2023-09-16: Renamed and updated.
+ *  2024-12-10: More documentation updates.
+ */
+
 using System.Runtime.InteropServices;
 
 namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
@@ -54,7 +79,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         /// </summary>
         WindowsColorSpace = 0x57696E20,
 
-        // ** Values for Microsoft Windows BMP v5
+        // ** Values added for Microsoft Windows BMP v5
 
         /// <summary>
         /// This value indicates that <c>ProfileOffset</c> points to the ICC color space file name (in ASCII Code Page 1252) of the profile to use (gamma and endpoints values are ignored).

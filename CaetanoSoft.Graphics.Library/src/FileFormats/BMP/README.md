@@ -35,7 +35,7 @@ https://flylib.com/books/en/4.267.1.73/1/
 
 ### IBM OS/2 v2
 
-**Monochrome** (1 bit-per-pixel)
+**Monochrome/2 Colors Palette** (1 bit-per-pixel)
 
 - [X] Uncompressed
 - [ ] Huffman 1D Compressed
@@ -62,7 +62,7 @@ https://flylib.com/books/en/4.267.1.73/1/
 
 ### Microsoft Windows v1
 
-**Monochrome/MGA/Hercules** (1 bit-per-pixel)
+**Monochrome/Hercules** (1 bit-per-pixel)
 
 - [ ] Uncompressed
 
@@ -76,7 +76,7 @@ https://flylib.com/books/en/4.267.1.73/1/
 
 ### Microsoft Windows v2
 
-**Monochrome** (1 bit-per-pixel)
+**Monochrome/2 Colors Palette** (1 bit-per-pixel)
 
 - [X] Uncompressed
 
@@ -99,7 +99,7 @@ https://flylib.com/books/en/4.267.1.73/1/
 **Extra Features**
 
 - [X] Top-down DIBs for uncompressed files
-- [ ]  90º degrees rotated DIBs for Windows CE files
+- [X]  90º degrees rotated DIBs for Windows CE files
 - [X] Bitfield masks on v3 DIBs for Windows NT and Windows CE files
 - [X] Gamma correction for v4 and v5 DIBs
 - [X] ICC color spaces profiles for v5 DIBs
@@ -152,7 +152,7 @@ https://flylib.com/books/en/4.267.1.73/1/
 
 ### IBM OS/2 v2
 
-**Monochrome** (1 bit-per-pixel)
+**Monochrome/2 Colors Palette** (1 bit-per-pixel)
 
 - [ ] Uncompressed
 - [ ] Huffman 1D Compressed
@@ -252,7 +252,7 @@ https://flylib.com/books/en/4.267.1.73/1/
 
 > [!NOTE]
 > * 90º degrees rotated DIBs for Windows CE files, are probably for internal use of the Windows Win32 APIs. Not to be used on a file saved on a disk.
-> * JPEG and PNG cpmpression, are for internal use on the Windows Win32 Printing APIs. Not to be used on a file saved on a disk.
+> * JPEG and PNG compression, are for internal use on the Windows Win32 Printing APIs. Not to be used on a file saved on a disk.
 
 > [!IMPORTANT]
 > Information for IBM OS/2 1-bpp "Huffman 1D" compression needed. Please help.

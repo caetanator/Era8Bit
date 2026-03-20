@@ -7,7 +7,7 @@
  *
  * CONTACTS
  *  E-mail regarding any portion of the "CaetanoSoft.Era8bit.MediaFormats" project:
- *      José Caetano Silva, jcaetano@users.sourceforge.net
+ *      JosÃ© Caetano Silva, jcaetano@users.sourceforge.net
  *
  * COPYRIGHT
  *  This file is distributed under the terms of the GNU General Public
@@ -15,7 +15,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2016-2017 José Caetano Silva
+ *  (C)2016-2017 JosÃ© Caetano Silva
  *
  * HISTORY
  *  2016-12-20: Created.

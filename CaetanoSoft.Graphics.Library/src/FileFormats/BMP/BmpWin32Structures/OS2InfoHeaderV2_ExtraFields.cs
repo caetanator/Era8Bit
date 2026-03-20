@@ -23,7 +23,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2009-2024 José Caetano Silva
+ *  (C)2009-2024 JosÃ© Caetano Silva
  *
  * HISTORY
  *  2009-09-15: Created.
@@ -71,7 +71,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
         // ** Fields - Upgraded from Microsoft Windows BMP v2 and IBM OS/2 BMP v1 DIB headers and compatible with Microsoft Windows BMP v3
 
         /// <summary>
-        /// The size required to store this structure, in bytes. Always 24.
+        /// The size required to store this structure, in bytes. Between 14 and 64.
         /// <para>
         /// Also used to determine the version of the BMP DIB, as:
         /// <list type="table">
@@ -360,10 +360,10 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP.Win32Structures
                 //this.Size = (uint)Marshal.SizeOf(this);
                 //this.ColorPlanes = 1;
                 //this.Compression = (uint)EnumCompression.RGB;
-                this.ResolutionUnit = (ushort)EnumOS2EnumOS2ResolutionUnits.PPM;
-                this.RecordingDirection = (ushort)EnumOS2EnumOS2RecordingAlgorithm.BottomUp;
+                this.ResolutionUnit = (ushort)EnumOS2ResolutionUnits.PPM;
+                this.RecordingDirection = (ushort)EnumOS2RecordingAlgorithm.BottomUp;
                 this.HalftoningMethod = (ushort)EnumOS2Huffman1DHalftoning.NoHalftoning;
-                this.ColorEncoding = (uint)EnumOS2EnumOS2ColorEncoding.RGB;
+                this.ColorEncoding = (uint)EnumOS2ColorEncoding.RGB;
             }
         }
     }
