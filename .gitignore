@@ -1,6 +1,7 @@
 ﻿/.vs
 /.vscode
 /dist
+/doc/Private
 /CaetanoSoft.Era8bit.Library/bin
 /CaetanoSoft.Era8bit.Library/obj
 /CaetanoSoft.Graphics.Library/bin
