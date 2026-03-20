@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DCK_InfoViewer": {
+      "commandName": "Project",
+      "commandLineArgs": "*.dck"
+    }
+  }
+}

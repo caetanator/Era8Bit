@@ -1,0 +1,99 @@
+    /// <para><c>
+    /// +---------------+------------------------------------------------------------+<br />
+    /// |   Location    |                           Description                      |<br />
+    /// +---------------+------------------------------------------------------------+<br />
+    /// |               | Not used:                                                  |<br />
+    /// |       0       |   0 (00H) = Recommended value                              |<br />
+    /// |    (0000H)    |                                                            |<br />
+    /// |               |                                                            |<br />
+    /// +---------------+------------------------------------------------------------+<br />
+    /// |               | Cartridge Type:                                            |<br />
+    /// |       1       |   1 = LROS                                                 |<br />
+    /// |    (0001H)    |                                                            |<br />
+    /// |               |                                                            |<br />
+    /// +---------------+------------------------------------------------------------+<br />
+    /// |               | Auto-Start Address (LSB/MSB):                              |<br />
+    /// |      2-3      |   Address to the Z80 instruction be jumped to after the    |<br />
+    /// | (0002H-0003H) |   Operating System initialization is complete.             |<br />
+    /// |               |                                                            |<br />
+    /// +---------------+------------------------------------------------------------+<br />
+    /// |               | Memory Chunk Specification:                                |<br />
+    /// |       4       |   Bits 0-7 represent Chunks 0-7 respectively in the DOCK   |<br />
+    /// |    (0004H)    |   memory bank in low active format as follows              |<br />
+    /// |               |     0 = In use                                             |<br />
+    /// |               |     1 = Not in use                                         |<br />
+    /// |               | NOTE: When writing to the Horizontal Select Register       |<br />
+    /// |               |       (Port F4H), the Chunk Specification is High Active.  |<br />
+    /// +---------------+------------------------------------------------------------+<br />
+    /// </c></para>
+
+    /// <para><c>
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// |   Location    |                           Description                         |<br />
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// |               | Language Type:                                                |<br />
+    /// |     32768     |   1 = BASIC (with optional machine code)                      |<br />
+    /// |    (8000H)    |   2 = Z80 Machine code (only)                                 |<br />
+    /// |               | NOTE: Any other value will result in: Error S, Missing LROS). |<br />
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// |               | Cartridge Type:                                               |<br />
+    /// |     32769     |   2 = AROS                                                    |<br />
+    /// |    (8001H)    |                                                               |<br />
+    /// |               |                                                               |<br />
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// |               | Starting Address(LSB/MSB):                                    |<br />
+    /// |  32770-32771  |   BASIC AROS = Number of the start program line               |<br />
+    /// | (8002H-8003H) |   Machine Code AROS = Address of first Z80 instruction        |<br />
+    /// |               |                                                               |<br />
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// |               | Memory Chunk Specification:                                   |<br />
+    /// |     32772     |   Bits 0-7 represent Chunks 0-7 respectively in the DOCK      |<br />
+    /// |    (8004H)    |   Bank in low active format as follows:                       |<br />
+    /// |               |     0 = In use                                                |<br />
+    /// |               |     1 = Not in use                                            |<br />
+    /// |               | NOTE: Bits 0-3 must he set to 1 for proper execution.         |<br />
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// |               | auto-start Specification:                                      |<br />
+    /// |     32773     |   0 = No auto-start                                            |<br />
+    /// |    (8005H)    |   1 = auto-start                                               |<br />
+    /// |               |                                                               |<br />
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// |               | Number of bytes of RAM to be reserved for machine code        |<br />
+    /// |  32774-32775  | Variables(LSB/MSB). Examples:                                 |<br />
+    /// | (8006H-8007H) |   0100H = 1 byte reserved                                     |<br />
+    /// |               |   0002H = 512 bytes Reserved                                  |<br />
+    /// +---------------+---------------------------------------------------------------+<br />
+    /// </c></para>
+
+
+
+    /// <summary>
+        /// Initializes a new instance of the <see cref="MemoryBankChunk" /> class.<br />
+        /// This creates a new memory bank chunk from a vector of bytes.<br />
+        /// <para>
+        /// If <c>type</c> is equal to <c>MemoryBankChunkTypeEnum.Unknown</c>, the memory bank chunk is not created.<br />
+        /// If <c>chunk.Length</c> is not between 1 byte and 512 MB, the memory bank chunk is not created.<br />
+        /// </para>
+        /// </summary>
+        /// <param name="type">The type of the chunk to one of the values of <see cref="MemoryBankChunkTypeEnum"/> except <c>MemoryBankChunkTypeEnum.Unknown</c>.</param>
+        /// <param name="chunk">The vector bytes to be copied to the chunk.</param>
+        public MemoryBank(MemoryBankChunkTypeEnum type, byte [] chunk) : this(type, chunk.Length, -1)
+        {
+#if DEBUG
+            Assert.IsNotNull(chunk, "'chunk' can't be null!");
+            Assert.IsFalse((type != MemoryBankChunkTypeEnum.Unknown) &&
+                            ((type == MemoryBankChunkTypeEnum.ROM) || (type == MemoryBankChunkTypeEnum.RAM_Static) ||
+                             (type == MemoryBankChunkTypeEnum.RAM_Volatile)), "'type' must be RAM or ROM!");
+            Assert.IsFalse((chunk.Length >= 0), "'chunk.Length' must be 1 or more!");
+#endif
+            // Validate the memory bank chunk type
+            if (this.Type != MemoryBankChunkTypeEnum.Unknown)
+            {
+                // Validate the memory bank chunk size
+                if ((this.BankSize >= 0) && (this.MemoryChunk.Length == chunk.Length))
+                {
+                    // OK, copy byte values
+                    chunk.CopyTo(this.MemoryChunk, 0);
+                }
+            }
+        }
