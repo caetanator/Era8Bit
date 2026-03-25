@@ -17,7 +17,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2019-2024 José Caetano Silva
+ *  (C)2019-2026 José Caetano Silva
  *
  * HISTORY
  *  2019-09-16: Created.
@@ -224,5 +224,25 @@ namespace CaetanoSoft.Graphics.PixelFormats
         /// <returns>The RGBA value</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RGBA32 ToRgba32() => new RGBA32(this.R, this.G, this.B, this.A);
+
+        void IPixel<BGRA32>.PackFromVector3(Vector3 vector)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void IPixel<BGRA32>.ToArgb32(ref ARGB32 dest)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        Vector3 IPixel<BGRA32>.ToVector3()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        string IPixel<BGRA32>.ToHex()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

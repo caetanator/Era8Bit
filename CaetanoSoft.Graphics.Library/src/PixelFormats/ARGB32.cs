@@ -15,7 +15,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2019-2024 José Caetano Silva
+ *  (C)2019-2026 José Caetano Silva
  *
  * HISTORY
  *  2019-09-16: Created.
@@ -158,77 +158,77 @@ namespace CaetanoSoft.Graphics.PixelFormats
         /// <inheritdoc/>
         public uint PackedValue { get; set; }
 
-        /// <summary>
-        /// Gets or sets the red component.
-        /// </summary>
-        public byte R
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return (byte)(this.PackedValue >> RedShift);
-            }
+        // /// <summary>
+        // /// Gets or sets the red component.
+        // /// </summary>
+        // public byte R
+        // {
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     get
+        //     {
+        //         return (byte)(this.PackedValue >> RedShift);
+        //     }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set
-            {
-                this.PackedValue = this.PackedValue & 0xFF00FFFF | (uint)value << RedShift;
-            }
-        }
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     set
+        //     {
+        //         this.PackedValue = this.PackedValue & 0xFF00FFFF | (uint)value << RedShift;
+        //     }
+        // }
 
-        /// <summary>
-        /// Gets or sets the green component.
-        /// </summary>
-        public byte G
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return (byte)(this.PackedValue >> GreenShift);
-            }
+        // /// <summary>
+        // /// Gets or sets the green component.
+        // /// </summary>
+        // public byte G
+        // {
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     get
+        //     {
+        //         return (byte)(this.PackedValue >> GreenShift);
+        //     }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set
-            {
-                this.PackedValue = this.PackedValue & 0xFFFF00FF | (uint)value << GreenShift;
-            }
-        }
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     set
+        //     {
+        //         this.PackedValue = this.PackedValue & 0xFFFF00FF | (uint)value << GreenShift;
+        //     }
+        // }
 
-        /// <summary>
-        /// Gets or sets the blue component.
-        /// </summary>
-        public byte B
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return (byte)(this.PackedValue >> BlueShift);
-            }
+        // /// <summary>
+        // /// Gets or sets the blue component.
+        // /// </summary>
+        // public byte B
+        // {
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     get
+        //     {
+        //         return (byte)(this.PackedValue >> BlueShift);
+        //     }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set
-            {
-                this.PackedValue = this.PackedValue & 0xFFFFFF00 | (uint)value << BlueShift;
-            }
-        }
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     set
+        //     {
+        //         this.PackedValue = this.PackedValue & 0xFFFFFF00 | (uint)value << BlueShift;
+        //     }
+        // }
 
-        /// <summary>
-        /// Gets or sets the alpha component.
-        /// </summary>
-        public byte A
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return (byte)(this.PackedValue >> AlphaShift);
-            }
+        // /// <summary>
+        // /// Gets or sets the alpha component.
+        // /// </summary>
+        // public byte A
+        // {
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     get
+        //     {
+        //         return (byte)(this.PackedValue >> AlphaShift);
+        //     }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set
-            {
-                this.PackedValue = this.PackedValue & 0x00FFFFFF | (uint)value << AlphaShift;
-            }
-        }
+        //     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //     set
+        //     {
+        //         this.PackedValue = this.PackedValue & 0x00FFFFFF | (uint)value << AlphaShift;
+        //     }
+        // }
 
         /// <summary>
         /// Compares two <see cref="ARGB32"/> objects for equality.
@@ -268,9 +268,6 @@ namespace CaetanoSoft.Graphics.PixelFormats
         {
             this.PackedValue = Pack(ref vector);
         }
-
-        /// <inheritdoc />
-        public PixelOperations<ARGB32> CreatePixelOperations() => new PixelOperations<ARGB32>();
 
         /// <inheritdoc/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -401,6 +398,26 @@ namespace CaetanoSoft.Graphics.PixelFormats
                         | ((byte)vector.Y << GreenShift)
                         | ((byte)vector.Z << BlueShift)
                         | (byte)vector.W << AlphaShift);
+        }
+
+        void IPixel<ARGB32>.PackFromVector3(Vector3 vector)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void IPixel<ARGB32>.ToArgb32(ref ARGB32 dest)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        Vector3 IPixel<ARGB32>.ToVector3()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        string IPixel<ARGB32>.ToHex()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

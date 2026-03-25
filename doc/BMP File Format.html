@@ -4,7 +4,7 @@
   <head>
     <!-- * Metadata * -->
     <meta charset="utf-8">
-    <meta name="robots" content="all">
+    <meta name="robots" content="nofollow">
     <meta name="description" content="Microsoft Windows and IBM OS/2 BMP File Format.">
     <meta name="keywords" content="Jos&eacute; Caetano Silva, CaetanoSoft, BMP, BMP File Format, Bitmap, DIB, DDB, Windows, OS/2">
     <meta name="author" content="&copy; 1995-2023 Jos&eacute; Caetano Silva. All Rights Reserved.">
@@ -28,7 +28,7 @@
         color: #000000;
         text-align: left;
         vertical-align: top;
-        font: normal 12pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        font: normal 12pt "DejaVu Sans", Tahoma, Verdana, Arial, Helvetica, sans-serif;
         align-items: center;
         align-content: space-evenly;
         justify-content: space-evenly;
@@ -38,10 +38,22 @@
         text-align: justify;
         hyphens: auto;
       }
+      /* HTML UL Tag Default Style */
+      ul {
+        list-style-position: outside;
+        list-style-type: disc;
+        vertical-align: middle;
+        align-items: center;
+      }
+      /* HTML LI Tag Default Style */
+      li {
+        vertical-align: top;
+        align-items: center;
+      }
       /* HTML H1 Tag Default Style */
       h1 {
         color: #0C0CFF;
-        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-family: "DejaVu Serif", Garamond, Georgia, "Times New Roman", Times, serif;
         font-size: 24pt;
         font-weight: bold !important;
         text-align: center;
@@ -50,14 +62,14 @@
       /* HTML H2 Tag Default Style */
       h2 {
         color: #0C0CFF;
-        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-family: "DejaVu Serif", Garamond, Georgia, "Times New Roman", Times, serif;
         font-size: 18pt;
         font-weight: bold;
       }
-       /* HTML H3 Tag Default Style */
+      /* HTML H3 Tag Default Style */
       h3 {
         color: #0C0CFF;
-        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-family: "DejaVu Serif", Garamond, Georgia, "Times New Roman", Times, serif;
         font-size: 14pt;
         font-weight: bold !important;
         text-align: left;
@@ -78,13 +90,13 @@
       }
       /* HTML CODE Tag Default Style */
       code {
-        font-family: "Lucida Console", Lucida, "Courier New", Courier, monospace;
+        font-family: "DejaVu Sans Mono", "Lucida Console", Lucida, "Courier New", Courier, monospace;
         font-size: 12pt;
         background-color: #C5EDC9;
       }
       /* HTML CAPTION Tag Default Style */
       caption {
-        font-family: Garamond, Georgia, "Times New Roman", Times, serif;
+        font-family: "DejaVu Serif", Garamond, Georgia, "Times New Roman", Times, serif;
         font-size: 12pt !important;
       }
       /* HTML TABLE Tag Default Style */
@@ -105,7 +117,7 @@
         height: auto;
         text-align: center;
         vertical-align: middle;
-        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font: normal 12pt "DejaVu Serif", Garamond, Georgia, "Times New Roman", Times, serif;
         font-weight: bold;
         hyphens: none;
       }
@@ -118,7 +130,7 @@
         height: auto;
         text-align: center;
         vertical-align: middle;
-        font: normal 12pt Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        font: normal 12pt "DejaVu Sans", Tahoma, Verdana, Arial, Helvetica, sans-serif;
         hyphens: auto;
       }
       td ul {
@@ -131,11 +143,13 @@
         margin-left: 30px;
         border-width: 0;
         padding: 2px;
+        vertical-align: middle;
+        align-items: center;
       }
       .classTdAsTh {
         background-color: #F0F0F0;
         text-align: left;
-        font: normal 12pt Garamond, Georgia, "Times New Roman", Times, serif;
+        font: normal 12pt "DejaVu Serif", Garamond, Georgia, "Times New Roman", Times, serif;
         font-weight: bold;
         width: none;
         hyphens: none;
@@ -216,8 +230,10 @@
       /* Override styles when printing as a book */
       /* Target all pages */
       @page {
-        size: A4;
-        margin: 1.5cm;
+        body {
+          size: A4;
+          margin: 1.5cm;
+        }
         h1 {
           page-break-before: always;
         }
@@ -232,7 +248,7 @@
     <!-- * ECMA JavaScript v6.0/2015 * -->
     <script>
       // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-v3-or-Later
-
+      
       // @license-end
     </script>
   </head>
@@ -247,7 +263,7 @@
       Usual file extensions are: <i>.bmp</i> (for File Header + DIB Header), <i>.dib</i> (for DIB Header) and <i>.ddb</i> (for DDB Header).
     </p>
     <p>
-      It's used by Microsoft Windows and the defunct IBM OS/2 operating systems (OS) as theirs native bitmap format and it's widely used and supported by 
+      It's used by Microsoft Windows and the defunct IBM OS/2 operating systems (OS) as theirs native bitmap format, and it's widely used and supported by 
       graphics programs and frameworks in the PC marketplace. Its basic design makes it a good as a general&hyphen;purpose format that can be used for colour or black &amp; white
       image storage (if file size is not a factor). The simplicity and widespread support makes easy to implement it on software applications.
     </p>
@@ -265,39 +281,41 @@
     <h3>Microsoft Windows 1.0 BMP v1</h3>
     <p>
       The original BMP file format was created for Microsoft Windows 1.0 (released in 1985<sup><a href="#cite_note-1">[1]</a></sup>) and 
-      had a very simple structure. It had no palette (used the same in use by the graphics card), was optimised for 16-bit (<code>WORD</code>),
+      had a very simple structure. It had no palette (used the same in use by the graphics card), was optimized for 16-bit (<code>WORD</code>),
       did not supported bitmap data compression, and was designed to support the most popular IBM PC graphics cards in use at the time:
-      <ul>
-        <li><b>IBM Monochrome Display Adapter (MDA)</b><sup><a href="#cite_note-3">[3]</a></sup>: 4 grayscale monochrome colours (of the 2-bit colour deep [B/F+I] palette). 
-        <span style="color: #FF0000;">Text only! No graphics capabilities</span>;</li>
-        <li><b>IBM colour Graphics Adapter (CGA)</b><sup><a href="#cite_note-4">[4]</a></sup>: 4 bpp = maximum of 16 colours (of the possible 16 colours/4-bit colour deep 
-        [R+G+B+I] palette);</li>
-        <li><b>IBM Enhanced Graphics Adapter (EGA)</b><sup><a href="#cite_note-5">[5]</a></sup>: 4 bpp = maximum of 16 colours (of the possible 64 colours/6-bit colour deep [R<sub>2</sub>+G<sub>2</sub>+B<sub>2</sub>] palette);</li>
-        <li><b>Hercules Graphics Card (HGC/Hercules)</b><sup><a href="#cite_note-6">[6]</a></sup>: 1 bpp = 2 monochrome colours (of the 1-bit colour deep [B/F] palette).</li>
-      </ul>
-      <b>Note:</b> B/F => 1-bit Background (=0) / Foreground (=1); I => 1-bit Intensity (Off=0, On=1); 
-      R => 1-bit Red (Off=0, On=1); G => 1-bit Green (Off=0, On=1); B => 1-bit Blue (Off=0, On=1); 
-      R<sub>2</sub> => 2-bit Red (Off=00 to Full On=11); G<sub>2</sub> => 2-bit Green (Off=00 to Full On=11); B<sub>2</sub> => 2-bit Blue (Off=00 to Full On=11).
+    <ul>
+      <li><b>IBM Monochrome Display Adapter (MDA)</b><sup><a href="#cite_note-3">[3]</a></sup>: 4 greyscale monochrome colours (of the 2-bit colour deep [B/F+I] palette);<br>
+      <span style="color: #FF0000;"><b>Note: </b>Text only, no graphics capabilities! Windows OS can't run if this is the only &quot;graphic&quot; card on the system!</span>
+      </li>
+      <li><b>IBM Color Graphics Adapter (CGA)</b><sup><a href="#cite_note-4">[4]</a></sup>: 4 bpp = maximum of 16 colours (of the possible 16 colours/4-bit colour deep 
+        [R+G+B+I] palette);
+      </li>
+      <li><b>IBM Enhanced Graphics Adapter (EGA)</b><sup><a href="#cite_note-5">[5]</a></sup>: 4 bpp = maximum of 16 colours (of the possible 64 colours/6-bit colour deep [R<sub>2</sub>+G<sub>2</sub>+B<sub>2</sub>] palette);</li>
+      <li><b>Hercules Graphics Card (HGC/Hercules)</b><sup><a href="#cite_note-6">[6]</a></sup>: 1 bpp = 2 monochrome colours (of the 1-bit colour deep [B/F] palette).</li>
+    </ul>
+    <b>Note:</b> B/F => 1-bit Background (=0) / Foreground (=1); I => 1-bit Intensity (Off=0, On=1); 
+    R => 1-bit Red (Off=0, On=1); G => 1-bit Green (Off=0, On=1); B => 1-bit Blue (Off=0, On=1); 
+    R<sub>2</sub> => 2-bit Red (Off=00 to Full On=11); G<sub>2</sub> => 2-bit Green (Off=00 to Full On=11); B<sub>2</sub> => 2-bit Blue (Off=00 to Full On=11).
     </p>
     <p>
       This defunct and short&hyphen;lived format is now often referred to as the original Windows <i>Device&hyphen;Dependent Bitmap</i> (DDB).
     </p>
     <p>
-      On monochrome displays, the Color Palette is given by the CRT (Cathode-Ray Tube) monitor's phosphor screen used
+      On monochrome displays, the colour palette is given by the CRT (Cathode-Ray Tube) monitor's phosphor screen used
       <sup><a href="#cite_note-10">[10]</a></sup><sup><a href="#cite_note-11">[11]</a></sup>:
-      <ul>
-        <li><b>White (P4)</b>: Black &amp; White;</li>
-        <li><b>Green (P1)</b>: Black &amp; Green;</li>
-        <li><b>Amber (P3)</b>: Black &amp; Amber;</li>
-        <li><b>Blue</b>: Black &amp; Blue;</li>
-      </ul>
-      <b>Note:</b> Blue CRT monitors, were never popular, because blue is the colour that human beings see worst and  blue phosphor brightness fades very quickly.
+    <ul>
+      <li><b>White (P4)</b>: Black &amp; White;</li>
+      <li><b>Green (P1)</b>: Black &amp; Green;</li>
+      <li><b>Amber (P3)</b>: Black &amp; Amber;</li>
+      <li><b>Blue</b>: Black &amp; Blue;</li>
+    </ul>
+    <b>Note:</b> Blue CRT monitors, were never popular, because blue is the colour that human beings see worst and blue phosphor brightness fades very quickly.
     </p>
     <h3>Microsoft Windows 2.0 &amp; NT 3.1 &amp; CE 2.0 BMP v2</h3>
     <p>
       As Windows 2.0 (released on 1987<sup><a href="#cite_note-1">[1]</a></sup>) was being developed, EGA<sup><a href="#cite_note-5">[5]</a></sup> ruled the graphics cards and 
       VGA<sup><a href="#cite_note-7">[7]</a></sup> (8 bpp = maximum of 256 colours (of the possible 262,144 colours/18-bit colour deep 
-      [R<sub>6</sub>+G<sub>6</sub>+B<sub>6</sub>] output gamut) started to replace it by 1987. So, support for a programmable Color Palette for 1 bpp, 4 bpp and 8 bpp 
+      [R<sub>6</sub>+G<sub>6</sub>+B<sub>6</sub>] output gamut) started to replace it by 1987. So, support for a programmable colour palette for 1 bpp, 4 bpp and 8 bpp 
       was added to Windows OS and the BMP file format, allowing user&hyphen;definable colour data to be stored along with the bitmap data that used it. Also was added support for 
       24 bpp bitmaps with no palette. No compression was supported.
     </p>
@@ -329,38 +347,42 @@
     </p>
     <h3>Microsoft Windows 3.0 &amp; NT 3.1 &amp; CE 1.0 BMP v3</h3>
     <p>
-      When Microsoft Windows 3.0 (released on 1990<sup><a href="#cite_note-1">[1]</a></sup>) hit the market, VGA<sup><a href="#cite_note-7">[7]</a></sup>, 
-      SVGA<sup><a href="#cite_note-8">[8]</a></sup> (Super VGA) and XGA<sup><a href="#cite_note-9">[9]</a></sup> graphics cards with 256 colours palettes were the norm, with 
-      2D acceleration, High Colour (15/16-bit)<sup><a href="#cite_note-12">[12]</a></sup> and True Colour (24-bit)<sup><a href="#cite_note-13">[13]</a></sup> becoming the standard.
+      When Microsoft Windows 3.0 (released on 1990<sup><a href="#cite_note-1">[1]</a></sup>) hit the market, VGA<sup><a href="#cite_note-7">[7]</a></sup> 
+      with 640&thinsp;&times;&thinsp;480 resolution and 8-bit colour deep / 256 colours (from a palette of 262,144 colours [18-bit palette]) were the norm. 
+      SVGA<sup><a href="#cite_note-8">[8]</a></sup> (Super VGA) and XGA<sup><a href="#cite_note-9">[9]</a></sup> graphics cards with 2D acceleration and 
+      High Colour (15/16-bit)<sup><a href="#cite_note-12">[12]</a></sup> and/or True Colour (24-bit)<sup><a href="#cite_note-13">[13]</a></sup> were becoming the standard.
     </p>
     <p>
-      So, the DIB Header structure was expanded by adding Run-Length Encoding (RLE)<sup><a href="#cite_note-14">[14]</a></sup> compression for 4 bpp and 8 bpp bitmaps, was optimized for 32-bit (<code>DWORD</code>), uses the new <i>Color Palette</i> v2 (4 bytes per entry = 1 <code>DWORD</code>, BGRA) with better Color Palette detection 
+      So, the DIB Header structure was expanded by adding Run-Length Encoding (RLE)<sup><a href="#cite_note-14">[14]</a></sup> compression for 4 bpp and 8 bpp bitmaps, was optimized 
+      for 32-bit (<code>DWORD</code>), uses the new <i>Color Palette</i> v2 (4 bytes per entry = 1 <code>DWORD</code>, BGRA) with better colour palette detection 
       support and optional image resolution in pixels&hyphen;per&hyphen;meter (ppm).
     </p>
     <p>
       The Windows <i>BMP File Format</i> v3 as the following structure: <br>
-      &nbsp;&nbsp;&nbsp;&nbsp;<b>File Header v1 + DIB Header v3 + ColorPalette v2 + Bitmap Pixels</b>.
+      &nbsp;&nbsp;&nbsp;&nbsp;<b>File Header v1 + DIB Header v3 + Color Palette v2 + Bitmap Pixels</b>.
     </p>
     <h3>IBM OS/2 2.0 BMP v2</h3>
     <p> 
       IBM OS/2 2.0 (released on 1993 <sup><a href="#cite_note-2">[2]</a></sup>), also used the Windows 3.xx BMP file format as its base and maintaining compatibility with 
       Windows 3.xx. IBM added some little used features that were exclusive of OS/2 <i>BMP File Format</i> v2:
-      <ul>
-        <li>Huffman 1D compression for 1 bpp bitmaps;</li>
-        <li>RLE compression for 24 bpp bitmaps;</li>
-        <li>Halftoning.</li>
-      </ul>
-      <b>Note:</b> At this time Microsoft no longer cooperated with IBM on OS/2 development.
+    <ul>
+      <li>Huffman 1D compression for 1 bpp bitmaps;</li>
+      <li>RLE compression for 24 bpp bitmaps;</li>
+      <li>Halftoning.</li>
+    </ul>
+    <b>Note:</b> At this time Microsoft no longer cooperated with IBM on OS/2 development.
     </p>
     <p>
       The IBM OS/2 v2.x and above, supported 3 versions (<i>aka</i> sizes) of OS/2 <i>BMP File Format</i> v2 file format:
-      <ul>
-        <li>16 Bytes: Same as Windows BMP v2 and OS/2 v1, but with the fields optimized for 32-bit (<code>DWORD</code>) and uses the <i>Color Palette</i> v2 (4 bytes per entry, 
-        BGRA = 1 <code>DWORD</code>), except that Huffman 1D and 24-bit RLE compression is not supported by the Windows OS APIs;</li>
-        <li>40 Bytes: Same as Windows BMP v3, except that Huffman 1D and 24-bit RLE compression is not supported by the Windows OS APIs and
-        16 and 32 bpp colour deep aren't supported by OS/2 OS APIs;</li>
-        <li>64 Bytes: Supports all OS/2 BMP v2 functionality like Huffman 1D and 24-bit RLE compression, halftoning.</li>
-      </ul>
+    <ul>
+      <li>16 Bytes: Same as Windows BMP v2 and OS/2 v1, but with the fields optimized for 32-bit (<code>DWORD</code>) and uses the <i>Color Palette</i> v2 (4 bytes per entry, 
+        BGRA = 1 <code>DWORD</code>), except that Huffman 1D and 24-bit RLE compression is not supported by the Windows OS APIs;
+      </li>
+      <li>40 Bytes: Same as Windows BMP v3, except that Huffman 1D and 24-bit RLE compression is not supported by the Windows OS APIs and
+        16 and 32 bpp colour deep aren't supported by OS/2 OS APIs;
+      </li>
+      <li>64 Bytes: Supports all OS/2 BMP v2 functionality like Huffman 1D and 24-bit RLE compression, halftoning.</li>
+    </ul>
     </p>
     <h3>Microsoft Windows NT 3.5 BMP v3</h3>
     <p>
@@ -371,7 +393,7 @@
     <h3>Microsoft Windows CE 1.0 BMP v3</h3>
     <p>
       For Microsoft Windows CE 1.0 (released on 1996 <sup><a href="#cite_note-1">[1]</a></sup>), Microsoft changed the specification of Windows 3.xx, in order that 2 bpp 
-      (4 grayscale colours palette) bitmaps could be supported [only] by Windows CE OS family. This is the only colour deep and DIB header structure supported by Windows CE 1.0.
+      (4 greyscale colours palette) bitmaps could be supported [only] by Windows CE OS family. This is the only colour deep and DIB header structure supported by Windows CE 1.0.
     </p>
     <h3>Microsoft Windows CE 5.0 BMP v3</h3>
     <p>
@@ -381,15 +403,17 @@
     </p>
     <h3>Microsoft Windows 95 &amp; NT 4 BMP v4</h3>
     <p>
-      By this time SVGA and 16-bit colour deep was the norm. During the development of Windows 95, NT, 4.0 and CE 5.0, Microsoft created the Windows BMP v4 specification, on top of Windows BMP v3, by
+      By this time SVGA with 800&thinsp;&times;&thinsp;600 resolution, 2D acceleration and 15/16-bit colour deep was the norm. During the development of 
+      Windows 95, NT 4.0 and CE 5.0, Microsoft created the Windows BMP v4 specification, on top of Windows BMP v3, by
       adding 16 and 32 bits‐per‐pixel colour deep, RGBA bitfields and ICM colour correction profiles.
     </p>
     <h3>Microsoft Windows 98 &amp; 2000 BMP v5</h3>
     <p>
-      By now, 3D accelerated XGA resolution with 32-bit colour deep were the norm. For Windows 98 and 2000, Microsoft created the Windows BMP v5 specification, on top of Windows BMP v4, by adding more ICM colour
-      correction profiles support by external or embed ICM profiles files.
+      By now, SVGA with 1024&thinsp;&times;&thinsp;768 resolution, 2D + 3D acceleration and 32-bit colour deep were the norm. For Windows 98 and 2000, 
+      Microsoft created the Windows BMP v5 specification, on top of Windows BMP v4, by adding more ICM colour correction profiles support by external or 
+      embed ICM profiles files.
     </p>
-    <p>&nbsp;</p>
+    <p>&nbsp;</p>,
     <h2>BMP File Structure According It's Version</h2>
     <table id="TableBMP">
       <thead>
@@ -416,7 +440,7 @@
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #FFC0C0;">
                     <p style="text-align: center;">
                       Resource Header<br>
-                      <span style="color: #ff0000; font-size: 10px;">* OPTIONAL *</span>
+                      <span style="color: #efefef; font-size: 10px;">* OPTIONAL *</span>
                     </p>
                   </td>
                 </tr>
@@ -431,7 +455,7 @@
                   <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #FFC0C0;">
                     <p style="text-align: center;">
                       Resource Header Memory Pointer to Bitmap Pixels<br>
-                      <span style="color: #ff0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
+                      <span style="color: #efefef; font-size: 10px;">* SEMI-OPTIONAL *</span>
                     </p>
                   </td>
                 </tr>
@@ -457,7 +481,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #F0F50F;">
+                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #F2F50F;">
                     <p style="text-align: center;">
                       Color Table v1<br>
                       <span style="color: #ff0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
@@ -489,7 +513,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
+                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #BAEFFF;">
                     <p style="text-align: center;">DIB Header v3</p>
                   </td>
                 </tr>
@@ -526,7 +550,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
+                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #BAEFFF;">
                     <p style="text-align: center;">DIB Header v4</p>
                   </td>
                 </tr>
@@ -563,7 +587,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
+                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #BAEFFF;">
                     <p style="text-align: center;">DIB Header v5</p>
                   </td>
                 </tr>
@@ -621,7 +645,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #F0F50F;">
+                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #F2F50F;">
                     <p style="text-align: center;">
                       Color Palette v1<br>
                       <span style="color: #FF0000; font-size: 10px;">* SEMI-OPTIONAL *</span>
@@ -653,7 +677,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #CAFFF0;">
+                  <td style="border: 1px solid #000000 !important; border-collapse: collapse; width: 140px; background-color: #BAEFFF;">
                     <p style="text-align: center;">Bitmap Header v2</p>
                   </td>
                 </tr>
@@ -690,7 +714,7 @@
       The <b>Gap 1</b> and <b>Gap 2</b> on the bitmap file format, are optional and so, they can be 0 bytes.
       When both gaps are set to zero (0), the bitmap is called a <i>Packed DIB</i>.<br>
       On <i>packed DIBs</i> in memory, the <i>Windows Bitmap Pixels Array</i> and <i>OS/2 Bitmap Data</i>, must start at a memory address that is a multiple of 4 bytes.
-      In some cases, it may be necessary to adjust the number of entries in the Color Table in order to force the memory address alignment.<br>
+      In some cases, it may be necessary to adjust the number of entries in the <i>Color Table</i> in order to force the memory address alignment.<br>
       The optional ICC colour correction profile data, should immediately follow the pixel array data, if used.
     </p>
     <p>
@@ -753,36 +777,36 @@
       On the examples I found online <a href="https://www.charlespetzold.com/src/ProgWin1.zip" target="_blank">Charles Petzold Books - &quot;Programming Windows, 1st edition&quot; Source Code</a>, <br>
       the structure defined on <a href="#Table1">Table 1</a>, and also referred on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDD&quot;</a>, <br>
       is preceded by:
-      <table id="Table0">
-        <thead>
-          <tr>
-            <th>Offset#</th>
-            <th>Size (Bytes)</th>
-            <th>Type</th>
-            <th>Field Name</th>
-            <th style="max-width: 500px;">Purpose</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>0000h</td>
-            <td>2</td>
-            <td>16&hyphen;bit unsigned</td>
-            <td>ResourceFileType</td>
-            <td class="classTextAlingLeft">
-              The following valid values are possible:
-              <ul>
-                <li>
-                  <b>0002h</b> (<code>RT_BITMAP</code>) - Resource Bitmap Non-Discardable;
-                </li>
-                <li>
-                  <b>0102h</b> (<code>RT_BITMAP | 0x0100</code>) - Resource Bitmap Discardable.
-                </li>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <table id="Table0">
+      <thead>
+        <tr>
+          <th>Offset#</th>
+          <th>Size (Bytes)</th>
+          <th>Type</th>
+          <th>Field Name</th>
+          <th style="max-width: 500px;">Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0000h</td>
+          <td>2</td>
+          <td>16&hyphen;bit unsigned</td>
+          <td>ResourceFileType</td>
+          <td class="classTextAlingLeft">
+            The following valid values are possible:
+            <ul>
+              <li>
+                <b>0002h</b> (<code>RT_BITMAP</code>) - Resource Bitmap Non-Discardable;
+              </li>
+              <li>
+                <b>0102h</b> (<code>RT_BITMAP | 0x0100</code>) - Resource Bitmap Discardable.
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     </p>
     <p>
       On <a href="#Table1">Table 1</a>, and also referred on <a href="http://fileformats.archiveteam.org/wiki/Windows_DDB" target="_blank">&quot;Windows DDB&quot;</a>, <br>
@@ -1051,7 +1075,8 @@
       &nbsp;&nbsp;&nbsp;&nbsp;<code>MaxNumberOfEntries = 1 &lt;&lt; BitsPerPixel;</code><br>
       To detect the presence of a Color Palette in a BMP file, use this formula:
     </p>
-    <div class="divCode"><pre><code>
+    <div class="divCode">
+      <pre><code>
 RGBTRIPLE ColorPalette_RGB[];
 int NumberOfEntries = 0;
 int StartOfPalBytes = 0;
@@ -1079,8 +1104,9 @@ else {
 &nbsp;&nbsp;&nbsp;&nbsp;/* ERROR: Invalid bpp format */
 &nbsp;&nbsp;}
 }
-    </code></pre></div>
-	  <p>&nbsp;</p>
+    </code></pre>
+    </div>
+    <p>&nbsp;</p>
     <table id="Table3">
       <caption><b>Table 3:</b> Windows RGBTRIPLE and OS/2 OS21XPALETTEELEMENT structures</caption>
       <thead>
@@ -1150,7 +1176,8 @@ else {
       &nbsp;&nbsp;&nbsp;&nbsp;<code>MaxNumberOfEntries = 1 &lt;&lt; BitsPerPixel;</code><br>
       To detect the presence of a Color Palette in a BMP file, use this formula:
     </p>
-    <div class="divCode"><pre><code>
+    <div class="divCode">
+      <pre><code>
 int StartOfPalBytes = 0;
 int NumberOfMasks = 0;
 int NumberOfMasksBytes = 0;
@@ -1217,8 +1244,9 @@ else {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NumberOfEntries : BitmapInfoHeader.biClrUsed;
 }
 RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImportant);
-    </code></pre></div>
-	  <p>&nbsp;</p>
+    </code></pre>
+    </div>
+    <p>&nbsp;</p>
     <table id="Table4">
       <caption><b>Table 4:</b> Windows RGBQUAD and OS/2 OS22XPALETTEELEMENT structures</caption>
       <thead>
@@ -1790,7 +1818,8 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
             The bitmap image width, in pixels (must be &gt; 0).<br>
             <b>Notes:</b><br>
             &nbsp;&nbsp;If <code>BITMAPV4IHEADER.bV4Compression</code> is <code>BI_JPEG</code> or <code>BI_PNG</code>, the bV4Width member specifies
-            the width of the decompressed JPEG or PNG image in pixels.</td>
+            the width of the decompressed JPEG or PNG image in pixels.
+          </td>
         </tr>
         <tr>
           <td>0008h</td>
@@ -1805,7 +1834,7 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
             &nbsp;&nbsp;For YUV bitmaps, ignore the sign, because they are always top&hyphen;down.<br>
             &nbsp;&nbsp;Top&hyphen;down DIBs cannot be compressed.<br>
             &nbsp;&nbsp;If <code>BITMAPV4IHEADER.bV4Compression</code> is <code>BI_JPEG</code> or <code>BI_PNG</code>, the bV4Height member specifies the height of
-            the decompressed JPEG or PNG image in pixels.
+            the decompressed JPEG or PNG image in pixels and must be > 0.
           </td>
         </tr>
         <tr>
@@ -1825,15 +1854,16 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
             The following valid values are possible:
             <ul>
               <li><b> 0</b> - the number of bits&hyphen;per&hyphen;pixel is specified or is implied by the JPEG or PNG file format.
-                Only valid if <code>BITMAPV4IHEADER.biCompression</code> = <code>BI_JPEG</code> or <code>BI_PNG</code>;</li>
+                Only valid if <code>BITMAPV4IHEADER.biCompression</code> = <code>BI_JPEG</code> or <code>BI_PNG</code>;
+              </li>
               <li><b>&nbsp;1</b> - &nbsp;&nbsp;2 colours monochrome bitmap (1 bit&hyphen;per&hyphen;pixel);</li>
-              <li><b>&nbsp;2</b> - &nbsp;&nbsp;4 colours bitmap (2 bits&hyphen;per&hyphen;pixel), 4 gray shades. Only supported by Windows CE APIs;</li>
+              <li><b>&nbsp;2</b> - &nbsp;&nbsp;4 colours bitmap (2 bits&hyphen;per&hyphen;pixel), 4 gray shades <span style="color: #FF0000;">(only supported by Windows CE APIs)</span>;</li>
               <li><b>&nbsp;4</b> - &nbsp;16 colours bitmap (4 bits&hyphen;per&hyphen;pixel);</li>
               <li><b>&nbsp;8</b> - 256 colours bitmap (8 bits&hyphen;per&hyphen;pixel);</li>
               <li><b>16</b> - 16 bits&hyphen;per&hyphen;pixel bitmap, has a maximum of 2<sup>16</sup> colours;</li>
               <li><b>24</b> - 24 bits&hyphen;per&hyphen;pixel bitmap, has a maximum of 2<sup>24</sup> colours;</li>
               <li><b>32</b> - 32 bits&hyphen;per&hyphen;pixel bitmap, has a maximum of 2<sup>32</sup> colours;</li>
-              <li><b>64</b> - 64 bits&hyphen;per&hyphen;pixel bitmap, has a maximum of 2<sup>64</sup> colours. Only supported by GDI+</li>
+              <li><b>64</b> - 64 bits&hyphen;per&hyphen;pixel bitmap, has a maximum of 2<sup>64</sup> colours <span style="color: #FF0000;">(only supported by GDI+)</span>.</li>
             </ul>
             <b>Notes:</b><br>
             &nbsp;&nbsp;Windows CE versions 1.0 and 1.01, only support 1 and 2 bits&hyphen;per&hyphen;pixel bitmaps.<br>
@@ -1908,7 +1938,8 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
                   <td><code>BI_ALPHABITFIELDS</code></td>
                   <td>Bitfields RGBA</td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">Uncompressed RGBA bitfields masks. Is valid when used with
-				          16- and 32-bpp bitmaps. Only valid on <code>BITMAPINFOHEADER</code>, for Windows CE 5.0 with .NET 4.0 or later.</td>
+                    16- and 32-bpp bitmaps. Only valid on <code>BITMAPINFOHEADER</code>, for Windows CE 5.0 with .NET 4.0 or later.
+                  </td>
                 </tr>
                 <tr>
                   <td>11</td>
@@ -1933,7 +1964,8 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
                   <td><code>MAKEFOURCC('Y','U','Y','2');</code><br><code>FCC("YUY2");</code></td>
                   <td>YUV Compressed Video</td>
                   <td class="classTextAlingLeft" style="max-width: 460px;">For compressed video and YUV formats, this member is a FOURCC code, 4 ASCII characters like
-                    'VYUY' or 56595559h in hexadecimal.</td>
+                    'VYUY' or 56595559h in hexadecimal.
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -2097,7 +2129,7 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
                   <td class="classTextAlingLeft" style="max-width: 460px;">
                     This value indicates that the bitmap is in the OS default colour space, normally sRGB.<br>
                     <code>bV4Endpoints</code>, <code>bV4GammaRed</code>, <code>bV4GammaGreen</code> and <code>bV4GammaBlue</code> members are ignored.<br>
-                     The OS values are used instead.<br>
+                    The OS values are used instead.<br>
                     In ASCII, equals 'Win '.
                   </td>
                 </tr>
@@ -2125,7 +2157,7 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
             </table>
           </td>
         </tr>
-		    <tr>
+        <tr>
           <td>003Ch</td>
           <td>36</td>
           <td>3 * 32&hyphen;bit unsigned</td>
@@ -2133,59 +2165,61 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
           <td class="classTextAlingLeft">
             The RGB colour calibrated endpoints. Calibrated RGB is defined by the 1931 CIE XYZ standard.<br>
             <code>CIEXYZTRIPLE</code> contains the x,y, and z coordinates of the three colours components that are composed by <code>CIEXYZTRIPLE.ciexyzRed</code>, 
-			<code>CIEXYZTRIPLE.ciexyzGreen</code> and <code>CIEXYZTRIPLE.ciexyzBlue</code> endpoints.<br>
-        	Specified in fixed point 2.30 format. The upper 2 bits are the unsigned integer value. The lower 30 bits are the fractional part.
+            <code>CIEXYZTRIPLE.ciexyzGreen</code> and <code>CIEXYZTRIPLE.ciexyzBlue</code> endpoints, each made of one <code>CIEXYZ<code>, 
+            (<code>CIEXYZ.ciexyzX<code>, <code>CIEXYZ.ciexyzY<code>, <code>CIEXYZ.ciexyzZ<code>), of the type <code>FXPT2DOT30</code>, a.k.a. <code>DWORD</code>.<br>
+            Specified in fixed point 2.30 format. The upper 2 bits are the unsigned integer value. The lower 30 bits are the fractional part:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;0bnnffffffffffffffffffffffffffffff
           </td>
         </tr>
-		    <tr>
+        <tr>
           <td>0060h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
           <td>bV4GammaRed</td>
           <td class="classTextAlingLeft">
             Tone response curve for red colour component. 
-			This member is ignored unless colour values are calibrated RGB values and <code>bV4CSType</code> is set to 
-			<code>LCS_CALIBRATED_RGB</code>.<br>
-        	Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
-			The required <code>DWORD</code> bit format for the  <code>bV4GammaRed</code> is an 8.8 fixed point integer left-shifted
-		    by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
-		    of the 32-bit DWORD is:<br>
-		    &nbsp;&nbsp;&nbsp;&nbsp;0x00000000nnnnnnnnffffffff00000000
+            This member is ignored unless colour values are calibrated RGB values and <code>bV4CSType</code> is set to 
+            <code>LCS_CALIBRATED_RGB</code>.<br>
+            Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
+            The required <code>DWORD</code> bit format for the  <code>bV4GammaRed</code> is an 8.8 fixed point integer left-shifted
+            by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+            of the 32-bit DWORD is:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;0b00000000nnnnnnnnffffffff00000000
           </td>
         </tr>
-		    <tr>
+        <tr>
           <td>0064h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
           <td>bV4GammaGreen</td>
           <td class="classTextAlingLeft">
             Tone response curve for green colour component. 
-			This member is ignored unless colour values are calibrated RGB values and <code>bV4CSType</code> is set to 
-			<code>LCS_CALIBRATED_RGB</code>.<br>
-        	Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
-			The required <code>DWORD</code> bit format for the  <code>bV4GammaGreen</code> is an 8.8 fixed point integer left-shifted
-		    by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
-		    of the 32-bit DWORD is:<br>
-		    &nbsp;&nbsp;&nbsp;&nbsp;0x00000000nnnnnnnnffffffff00000000
+            This member is ignored unless colour values are calibrated RGB values and <code>bV4CSType</code> is set to 
+            <code>LCS_CALIBRATED_RGB</code>.<br>
+            Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
+            The required <code>DWORD</code> bit format for the  <code>bV4GammaGreen</code> is an 8.8 fixed point integer left-shifted
+            by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+            of the 32-bit DWORD is:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;0b00000000nnnnnnnnffffffff00000000
           </td>
         </tr>
-		    <tr>
+        <tr>
           <td>0068h</td>
           <td>4</td>
           <td>32&hyphen;bit unsigned</td>
           <td>bV4GammaBlue</td>
           <td class="classTextAlingLeft">
             Tone response curve for blue colour component. 
-			This member is ignored unless colour values are calibrated RGB values and <code>bV4CSType</code> is set to 
-			<code>LCS_CALIBRATED_RGB</code>.<br>
-        	Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
-			The required <code>DWORD</code> bit format for the  <code>bV4GammaBlue</code> is an 8.8 fixed point integer left-shifted
-		    by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
-		    of the 32-bit DWORD is:<br>
-		    &nbsp;&nbsp;&nbsp;&nbsp;0x00000000nnnnnnnnffffffff00000000
+            This member is ignored unless colour values are calibrated RGB values and <code>bV4CSType</code> is set to 
+            <code>LCS_CALIBRATED_RGB</code>.<br>
+            Specified in fixed point 16.16 format. The upper 16 bits are the unsigned integer value. The lower 16 bits are the fractional part.<br>
+            The required <code>DWORD</code> bit format for the  <code>bV4GammaBlue</code> is an 8.8 fixed point integer left-shifted
+            by 8 bits. This means 8 integer bits are followed by 8 fraction bits. Taking the bit shift into account, the required format
+            of the 32-bit DWORD is:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;0b00000000nnnnnnnnffffffff00000000
           </td>
         </tr>
-		    <tr>
+        <tr>
           <td colspan="5" style="background: #000000; colour: #FFFFFF">Windows BITMAPV5HEADER <span style="color: #00FF00;">(124 Bytes)</span></td>
         </tr>
         <tr>
@@ -2339,3 +2373,4 @@ RGBQUAD ColorPalette_RGBA[] = loadColorPalette_RGBA(BitmapInfoHeader.biClrImport
     </ol>
   </body>
 </html>
+

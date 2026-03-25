@@ -14,7 +14,7 @@
  *      ftp://prep.ai.mit.edu/pub/gnu/GPL
  *  Each contributing author retains all rights to their own work.
  *
- *  (C)2016-2017 José Caetano Silva
+ *  (C) 2016-2026 José Caetano Silva
  *
  * HISTORY
  *  2016-12-01: Created.

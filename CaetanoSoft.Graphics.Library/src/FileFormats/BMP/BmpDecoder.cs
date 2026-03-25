@@ -160,6 +160,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
                 throw new ArgumentNullException(nameof(streamIn));
             }
 
+            Image<TPixel> image = null;
             // Parameters OK
             try
             {
@@ -280,6 +281,7 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
                                             {
                                                 throw new Exception(String.Format("BMP 'BM' DIB Header size {0} format not supported!", this.dibHeader.Size));
                                             }
+                                            break;
                                     }
                                     if (!ValidateDibHeaderV5())
                                         throw new Exception(String.Format("BMP 'BM' DIB Header size {0} invalid format!", this.dibHeader.Size));
@@ -313,6 +315,8 @@ namespace CaetanoSoft.Graphics.FileFormats.BMP
             {
                 throw;
             }
+
+            return image;
         }
 
         // ** Methods
