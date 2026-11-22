@@ -1,0 +1,450 @@
+
+Kempston Joystick
+=================
+
+Table: IN 31 return values (can be OR'ed), only the lower 5 bits are valid
++-----+---------+-------------+--------+
+| Bit | Decimal | Bit Pattern |  Joy   |
++-----+---------+-------------+--------+
+| --- |       0 |    xxx00000 | Center |
+| D0  |       1 |    xxx00001 | Right  |
+| D1  |       2 |    xxx00010 | Left   |
+| D2  |       4 |    xxx00100 | Down   |
+| D3  |       8 |    xxx01000 | Up     |
+| D4  |      16 |    xxx10000 | Fire   |
++-----+---------+-------------+--------+
+| --- |      31 |    00011111 | Mask   |
++-----+---------+-------------+--------+
+NOTE: xxx is normaly 000 (bin 00000000 = dec 0), some clone interfaces use D6 to D7 for extra buttons.
+
+Joystick Direction (decimal values):
+
+      10 08 09
+
+      02 00 01
+
+      06 04 05  [16]
+
+* Sinclair BASIC:
+
+   10 LET k1b=0: REM Reset fire button state
+   20 LET k1j=IN 31: REM Read the Kempston Joystick port
+   30 IF (k1j>31) OR (k1j=0) THEN GO TO 10: REM Ignore invalid data or no movement
+   40 IF k1j>=16 THEN LET k1j=k1j-16: LET k1b=1: REM Check if fire button is pressed
+   50 IF k1j=1 THEN PRINT "Kempston Joystick 1: Right"
+   60 IF k1j=2 THEN PRINT "Kempston Joystick 1: Left"
+   70 IF k1j=4 THEN PRINT "Kempston Joystick 1: Down"
+   80 IF k1j=5 THEN PRINT "Kempston Joystick 1: Down + Right"
+   90 IF k1j=6 THEN PRINT "Kempston Joystick 1: Down + Left"
+  100 IF k1j=8 THEN PRINT "Kempston Joystick 1: Up"
+  110 IF k1j=9 THEN PRINT "Kempston Joystick 1: Up + Right"
+  120 IF k1j=10 THEN PRINT "Kempston Joystick 1: Up + Left"
+  130 IF k1b=1 THEN PRINT "Kempston Joystick 1: Fire"
+  140 GO TO 10
+
+* Z80 Assembler:
+
+  ; Read Kempston Joystick
+  ; Usage Example: CALL SUB_READ_KEMPSTON
+  ; Returns: A = Joystick State
+  ; Bits: 4=Fire, 3=Up, 2=Down, 1=Left, 0=Right -- 1 => Pressed, 0 => Not Pressed
+  SUB_READ_KEMPSTON:
+       IN A, ($1F)    ; Read joystick state (Port 31/1Fh) into A register
+       BIT 4, A       ; Test for Fire button
+       CALL NZ, SUB_HANDLE_FIRE1_PRESSED
+       BIT 3, A       ; Test for Up button
+       CALL NZ, SUB_HANDLE_UP1_PRESSED
+       BIT 2, A       ; Test for Down button
+       CALL NZ, SUB_HANDLE_DOWN1_PRESSED
+       BIT 1, A       ; Test for Left button
+       CALL NZ, SUB_HANDLE_LEFT1_PRESSED
+       BIT 0, A       ; Test for Right button
+       CALL NZ, SUB_HANDLE_RIGHT1_PRESSED
+       RET
+
+  SUB_HANDLE_FIRE1_PRESSED:
+       ; Handle Fire button pressed
+       RET
+
+  SUB_HANDLE_UP1_PRESSED:
+       ; Handle Up button pressed
+       RET
+
+  SUB_HANDLE_DOWN1_PRESSED:
+       ; Handle Down button pressed
+       RET
+
+  SUB_HANDLE_LEFT1_PRESSED:
+       ; Handle Left button pressed
+       RET
+
+  SUB_HANDLE_RIGHT1_PRESSED:
+       ; Handle Right button pressed
+       RET
+
+
+
+Sinclair Joysticks (ZX Interface II/+2/+3)
+==================
+
+Table: Keyboard layout
++-----------------+------------------------------------------+
+|   (High Byte)   |                  IN Bit                  |
+|       $FE       |     D4     |      D3      | D2 | D1 | D0 |
++-----------------+------------+--------------+----+----+----+
+| $FE (%11111110) | CAPS SHIFT |       Z      |  X |  C |  V |
++-----------------+------------+--------------+----+----+----+
+| $FD (%11111101) |      A     |       S      |  D |  F |  G |
++-----------------+------------+--------------+----+----+----+
+| $FB (%11111011) |      Q     |       W      |  E |  R |  T |
++-----------------+------------+--------------+----+----+----+
+| $F7 (%11110111) |      1     |       2      |  3 |  4 |  5 |
++-----------------+------------+--------------+----+----+----+
+| $EF (%11101111) |      0     |       9      |  8 |  7 |  6 |
++-----------------+------------+--------------+----+----+----+
+| $DF (%11011111) |      P     |       O      |  I |  U |  Y |
++-----------------+------------+--------------+----+----+----+
+| $BF (%10111111) |    ENTER   |       L      |  K |  J |  H |
++-----------------+------------+--------------+----+----+----+
+| $7F (%01111111) |    SPACE   | SYMBOL SHIFT |  M |  N |  B |
++-----------------+------------+--------------+----+----+----+
+
+Table: IN 61438 ($EFFE) and IN 63486 (F7FE) return values (can be AND'ed), only the lower 5 bits are valid
++-----+---------+-------------+--------+--------+
+| Bit | Decimal | Bit Pattern | Joy 1  | Joy 2  |
++-----+---------+-------------+--------+--------+
+| --- |      31 |    xxx11111 | Center | Center |
+| D0  |      30 |    xxx11110 | Fire   | Right  |
+| D1  |      29 |    xxx11101 | Down   | Left   |
+| D2  |      27 |    xxx11011 | Up     | Down   |
+| D3  |      23 |    xxx10111 | Right  | Up     |
+| D4  |      15 |    xxx01111 | Left   | Fire   |
++-----+---------+-------------+--------+--------+
+| --- |      31 |    00011111 | Mask   | Mask   |
++-----+---------+-------------+--------+--------+
+NOTE: xxx is normaly 1t1 on Issue 2 Spectrums 16/48K and 0t0 on other issues and models
+      (t = bit D6: is EAR socket state and can vary depending on the last thing played on the tape).
+
+Joystick Direction (decimal values):
+      21 27 13          21 23 22
+
+      15 31 23          29 31 30
+
+      19 29 22  [30]    25 27 26  [15]
+
+* Sinclair BASIC:
+
+   10 LET s1b=0: REM Reset fire button 1 state
+   20 LET s2b=0: REM Reset fire button 2 state
+   30 LET s1j=IN 61438: REM Read the Sinclair Joystick 1 port
+   40 IF s1j>=128 THEN LET s1j=s1j-128:IF s1j>64 THEN LET s1j=s1j-64:IF s1j>=32 THEN LET s1j=s1j-32
+   50 LET s2j=IN 63486: REM Read the Sinclair Joystick 2 port
+   60 IF s2j>=128 THEN LET s2j=s2j-128:IF s2j>64 THEN LET s2j=s2j-64:IF s2j>=32 THEN LET s2j=s2j-32
+   70 IF (s1j>=31) AND (s2j>=31) THEN GO TO 10: REM Ignore invalid data or no movement
+   80 IF (s1j<=30) AND (INT (s1j/2)*2=s1j) THEN LET s1j=s1j+1: LET s1b=1: REM Check if fire 1 button is pressed
+   90 IF s1j=11 THEN PRINT "Sinclair Joystick 1: Down + Left"
+  100 IF s1j=13 THEN PRINT "Sinclair Joystick 1: Up + Left"
+  110 IF s1j=15 THEN PRINT "Sinclair Joystick 1: Left"
+  120 IF s1j=19 THEN PRINT "Sinclair Joystick 1: Down + Right"
+  130 IF s1j=21 THEN PRINT "Sinclair Joystick 1: Up + Right"
+  140 IF s1j=23 THEN PRINT "Sinclair Joystick 1: Right"
+  150 IF s1j=27 THEN PRINT "Sinclair Joystick 1: Down"
+  160 IF s1j=29 THEN PRINT "Sinclair Joystick 1: Up"
+  170 IF s1b=1 THEN PRINT "Sinclair Joystick 1: Fire"
+  180 IF s2j<=15 THEN LET s2j=s2j+16: LET s2b=1: REM Check if fire 2 button is pressed
+  190 IF s2j=21 THEN PRINT "Sinclair Joystick 2: Up + Right"
+  200 IF s2j=22 THEN PRINT "Sinclair Joystick 2: Up + Left"
+  210 IF s2j=23 THEN PRINT "Sinclair Joystick 2: Up"
+  220 IF s2j=25 THEN PRINT "Sinclair Joystick 2: Down + Right"
+  230 IF s2j=26 THEN PRINT "Sinclair Joystick 2: Down + Left"
+  240 IF s2j=27 THEN PRINT "Sinclair Joystick 2: Down"
+  250 IF s2j=29 THEN PRINT "Sinclair Joystick 2: Right"
+  260 IF s2j=30 THEN PRINT "Sinclair Joystick 2: Left"
+  270 IF s2b=1 THEN PRINT "Sinclair Joystick 2: Fire"
+  280 GO TO 10
+
+* Z80 Assembler:
+
+  ; Read Sinclair Joystick 1
+  ; Usage Example: CALL SUB_READ_SINCLAIR_1
+  ; Returns: A = Joystick State
+  ; Bits: 4=Right, 3=Left, 2=Down, 1=Up, 0=Fire -- O => Pressed, 1 => Not Pressed
+  SUB_READ_SINCLAIR_1:
+       LD BC, $EFFE   ; Keyboard row for joystick 1: "0", "9", "8", "7", "6"
+       IN A, (C)        ; Read joystick 1 state (Port 61438/EFFEh) into A register
+       BIT 0, A       ; Test for Left button
+       CALL Z, SUB_HANDLE_LEFT1_PRESSED
+       BIT 1, A       ; Test for Right button
+       CALL Z, SUB_HANDLE_RIGHT1_PRESSED
+       BIT 2, A       ; Test for Down button
+       CALL Z, SUB_HANDLE_DOWN1_PRESSED
+       BIT 3, A       ; Test for Up button
+       CALL Z, SUB_HANDLE_UP1_PRESSED
+       BIT 4, A       ; Test for Fire button
+       CALL Z, SUB_HANDLE_FIRE1_PRESSED
+       RET
+
+  ; Read Sinclair Joystick 2
+  ; Usage Example: CALL SUB_READ_SINCLAIR_2
+  ; Returns: A = Joystick State
+  ; Bits: 4=Fire, 3=Up, 2=Down, 1=Right, 0=Left -- O => Pressed, 1 => Not Pressed
+  SUB_READ_SINCLAIR_2:
+       LD BC, $F7FE   ; Keyboard row for joystick 2: "1", "2", "3", "4", "5"
+       IN A, (C)        ; Read joystick 2 state (Port 63486/F7FEh) into A register
+       BIT 0, A       ; Test for Fire button
+       CALL Z, SUB_HANDLE_FIRE1_PRESSED
+       BIT 1, A       ; Test for Up button
+       CALL Z, SUB_HANDLE_UP1_PRESSED
+       BIT 2, A       ; Test for Down button
+       CALL Z, SUB_HANDLE_DOWN1_PRESSED
+       BIT 3, A       ; Test for Left button
+       CALL Z, SUB_HANDLE_LEFT1_PRESSED
+       BIT 4, A       ; Test for Right button
+       CALL Z, SUB_HANDLE_RIGHT1_PRESSED
+       RET
+
+  SUB_HANDLE_FIRE1_PRESSED:
+       ; Handle Fire button pressed
+       RET
+
+  SUB_HANDLE_UP1_PRESSED:
+       ; Handle Up button pressed
+       RET
+
+  SUB_HANDLE_DOWN1_PRESSED:
+       ; Handle Down button pressed
+       RET
+
+  SUB_HANDLE_LEFT1_PRESSED:
+       ; Handle Left button pressed
+       RET
+
+  SUB_HANDLE_RIGHT1_PRESSED:
+       ; Handle Right button pressed
+       RET
+
+  SUB_HANDLE_FIRE2_PRESSED:
+       ; Handle Fire button pressed
+       RET
+
+  SUB_HANDLE_UP2_PRESSED:
+       ; Handle Up button pressed
+       RET
+
+  SUB_HANDLE_DOWN2_PRESSED:
+       ; Handle Down button pressed
+       RET
+
+  SUB_HANDLE_LEFT2_PRESSED:
+       ; Handle Left button pressed
+       RET
+
+  SUB_HANDLE_RIGHT2_PRESSED:
+       ; Handle Right button pressed
+       RET
+
+
+
+Timex 2068 Joysticks
+====================
+
+For AY-3-8912 sound chip port 14/0Eh (General Purpose I/O Port A - IOA) in INPUT mode. 
+AY-3-8912 sound chip port 7/07h (Mixer Control and I/O Port Enable) bit 6 = 0.
+This is the only reliable way to read the TIMEX/Sinclair and TIMEX Computer 2068 joysticks ports!
+
+Table: OUT 245,14 + IN A,246   ; A = 1 -> Joy 1; 2 -> Joy 2; 3 -> A = Joy 1 & 2 ORed
++-----+---------+-------------+--------+--------+
+| Bit | Decimal | Bit Pattern | Joy 1  | Joy 2  |
++-----+---------+-------------+--------+--------+
+| --- |     255 |    1xxx1111 | Center | Center |
+| D0  |     254 |    1xxx1110 | Up     | Up     |
+| D1  |     253 |    1xxx1101 | Down   | Down   |
+| D2  |     251 |    1xxx1011 | Left   | Left   |
+| D3  |     247 |    1xxx0111 | Right  | Right  |
+| D7  |     127 |    0xxx1111 | Fire   | Fire   |
++-----+---------+-------------+--------+--------+
+| --- |     143 |    10001111 | Mask   | Mask   |
++-----+---------+-------------+--------+--------+
+NOTE: xxx is allways 111 (bin 10100000 = dec 160).
+        1 DO: 0 indicates stick up
+        2 D1: 0 indicates stick down 
+        4 D2: 0 indicates stick left 
+        8 D3: 0 indicates stick right 
+      16-64 (D4, D5, D6): Not used (all ones)
+      128 D7: 0 indicates pushbutton depressed
+
+Joystick Direction (decimal values):
+      250 254 246           250 254 246
+
+      251 255 247           251 255 247
+
+      249 253 245  [127]    249 253 245  [127]
+
+
+For AY-3-8912 sound chip port 14/0Eh (General Purpose I/O Port A - IOA) in OUTPUT mode. 
+AY-3-8912 sound chip port 7/07h (Mixer Control and I/O Port Enable) bit 6 = 1.
+
+Table: OUT 245,14 + OUT 246,MaskValue
++-----+------------------------------------------------+
+| Bit |                   Mask Use                     |
++-----+------------------------------------------------+
+| D0  | Joystick Up                         (0=active) |
+| D1  | Joystick Down                       (0=active) |
+| D2  | Joystick Left                       (0=active) |
+| D3  | Joystick Right                      (0=active) |
+| D4  | Usable in independent peripherals   (0=enable) |
+| D5  | IOA5 edge conector signal/BEU 16 MB (0=enable) |
+| D6  | Usable in independent peripherals   (0=enable) |
+| D7  | Joystick Fire                       (0=active) |
++-----+------------------------------------------------+
+NOTE: I think that only D5 is valid to activate the the never 
+      released TIMEX/Sinclair 2060 Bus Expansion Unit (BEU), 
+      by setting it to 0. See:
+      https://www.timexsinclair.com/article/the-mystery-of-the-missing-253/index.html
+
+
+Table: OUT 245,14 + IN A,246   ; A = 1 -> Joy 1; 2 -> Joy 2; 3 -> A = Joy 1 & 2 AND'ed
++-----+---------+-------------+--------+--------+
+| Bit | Decimal | Bit Pattern | Joy 1  | Joy 2  |
++-----+---------+-------------+--------+--------+
+| --- |     255 |    1xxx1111 | Center | Center |
+| D0  |     254 |    1xxx1110 | Up     | Up     |
+| D1  |     253 |    1xxx1101 | Down   | Down   |
+| D2  |     251 |    1xxx1011 | Left   | Left   |
+| D3  |     247 |    1xxx0111 | Right  | Right  |
+| D7  |     127 |    0xxx1111 | Fire   | Fire   |
++-----+---------+-------------+--------+--------+
+| --- |     143 |    10001111 | Mask   | Mask   |
++-----+---------+-------------+--------+--------+
+NOTE: xxx is allways 111 (bin 10100000 = dec 160).
+        1 DO: 0 indicates stick up
+        2 D1: 0 indicates stick down 
+        4 D2: 0 indicates stick left 
+        8 D3: 0 indicates stick right 
+      16-64 (D4, D5, D6): last values sent to these bits
+      128 D7: 0 indicates pushbutton depressed
+
+
+
+* Timex BASIC:
+
+   10 LET t1b=STICK(2,1): REM Read Timex 2068 joystick 1 button
+   20 IF t1b=1 THEN PRINT "Timex Joystick 1: Fire"
+   30 LET t1j=STICK(1,1): REM Read Timex 2068 joystick 1 position
+   40 IF t1j=1 THEN PRINT "Timex Joystick 1: Up"
+   50 IF t1j=2 THEN PRINT "Timex Joystick 1: Down"
+   60 IF t1j=4 THEN PRINT "Timex Joystick 1: Left"
+   70 IF t1j=5 THEN PRINT "Timex Joystick 1: Up+Left"
+   80 IF t1j=6 THEN PRINT "Timex Joystick 1: Down+Left"
+   90 IF t1j=8 THEN PRINT "Timex Joystick 1: Right"
+  100 IF t1j=9 THEN PRINT "Timex Joystick 1: Up+Right"
+  110 IF t1j=10 THEN PRINT "Timex Joystick 1: Down+Right"
+  120 LET t2b=STICK(2,2): REM Read Timex 2068 joystick 2 button
+  130 IF t2b=1 THEN PRINT "Timex Joystick 2: Fire"
+  140 LET t2j=STICK(1,2): REM Read Timex 2068 joystick 2 position
+  150 IF t2j=1 THEN PRINT "Timex Joystick 2: Up"
+  160 IF t2j=2 THEN PRINT "Timex Joystick 2: Down"
+  170 IF t2j=4 THEN PRINT "Timex Joystick 2: Left"
+  180 IF t2j=5 THEN PRINT "Timex Joystick 2: Up+Left"
+  190 IF t2j=6 THEN PRINT "Timex Joystick 2: Down+Left"
+  200 IF t2j=8 THEN PRINT "Timex Joystick 2: Right"
+  210 IF t2j=9 THEN PRINT "Timex Joystick 2: Up+Right"
+  220 IF t2j=10 THEN PRINT "Timex Joystick 2: Down+Right"
+  230 GO TO 10
+
+* Z80 Assembler:
+
+  ; Setup the Timex 2068 Joysticks port (14/0Eh) on the AY-3-8912 sound chip for input
+  ; Usage Example: CALL SUB_SETUP_TIMEX_JOYSTICKS_PORT
+  ; NOTE: This should be called once before start using SUB_READ_TIMEX_1 and SUB_READ_TIMEX_2 functions
+  ;       to insure that the joysticks state is returned in IN and not the OUT mask for port 14/0Eh
+  SUB_SETUP_TIMEX_JOYSTICKS_PORT:
+    LD A, $07      ; Register 7/7h of the AY-3-8912 sound chip, Mixer Control and I/O Port Enable register
+    OUT ($F5), A   ; Selects R7 as the active register, by outputing to port 245/F5h
+    IN A, ($F6)    ; Reads the R7 current state mask value from port 246/F6h
+    AND $BF        ; Clear bit 6 of R7 = Set R14/Port A of the AY-3-8912 sound chip as Input
+    OUT ($F6), A   ; Writes the R7 new value on port 246/F6h
+    RET
+
+  ; Read Timex 2068 Joystick 1
+  ; Usage Example: CALL SUB_READ_TIMEX_1
+  ; Returns: A = Joystick State
+  ; Bits: 0=Fire, 1=Up, 2=Down, 3=Right, 4=Left -- O => Pressed, 1 => Not Pressed
+  SUB_READ_TIMEX_1:
+       LD A, $0E      ; Register 14/Eh of the sound chip
+       OUT ($F5), A   ; Sound chip register selection port 245/F5h
+       LD A, $01      ; Select joystick 1 -- 1 => Joy1, 2 => Joy2, 3 => Both (Joy1 OR Joy2)
+       IN A, ($F6)    ; Read register 14 of the sound chip, for joystick 1 state (Port 246/F6h) into A register
+       BIT 7, A       ; Test for Fire button
+       CALL Z, SUB_HANDLE_FIRE1_PRESSED
+       BIT 0, A       ; Test for Up button
+       CALL Z, SUB_HANDLE_UP1_PRESSED
+       BIT 1, A       ; Test for Down button
+       CALL Z, SUB_HANDLE_DOWN1_PRESSED
+       BIT 2, A       ; Test for Left button
+       CALL Z, SUB_HANDLE_LEFT1_PRESSED
+       BIT 3, A       ; Test for Right button
+       CALL Z, SUB_HANDLE_RIGHT1_PRESSED
+       RET
+
+  ; Read Timex 2068 Joystick 2
+  ; Usage Example: CALL SUB_READ_TIMEX_2
+  ; Returns: A = Joystick State
+  ; Bits: 4=Fire, 3=Up, 2=Down, 1=Right, 0=Left -- O => Pressed, 1 => Not Pressed
+  SUB_READ_TIMEX_2:
+       LD A, $0E      ; Register 14/Eh of the sound chip
+       OUT ($F5), A   ; Sound chip register selection port 245/F5h
+       LD A, $02      ; Select joystick 2 -- 1 => Joy1, 2 => Joy2, 3 => Both (Joy1 OR Joy2)
+       IN A, ($F6)    ; Read register 14 of the sound chip, for joystick 2 state (Port 246/F6h) into A register
+       BIT 7, A       ; Test for Fire button
+       CALL Z, SUB_HANDLE_FIRE2_PRESSED
+       BIT 0, A       ; Test for Up button
+       CALL Z, SUB_HANDLE_UP2_PRESSED
+       BIT 1, A       ; Test for Down button
+       CALL Z, SUB_HANDLE_DOWN2_PRESSED
+       BIT 2, A       ; Test for Left button
+       CALL Z, SUB_HANDLE_LEFT2_PRESSED
+       BIT 3, A       ; Test for Right button
+       CALL Z, SUB_HANDLE_RIGHT2_PRESSED
+       RET
+
+  SUB_HANDLE_FIRE1_PRESSED:
+       ; Handle Fire button pressed
+       RET
+
+  SUB_HANDLE_UP1_PRESSED:
+       ; Handle Up button pressed
+       RET
+
+  SUB_HANDLE_DOWN1_PRESSED:
+       ; Handle Down button pressed
+       RET
+
+  SUB_HANDLE_LEFT1_PRESSED:
+       ; Handle Left button pressed
+       RET
+
+  SUB_HANDLE_RIGHT1_PRESSED:
+       ; Handle Right button pressed
+       RET
+
+  SUB_HANDLE_FIRE2_PRESSED:
+       ; Handle Fire button pressed
+       RET
+
+  SUB_HANDLE_UP2_PRESSED:
+       ; Handle Up button pressed
+       RET
+
+  SUB_HANDLE_DOWN2_PRESSED:
+       ; Handle Down button pressed
+       RET
+
+  SUB_HANDLE_LEFT2_PRESSED:
+       ; Handle Left button pressed
+       RET
+
+  SUB_HANDLE_RIGHT2_PRESSED:
+       ; Handle Right button pressed
+       RET
+
